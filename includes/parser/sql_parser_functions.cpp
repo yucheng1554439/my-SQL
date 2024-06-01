@@ -1,0 +1,4 @@
+#ifndef SQL_PARSER_FUNCTIONS_CPP
+#define SQL_PARSER_FUNCTIONS_CPP
+
+#endif
