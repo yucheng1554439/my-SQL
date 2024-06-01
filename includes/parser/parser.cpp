@@ -47,27 +47,27 @@ mmap_ss Parser::parse_tree(){
         for(int i = 0; i < ptree["fields"].size(); i++){
             temp.insert("fields", ptree["fields"][i]);
         }
-        for(int i = 0; i < ptree["table"].size(); i++){
-            temp.insert("table", ptree["table"][i]);
+        for(int i = 0; i < ptree["table_name"].size(); i++){
+            temp.insert("table_name", ptree["table_name"][i]);
         }
         if(ptree.contains("where")){
-            temp.insert("where", "yes");
+            temp.insert("where", ptree["where"][0]);
         }        
     }else if(ptree["command"][0] == "insert"){
-        temp.insert("command", "insert");
-        for(int i = 0; i < ptree["table"].size(); i++){
-            temp.insert("table", ptree["table"][i]);
+        temp.insert("command", ptree["command"][0]);
+        for(int i = 0; i < ptree["table_name"].size(); i++){
+            temp.insert("table_name", ptree["table_name"][i]);
         }
-        for(int i = 0; i < ptree["condition"].size(); i++){
-            temp.insert("condition", ptree["condition"][i]);
+        for(int i = 0; i < ptree["values"].size(); i++){
+            temp.insert("values", ptree["values"][i]);
         }
     }else if(ptree["command"][0] == "make"){
-        for(int i = 0; i < ptree["fields"].size(); i++){
-            temp.insert("fields", ptree["fields"][i]);
+        for(int i = 0; i < ptree["col"].size(); i++){
+            temp.insert("col", ptree["col"][i]);
         }
-        temp.insert("command", "make");
-        for(int i = 0; i < ptree["table"].size(); i++){
-            temp.insert("table", ptree["table"][i]);
+        temp.insert("command", ptree["command"][0]); //
+        for(int i = 0; i < ptree["table_name"].size(); i++){
+            temp.insert("table_name", ptree["table_name"][i]);
         }
     }
     return temp;
@@ -95,7 +95,7 @@ void Parser::set_string(string string){
     for(int i = 0; i < vecLength; i++){
         if(_token_holder[i].token_str() != "," && _token_holder[i].token_str() != " "){
             temp.push_back(_token_holder[i]);
-            // std::cout << _token_holder[i];
+            // std::cout << _token_holder[i] <<endl;
         }
     }
     _token_holder.clear();
@@ -115,6 +115,9 @@ keys Parser::get_column(Token token){
     if(token.token_str()=="*"){
         return STARR;
     }
+    // if(token.token_str()=="."){
+    //     return SYM;
+    // }
 
     Pair<string, keys> temp(toupper(token.token_str()));
     if(keyword.contains(temp)){
@@ -127,7 +130,7 @@ bool Parser::get_parse_tree(){
     std::string x = "command";
     MPair<std::string, std::string > tem12p(x);
     ptree.insert(tem12p);
-    x = "table";
+    x = "table_name";
     MPair<std::string, std::string > te2p(x);
     ptree.insert(te2p);
     x = "fields";
@@ -144,26 +147,26 @@ bool Parser::get_parse_tree(){
     for(int i = 0; i < vecLength; i++){
 
         Token token = _token_holder[i];
-        
+        std::string yes = "yes";
         state = _table_for_enum.get(state, get_column(token));
         // std::cout << get_column(token) << endl;
 
-        switch (state)
+        switch(state)
         {
         case 1:
             ptree["command"] += token.token_str();
             break;
         case 3:
-            ptree["table"] += token.token_str();
+            ptree["table_name"] += token.token_str();
             break;
         case 5:
-            ptree["fields"] += token.token_str();
+            ptree["col"] += token.token_str();
             break;
         case 6:
             ptree["command"] += token.token_str();
             break;
         case 8:
-            ptree["table"] += token.token_str();
+            ptree["table_name"] += token.token_str();
             break;
         case 9:
             ptree["command"] += token.token_str();
@@ -172,13 +175,13 @@ bool Parser::get_parse_tree(){
             ptree["fields"] += token.token_str();
             break;
         case 12:
-            ptree["table"] += token.token_str();
+            ptree["table_name"] += token.token_str();
             break;
         case 13:
             ptree["fields"] += token.token_str();
             break;
         case 15:
-            ptree["where"] += token.token_str();
+            ptree["where"] += yes;
             break;
         case 16:
             if(token.token_str()[0] == '\"'){
@@ -187,8 +190,8 @@ bool Parser::get_parse_tree(){
             break;
         case 18:
             if(token.token_str()[0] == '\"'){
-                ptree["condition"] += token.token_str().substr(1, token.token_str().length()-2);
-            }else{ptree["condition"] += token.token_str();}
+                ptree["values"] += token.token_str().substr(1, token.token_str().length()-2);
+            }else{ptree["values"] += token.token_str();}
             break;
         default:
             break;

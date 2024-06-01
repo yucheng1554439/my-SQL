@@ -189,7 +189,6 @@ public:
     void insert(MPair<K, V> temp){
         mmap.insert(temp);
         key_count++;
-
     }
     void erase(const K& key){
         mmap.remove(MPair<K,V>(key));
@@ -247,6 +246,7 @@ public:
             std::cout << "command :\t" << mmap.get(MPair<string,string>("command")).value_list << endl;
             std::cout << "table_name:\t" << mmap.get(MPair<string,string>("table")).value_list << endl;
         }
+        
     }
 
 

@@ -233,6 +233,10 @@ void STokenizer::make_table_enum(int _table[][MAX_COLUMNS]){
     mark_cells(8, _table, VALUES, 17);
     mark_cells(17, _table, SYM, 18);
     mark_cells(18, _table, SYM, 18);
+    // mark_cells(18, _table, " ", 18);
+    // mark_cells(18, _table, SYM, 18);
+    // mark_cells(18, _table, ".", 18);
+    // mark_cells(18, _table, "\"", 18);
 
 
     mark_cells(0, _table, MAKE, 1);

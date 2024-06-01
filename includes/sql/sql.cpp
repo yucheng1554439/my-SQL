@@ -13,18 +13,19 @@ Table SQL::command(string string){
     MMap<std::string, std::string> ptree = parser.parse_tree();
     if(ptree["command"][0] == "make")
     {
-        Table table(ptree["table"][0], ptree["fields"]);
+        Table table(ptree["table_name"][0], ptree["col"]);
         return table;
     }
     if(ptree["command"][0] == "insert")
     {
-        Table table(ptree["table"][0]);
-        table.insert_into(ptree["condition"]);
+        Table table(ptree["table_name"][0]);
+        table.insert_into(ptree["values"]);
         return table;
     }
     if(ptree["command"][0] == "select")
     {
-        Table table(ptree["table"][0]);
+        std::string tableName = ptree["table_name"][0];
+        Table table(tableName);
         if(ptree["fields"][0] == "*"){
             if(ptree.contains("condition")){
                 // std::cout << "ptree[condition]" << ptree["condition"];
