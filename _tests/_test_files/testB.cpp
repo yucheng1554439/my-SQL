@@ -30,8 +30,8 @@ const vector<string> command_list = {
 /*10*/     "insert into student values \"Mary Ann\",   Davis,	Math,	30",
 
 /*11*/     "select * from employee",
-// /*12*/     "select last, first, age from employee",
-// /*13*/     "select last from employee",
+/*12*/     "select last, first, age from employee",
+/*13*/     "select last from employee",
 /*14*/     "select * from employee where last = Johnson",
 /*15*/     "select * from employee where last=Blow and major=\"JoAnn\"",
 
@@ -69,8 +69,6 @@ bool sql_basic(bool debug = false)
           else
                t = sql.command(command_list[i]);
           cout << "basic_test: records selected: "<<sql.select_recnos() << endl;
-
-          cout << "\n" << t << endl;
      }
 
      cout << "----- END TEST --------" << endl;
@@ -79,7 +77,7 @@ bool sql_basic(bool debug = false)
 
 // ==============================
 // global BAD!
-bool debug = false;
+bool debug = true;
 // ==============================
 
 TEST(SQL_BASIC, SQLBasic) {

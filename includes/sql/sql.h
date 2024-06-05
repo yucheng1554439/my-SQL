@@ -14,6 +14,7 @@ class SQL{
 
     private:
     vector<long> _recnos_selected;
+    // Table _table;
 };
 
 

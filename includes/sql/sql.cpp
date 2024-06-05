@@ -6,7 +6,7 @@
 
 
 SQL::SQL(){
-
+    
 }
 Table SQL::command(string string){
     Parser parser(string);
@@ -28,29 +28,32 @@ Table SQL::command(string string){
         Table table(tableName);
         if(ptree["fields"][0] == "*"){
             if(ptree.contains("condition")){
-                // std::cout << "ptree[condition]" << ptree["condition"];
+                // std::cout << "\nptree[condition]" << ptree["condition"] << endl;
                 // table.select(table.get_field_names(), ptree["condition"]);
-                // _recnos_selected = table.select_recnos();
-                // std::cout << "CNCCNCNNCNCNCN";
+                _recnos_selected = table.select_recnos();
+                // std::cout << table.select(table.get_field_names(), ptree["condition"]);
                 return table.select(table.get_field_names(), ptree["condition"]);
             }else{
                 // table.select_all();
-                // _recnos_selected = table.select_recnos();
+                _recnos_selected = table.select_recnos();
+
                 return table.select_all();
             }
         }else{
             if(ptree.contains("condition")){
                 // table.select(ptree["fields"], ptree["condition"]);
                 // std::cout << table.select_recnos() << endl;
-                // _recnos_selected = table.select_recnos();
+                _recnos_selected = table.select_recnos();
+
                 return table.select(ptree["fields"], ptree["condition"]);
             }else{
                 //this this the case where you just reduce the num of the fields, need to work on
                 // Queue<Token*> temp;
                 // table.select(ptree["fields"], temp);
                 // std::cout << table.select_recnos() << endl;
-                // _recnos_selected = table.select_recnos();
+                _recnos_selected = table.select_recnos();
                 // return table.select(ptree["fields"], temp);
+
                 return table.select_all();
             }
         }

@@ -132,8 +132,11 @@ class Relational:public Operator{
                 //get the subtree of the field that we are searching
                 if(fieldNames[i]==lhsString){
                     // int sizeOfRecVectr = _indices_recno[i].get(rhsString).size();
+                    // std::cout << "LHS:" << lhsString << "RHS: " << rhsString;
+                    // std::cout << _indices_recno[i];
                     recVectr = _indices_recno[i].get(rhsString);
                 }
+                
             }   
         }else if(_string_relational == "<"){
             for(int i = 0; i < numOfField; i++){
@@ -156,6 +159,8 @@ class Relational:public Operator{
                     for(itertrUpper; itertrUpper != MMap<string, long>::Iterator(nullptr); itertrUpper++){
                         for(int i = 0; i < ((*itertrUpper).value_list).size(); i++){
                             //get all the record numbers
+                            // std::cout << "\n" <<((*itertrUpper).value_list[i]) << endl;
+
                             recVectr.push_back(((*itertrUpper).value_list)[i]);
                         }
                     }

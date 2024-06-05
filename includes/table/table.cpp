@@ -47,6 +47,7 @@ Table::Table(string a)
         //loop thru the bin file
         while(record.read(file, recordNumbers) != 0){
             vectorstr b = record.readVector(file, recordNumbers, fieldLength);
+            // std::cout << "   ||" <<b << "||   ";
             long recon = recordNumbers;
             for(int j = 0; j < b.size(); j++){
                 _indices_recno[index[field_names[j]]].insert(b[j], recon);
@@ -55,6 +56,7 @@ Table::Table(string a)
             numOfRec++;
             recordNumbers++;
         }
+        
 
         file.close();
     }else{
@@ -109,6 +111,11 @@ Table::~Table(){
     file.close();
 }
 
+Table::Table(const Table& a){
+    *this = a;
+}
+
+
 void Table::insert_into(vectorstr b){
 
     FileRecord record(b);
@@ -127,13 +134,31 @@ void Table::insert_into(vectorstr b){
 Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
     sequenceNumber++;
     Table temp(title+"_"+to_string(sequenceNumber), fieldnames);
-    
+
+    // temp._indices_recno = _indices_recno;
+
+    // std::cout << temp._indices_recno;
+
     vector<long> recVectr;
     Stack<Token*> _stack;
     Stack<Token*> _result_stack;
     fstream file;
-    // int numOfField = field_names.size();
+
+
+    FileRecord record;
+
     open_fileRW(file, (title+".bin").c_str());
+
+    // for(int i = 0; i < numOfRec; i ++){
+    //     // open_fileRW(file, title.c_str());
+    //     // int i=0;
+    //     // while(record.read(f, i)!=0){   
+    //         record.read(file, i);
+    //         std::cout  << setw(10)<< i << "\t" << record << "\t" << setw(10)<< endl;
+    //         // i++;
+    //     // }
+    // }
+
     selected_recnos.clear();
     //if the queue is not empty
     while(!queue_of_compar.empty()){
@@ -141,7 +166,7 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
         if(queue_of_compar.front()->type_string() == "RELATIONAL"){
             Token* rhs = _stack.pop();
             Token* lhs = _stack.pop();
-            recVectr = queue_of_compar.pop()->evaluate(lhs, rhs, _indices_recno, field_names, file);  
+            recVectr = queue_of_compar.pop()->evaluate(lhs, rhs, _indices_recno, field_names, file); 
             ResultSet* result = new ResultSet(recVectr);
             _result_stack.push(result);
         //------ and or -----
@@ -155,21 +180,31 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
             _stack.push(queue_of_compar.pop());
         }
     }
+
+    // std::cout << *_result_stack.pop();
+
+
     //update of the vector of numbers to the last one in the stack after the operation
     recVectr = _result_stack.pop()->evaluate();
     //We have the record number list, now we just push the record into the new table
+    
+    // std::cout << recVectr;
+    
     selected_recnos = recVectr;
     int sizeOfRecVectr = recVectr.size();
     int numOfField = fieldnames.size();
 
+
     for(int j = 0; j < sizeOfRecVectr; j++){
         FileRecord record;
+        
         vectorstr newRecordValue = record.readVector(file, recVectr[j], field_names.size());
         vectorstr inOrderRec;
         for(int i = 0; i < numOfField; i++){
             //we are pushing back in the order of field
             inOrderRec.push_back(newRecordValue[index[fieldnames[i]]]);
         }
+        // std::cout << inOrderRec;
         temp.insert_into(inOrderRec);
     }
 
@@ -453,6 +488,7 @@ Table& Table::operator =(const Table& RHS){
     index = RHS.index;
     recnoVec = RHS.recnoVec;
     numOfRec = RHS.numOfRec;
+    // Table temp(RHS.title);
     return *this;
 }
 
