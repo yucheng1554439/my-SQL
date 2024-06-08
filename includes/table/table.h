@@ -23,12 +23,13 @@ class Table{
     Table select(vectorstr fieldnames, Queue<Token*> queue_of_compar);
     Table select(vectorstr fieldnames, vector<string> string_of_compar);
     Table select(vectorstr fieldnames, string field_searching, string operatr, string value_searching);
+    Table select(vectorstr fieldnames);
     Table select_all();
+    vectorstr get_field_names();
     Table vector_table(vector<long> vec, string fileName, int fieldNameLength);
     vector<long> select_recnos(); //return the record numbers
     Table& operator =(const Table& RHS);
     friend ostream& operator <<(ostream& outs, const Table& print_me);
-    vectorstr get_field_names();
     static int sequenceNumber;
     
     

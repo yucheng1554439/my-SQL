@@ -73,7 +73,15 @@ struct MPair{
         return lhs.key >= rhs.key;
     }
     friend MPair<K, V> operator + (const MPair<K, V>& lhs, const MPair<K, V>& rhs){
-        MPair<K,V> a = MPair<K, V>(lhs.key, lhs.value_list.pushback(rhs.value_list));
+
+        MPair<K,V> a = lhs;
+
+        for(int i = 0 ; i < rhs.value_list.size(); i++)
+        {
+            a.value_list.push_back(rhs.value_list[i]);
+        }
+        // MPair<K,V> a = MPair<K, V>(lhs.key, lhs.value_list.pushback(rhs.value_list));
+        //MPair<K,V> a = MPair<K, V>(lhs.key, lhs.value_list);
         return a;
     }
 };
@@ -125,7 +133,7 @@ public:
         typename MMap_base::Iterator _it;
     };
 
-    MMap(){
+    MMap():mmap(true){
         key_count = 0;
     }
 //  Iterators
@@ -189,6 +197,7 @@ public:
     void insert(MPair<K, V> temp){
         mmap.insert(temp);
         key_count++;
+
     }
     void erase(const K& key){
         mmap.remove(MPair<K,V>(key));
@@ -226,27 +235,36 @@ public:
     
     void print_lookup(){        
         if(mmap.get(MPair<string,string>("command")).value_list[0] == "select"){
-            std::cout << "command :\t" << mmap.get(MPair<string,string>("command")).value_list << endl;
+            // std::cout << "command :\t" << mmap.get(MPair<string,string>("command")).value_list << endl;
+            std::cout << mmap.get(MPair<string,string>("command")).key << " :\t" << mmap.get(MPair<string,string>("command")).value_list << endl;
             if(contains("condition")){
-                std::cout << "condition :\t" << mmap.get(MPair<string,string>("condition")).value_list << endl;
+                // std::cout << "condition :\t" << mmap.get(MPair<string,string>("condition")).value_list << endl;
+                std::cout << mmap.get(MPair<string,string>("condition")).key << " :\t" << mmap.get(MPair<string,string>("condition")).value_list << endl;
             }
-            std::cout << "fields :\t" << mmap.get(MPair<string,string>("fields")).value_list << endl;
-            std::cout << "table_name :\t" << mmap.get(MPair<string,string>("table")).value_list << endl;
+            // std::cout << "fields :\t" << mmap.get(MPair<string,string>("fields")).value_list << endl;
+            // std::cout << "table_name :\t" << mmap.get(MPair<string,string>("table")).value_list << endl;
+            std::cout << mmap.get(MPair<string,string>("fields")).key << " :\t" << mmap.get(MPair<string,string>("fields")).value_list << endl;
+            std::cout << mmap.get(MPair<string,string>("table_name")).key << " :\t" << mmap.get(MPair<string,string>("table_name")).value_list << endl;
             if(contains("where")){
-                std::cout << "where :\t" << "yes" << endl;
+                // std::cout << "where :\t" << "yes" << endl;
+                std::cout << mmap.get(MPair<string,string>("where")).key << " :\t" << mmap.get(MPair<string,string>("where")).value_list << endl;
             }
 
         }else if(mmap.get(MPair<string,string>("command")).value_list[0] == "insert"){
-            std::cout << "command :\t" << mmap.get(MPair<string,string>("command")).value_list << endl;
-            std::cout << "table_name :\t" << mmap.get(MPair<string,string>("table")).value_list << endl;
-            std::cout << "values :\t" << mmap.get(MPair<string,string>("condition")).value_list << endl;
+            std::cout << mmap.get(MPair<string,string>("command")).key << " :\t" << mmap.get(MPair<string,string>("command")).value_list << endl;
+            std::cout << mmap.get(MPair<string,string>("table_name")).key << " :\t" << mmap.get(MPair<string,string>("table_name")).value_list << endl;
+            std::cout << mmap.get(MPair<string,string>("values")).key << " :\t" << mmap.get(MPair<string,string>("values")).value_list << endl;
+            // std::cout << "table_name :\t" << mmap.get(MPair<string,string>("table")).value_list << endl;
+            // std::cout << "values :\t" << mmap.get(MPair<string,string>("condition")).value_list << endl;
 
         }else if(mmap.get(MPair<string,string>("command")).value_list[0] == "make"){
-            std::cout << "col :\t" << mmap.get(MPair<string,string>("fields")).value_list << endl;
-            std::cout << "command :\t" << mmap.get(MPair<string,string>("command")).value_list << endl;
-            std::cout << "table_name:\t" << mmap.get(MPair<string,string>("table")).value_list << endl;
+            std::cout << mmap.get(MPair<string,string>("col")).key << " :\t" << mmap.get(MPair<string,string>("col")).value_list << endl;
+            std::cout << mmap.get(MPair<string,string>("command")).key << " :\t" << mmap.get(MPair<string,string>("command")).value_list << endl;
+            std::cout << mmap.get(MPair<string,string>("table_name")).key << " :\t" << mmap.get(MPair<string,string>("table_name")).value_list << endl;
+            // std::cout << "col :\t" << mmap.get(MPair<string,string>("fields")).value_list << endl;
+            // std::cout << "command :\t" << mmap.get(MPair<string,string>("command")).value_list << endl;
+            // std::cout << "table_name:\t" << mmap.get(MPair<string,string>("table")).value_list << endl;
         }
-        
     }
 
 

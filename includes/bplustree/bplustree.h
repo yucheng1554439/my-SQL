@@ -480,7 +480,10 @@ private:
         int i = first_ge(data, data_count, entry);
         bool found = (i<data_count && data[i] == entry);
         if(found && is_leaf()){
-            data[i] = entry;
+            if(dups_ok)
+                data[i] = data[i] + entry;
+            else
+                data[i] = entry;
         }else if(found && !is_leaf()){
             subset[i+1]->loose_insert(entry);
             fix_excess(i+1);

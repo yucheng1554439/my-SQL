@@ -28,6 +28,8 @@ Parser::Parser(string string){
     keyword.insert("CONDITION", CONDITION);
     keyword.insert("SYM", SYM);
     keyword.insert("*", STARR);
+
+
     
 
 
@@ -81,21 +83,38 @@ void Parser::set_string(string string){
 
     Token t;
     stringTokenizer>>t;
-    _token_holder.push_back(t);
+    if(t.type_string()!= "SPACE")
+        _token_holder.push_back(t);
+
+    
     //get the token into the vector
     while(stringTokenizer.more()){
+        // for(int i = 0; i < _token_holder.size(); i++){
+        //     std::cout  << "_token_holder"<< _token_holder[i] << endl;
+        // }
+        // cout << "\nTOken:|" << t << "|TOKENTYPE:|" << setw(25)<<t.type_string() << "|\t\n";
         stringTokenizer>>t;
-        _token_holder.push_back(t);
+        if(t.type_string()!= "SPACE")
+            _token_holder.push_back(t);
+
     }
+
+    
+
     
     vector<Token> temp;
     temp.clear();
     //filter thru the raw vector
     int vecLength = _token_holder.size();
     for(int i = 0; i < vecLength; i++){
-        if(_token_holder[i].token_str() != "," && _token_holder[i].token_str() != " "){
+        
+        // if(valid_token(_token_holder[i].token_str())){
+        //     temp.push_back(_token_holder[i]);
+        // }
+
+        if(_token_holder[i].type_string() != "SPACE" && _token_holder[i].type_string() != "PUNCTUATION"){
             temp.push_back(_token_holder[i]);
-            // std::cout << _token_holder[i] <<endl;
+            // std::cout << _token_holder[i];
         }
     }
     _token_holder.clear();
@@ -103,7 +122,6 @@ void Parser::set_string(string string){
 
 
 
-    // std::cout << _token_holder << endl;
 
     // ptree
     ptree.clear();
@@ -111,13 +129,29 @@ void Parser::set_string(string string){
     // cout << ptree;
 }
 
+// bool Parser::valid_token(string string){
+//     bool Value = false;
+//     for(int i = 0; i < string.length(); i++){
+//         if(isnumber(string[i]) || isalpha(string[i]) || (string[i] == '*') || contains(OPERATORS, string[i])){
+//             Value = true;
+//         }
+//     }
+//     return Value;
+// }
+
+// bool Parser::contains(const char array[], char element){
+//     for(int i = 0; i < strlen(array); i ++){
+//         if(array[i] == element){
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+
 keys Parser::get_column(Token token){
     if(token.token_str()=="*"){
         return STARR;
     }
-    // if(token.token_str()=="."){
-    //     return SYM;
-    // }
 
     Pair<string, keys> temp(toupper(token.token_str()));
     if(keyword.contains(temp)){
@@ -150,6 +184,9 @@ bool Parser::get_parse_tree(){
         std::string yes = "yes";
         state = _table_for_enum.get(state, get_column(token));
         // std::cout << get_column(token) << endl;
+        string string = token.token_str();
+        bool valid = false;
+        // std::cout << "\nTOKEN|" << string << "|\n";
 
         switch(state)
         {
@@ -160,7 +197,16 @@ bool Parser::get_parse_tree(){
             ptree["table_name"] += token.token_str();
             break;
         case 5:
-            ptree["col"] += token.token_str();
+            // for(int i = 0; i < string.size(); i++){
+            //     if(isalpha(string[i])){
+            //         valid = true;
+            //     }
+            // }   
+            // if(valid){
+                ptree["col"] += token.token_str();
+            // }
+
+
             break;
         case 6:
             ptree["command"] += token.token_str();

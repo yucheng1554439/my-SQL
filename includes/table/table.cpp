@@ -23,12 +23,16 @@ Table::Table(string a)
     if (f)
     {
         // printing the success message
-        // cout << "File exists" << endl;
         string s;
+        // cout<<"filename: "<<a<<endl;
         while(getline(f, s)){
             //Set the field name equal to the things in the txt
+            // cout<<"string in getline: "<<s<<endl;
             field_names.push_back(s);
         }
+        // while(f>>s){
+        //     field_names.push_back(s);
+        // }
         f.close();
         for(int i = 0; i < field_names.size(); i++){
             MMap<string, long> temp;
@@ -47,7 +51,6 @@ Table::Table(string a)
         //loop thru the bin file
         while(record.read(file, recordNumbers) != 0){
             vectorstr b = record.readVector(file, recordNumbers, fieldLength);
-            // std::cout << "   ||" <<b << "||   ";
             long recon = recordNumbers;
             for(int j = 0; j < b.size(); j++){
                 _indices_recno[index[field_names[j]]].insert(b[j], recon);
@@ -56,7 +59,9 @@ Table::Table(string a)
             numOfRec++;
             recordNumbers++;
         }
-        
+
+        // cout << "_indices_recno\n" << _indices_recno << endl;
+
 
         file.close();
     }else{
@@ -85,9 +90,11 @@ Table::Table(string a, vectorstr b)
 
 
     ofstream f;
-    f.open((a + ".txt").c_str());
+    f.open((a + ".txt").c_str(), ios::trunc);
     int length = b.size();
+    // cout<<"length: "<<length<<"\n"
     for(int i = 0; i < length; i++){
+        // cout<<"field names being written: "<<b[i]<<endl;
         f << b[i] << "\n";
     }
     f.close();
@@ -111,11 +118,6 @@ Table::~Table(){
     file.close();
 }
 
-Table::Table(const Table& a){
-    *this = a;
-}
-
-
 void Table::insert_into(vectorstr b){
 
     FileRecord record(b);
@@ -125,6 +127,7 @@ void Table::insert_into(vectorstr b){
     for(int i = 0; i < b.size(); i++){
         _indices_recno[i].insert(b[i], recon);
     }
+    // cout << "_indices_recno" << _indices_recno << endl;
     recnoVec.push_back(recon);
     numOfRec++;
     file.close();
@@ -132,45 +135,34 @@ void Table::insert_into(vectorstr b){
 
 
 Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
-    sequenceNumber++;
+    //----------My main select-----------
     Table temp(title+"_"+to_string(sequenceNumber), fieldnames);
-
-    // temp._indices_recno = _indices_recno;
-
-    // std::cout << temp._indices_recno;
-
+    sequenceNumber++;
     vector<long> recVectr;
     Stack<Token*> _stack;
     Stack<Token*> _result_stack;
     fstream file;
-
-
-    FileRecord record;
-
+    // int numOfField = field_names.size();
     open_fileRW(file, (title+".bin").c_str());
-
-    // for(int i = 0; i < numOfRec; i ++){
-    //     // open_fileRW(file, title.c_str());
-    //     // int i=0;
-    //     // while(record.read(f, i)!=0){   
-    //         record.read(file, i);
-    //         std::cout  << setw(10)<< i << "\t" << record << "\t" << setw(10)<< endl;
-    //         // i++;
-    //     // }
-    // }
-
     selected_recnos.clear();
     //if the queue is not empty
     while(!queue_of_compar.empty()){
         //----- < <= >= > = ----- //PROBLEM, if there is then delet the resultstack replace with stack
+        // cout<<"-----queue of compar in select is not empty"<<endl;
         if(queue_of_compar.front()->type_string() == "RELATIONAL"){
+            // cout<<"RELATIONAL"<<endl;
             Token* rhs = _stack.pop();
             Token* lhs = _stack.pop();
+            // cout<<"LHS: "<<lhs->getString()<<endl;
+            // cout<<"RHS: "<<rhs->getString()<<endl;
             recVectr = queue_of_compar.pop()->evaluate(lhs, rhs, _indices_recno, field_names, file); 
+            // std::cout << "INSIDE" <<  recVectr;
             ResultSet* result = new ResultSet(recVectr);
+            // cout<<"---------result in rpn -----"<<endl<<result->evaluate()<<endl;
             _result_stack.push(result);
         //------ and or -----
         }else if(queue_of_compar.front()->type_string() == "LOGICAL"){
+            // cout<<"LOGICAL"<<endl;
             Token* rhs = _result_stack.pop();
             Token* lhs = _result_stack.pop();
             recVectr = queue_of_compar.pop()->evaluate(lhs, rhs);  
@@ -180,36 +172,80 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
             _stack.push(queue_of_compar.pop());
         }
     }
-
-    // std::cout << *_result_stack.pop();
-
-
     //update of the vector of numbers to the last one in the stack after the operation
+    // recVectr = _result_stack.pop()->evaluate();
     recVectr = _result_stack.pop()->evaluate();
     //We have the record number list, now we just push the record into the new table
-    
-    // std::cout << recVectr;
-    
     selected_recnos = recVectr;
     int sizeOfRecVectr = recVectr.size();
     int numOfField = fieldnames.size();
 
-
     for(int j = 0; j < sizeOfRecVectr; j++){
         FileRecord record;
-        
         vectorstr newRecordValue = record.readVector(file, recVectr[j], field_names.size());
         vectorstr inOrderRec;
         for(int i = 0; i < numOfField; i++){
             //we are pushing back in the order of field
             inOrderRec.push_back(newRecordValue[index[fieldnames[i]]]);
         }
-        // std::cout << inOrderRec;
         temp.insert_into(inOrderRec);
     }
-
+    // cout<<"sizeOfRecVectr in select(vectorstr fieldnames, Queue<Token*> queue_of_compar): "<<sizeOfRecVectr<<endl;
+    temp.numOfRec = sizeOfRecVectr;
+    // cout<<"Printing temp in select(vectorstr fieldnames, Queue<Token*> queue_of_compar)"<<endl;
+    // cout<<temp<<endl;
     file.close();
     return temp;
+}
+
+
+Table Table::select(vectorstr fieldnames){
+    
+    Table temp(title+"_"+to_string(sequenceNumber), fieldnames);
+    sequenceNumber++;
+    fstream file;
+    // int numOfField = field_names.size();
+    open_fileRW(file, (title+".bin").c_str());
+    selected_recnos.clear();
+
+    FileRecord record;
+    vector<long> recVectr;
+    long recordNumbers = 0;
+    int fieldLength = fieldnames.size();
+
+    while(record.read(file, recordNumbers) != 0){
+        vectorstr b = record.readVector(file, recordNumbers, fieldLength);
+        long recon = recordNumbers;
+        recVectr.push_back(recon);
+        recordNumbers++;
+    }
+    file.close();
+
+    fstream file1;
+    open_fileRW(file1, (title+".bin").c_str());
+
+    // std::cout << "recVectr" << recVectr << endl;
+    selected_recnos = recVectr;
+    int sizeOfRecVectr = recVectr.size();
+    int numOfField = fieldnames.size();
+
+    for(int j = 0; j < sizeOfRecVectr; j++){
+        FileRecord record1;
+        vectorstr newRecordValue = record1.readVector(file1, recVectr[j], field_names.size());
+        vectorstr inOrderRec;
+        for(int i = 0; i < numOfField; i++){
+            //we are pushing back in the order of field
+            inOrderRec.push_back(newRecordValue[index[fieldnames[i]]]);
+        }
+        // std::cout << "inOrderRec" << inOrderRec << endl;
+        temp.insert_into(inOrderRec);
+    }
+    temp.numOfRec = sizeOfRecVectr;
+
+    file1.close();
+    return temp;
+
+
 }
 
 
@@ -251,14 +287,19 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
     while(!tempStack.empty()){
         postOrderQueue.push(tempStack.pop());
     }
-    // printing the post order experission
-    Queue<Token*> printingtest = postOrderQueue;
-    while(!printingtest.empty()){
-        std::cout << " (" <<printingtest.pop()->getString() << ") ";
-    }
-    std::cout << endl;
+    //printing the post order experission
+    // Queue<Token*> printingtest = postOrderQueue;
+    // while(!printingtest.empty()){
+    //     std::cout << printingtest.pop()->getString() << " ";
+    // }
+    // std::cout << endl;
+    //Debugging
+    // cout<<"-------Printing select directly from select(fieldname, string compar)--------"<<endl;
+    // cout<<select(fieldnames, postOrderQueue)<<endl;
+    Table temp = select(fieldnames, postOrderQueue);
+    //
     //Now we offcialy done with Shawting yard!!! We have a postOrderQueue
-    return select(fieldnames, postOrderQueue);
+    return temp;
 }
 
 
@@ -432,6 +473,7 @@ Table Table::select(vectorstr fieldnames, string field_searching, string operatr
 }
 Table Table::select_all(){
     Table temp(title);
+    selected_recnos = recnoVec;
     // int vecSize = recnoVec.size();
     // int numOfField = field_names.size();
     // FileRecord record;
@@ -488,7 +530,6 @@ Table& Table::operator =(const Table& RHS){
     index = RHS.index;
     recnoVec = RHS.recnoVec;
     numOfRec = RHS.numOfRec;
-    // Table temp(RHS.title);
     return *this;
 }
 
@@ -513,7 +554,7 @@ ostream& operator <<(ostream& outs, const Table& print_me){
     std::cout << std::endl;
     fstream f;
     open_fileRW(f, (print_me.title+".bin").c_str());
-    
+    // cout<<"!!!!!!!print_me.numOfRec"<<print_me.numOfRec<<endl;
     for(int i = 0; i < print_me.numOfRec; i ++){
         // open_fileRW(file, title.c_str());
         // int i=0;
@@ -530,6 +571,5 @@ ostream& operator <<(ostream& outs, const Table& print_me){
 vectorstr Table::get_field_names(){
     return field_names;
 }
-
 
 #endif

@@ -33,12 +33,18 @@ STokenizer& operator>> (STokenizer& s, Token& t){
     int start_state = 0;
     if(s.get_token(start_state, token)){
         t.setToken(token);
+        // std::cout << "SETTOKEN: " << token << endl;
         if(token.length() > 1){
-            if(s.contains(ALFA, token[0])){
+            if(s.contains(ALFA, token[0]) || s.contains(ALFA, token[1])){
                 t.setType(TOKEN_ALPHA);
             }else if(s.contains(DIGITS, token[0])||s.contains(DIGITS, token[1])){
                 t.setType(TOKEN_NUMBER);
+            }else if(s.contains(SPACES, token[0]) && !s.contains(ALFA, token[1])){
+                t.setType(TOKEN_SPACE);
+            }else if(s.contains(OPERATORS, token[1])){
+                t.setType(OPERATOR);
             }
+            
         }else{
             if(s.contains(ALFA, token[0])){
                 t.setType(TOKEN_ALPHA);
@@ -50,10 +56,17 @@ STokenizer& operator>> (STokenizer& s, Token& t){
                 t.setType(TOKEN_OPERATOR);
             }else if(s.contains(PUNC, token[0])){
                 t.setType(TOKEN_PUNC);
+            }else if(token[0] == ')'){
+                t.setType(RPAREN);
+            }else if(token[0] == '('){
+                t.setType(LPAREN);
+            }else if(token[0] == '*'){
+                t.setType(OPERATOR);
             }
+            
         }
     }
-    // std::cout << "Token: " << t << std::endl;
+    // std::cout << "\nTokenSSS: |" << t << "|" << std::endl;
     // std::cout << "Position: " << s._pos << std::endl;
     return s;
 }
@@ -173,6 +186,7 @@ void STokenizer::make_table(int _table[][MAX_COLUMNS]){
     mark_cells(0, _table, QUOTATION, 9);    //state [0] --- ALFA ---> [5]
     mark_cells(9, _table, ALFA, 9);    //state [5] --- ALFA ---> [5]
     mark_cells(9, _table, SPACES, 9);    //state [5] --- ALFA ---> [5]
+    mark_cells(9, _table, PERIOD, 9);    //state [5] --- ALFA ---> [5]
     mark_cells(9, _table, QUOTATION, 10);    //state [0] --- ALFA ---> [5]
     
 
@@ -204,6 +218,7 @@ void STokenizer::make_table_enum(int _table[][MAX_COLUMNS]){
     mark_fail(_table, 13);  
     mark_fail(_table, 14);  
     mark_fail(_table, 17);
+    mark_fail(_table, 19);
 
 
 
@@ -233,10 +248,11 @@ void STokenizer::make_table_enum(int _table[][MAX_COLUMNS]){
     mark_cells(8, _table, VALUES, 17);
     mark_cells(17, _table, SYM, 18);
     mark_cells(18, _table, SYM, 18);
-    // mark_cells(18, _table, " ", 18);
-    // mark_cells(18, _table, SYM, 18);
-    // mark_cells(18, _table, ".", 18);
-    // mark_cells(18, _table, "\"", 18);
+    // mark_cells(18, _table, SPACE, 19);
+
+    // mark_cells(18, _table, PERIOD, 18);
+    
+
 
 
     mark_cells(0, _table, MAKE, 1);

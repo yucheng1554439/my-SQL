@@ -89,6 +89,8 @@ class ResultSet:public Token{
         setType(13);
     }
     virtual vector<long> evaluate() const{
+        // cout<<"Entered resultSet virtual evaluate and printing _result_vecno"<<endl;
+        // cout<<_result_vecno<<endl;
         return _result_vecno;
     }
     private: 
@@ -126,19 +128,22 @@ class Relational:public Operator{
         vector<long> recVectr;
         recVectr.clear();
         int numOfField = fieldNames.size();
+        // cout<<"numOfField: "<<numOfField<<endl;
+        // cout<<"printing the trees in relational evaluate: "<<endl;
+        // for(int i = 0; i < _indices_recno.size(); i++)
+        //     cout<<_indices_recno[i]<<endl;
 
+        // cout<<"_string_relational: "<<_string_relational<<endl;
         if(_string_relational == "="){
             for(int i = 0; i < numOfField; i++){
                 //get the subtree of the field that we are searching
                 if(fieldNames[i]==lhsString){
                     // int sizeOfRecVectr = _indices_recno[i].get(rhsString).size();
-                    // std::cout << "LHS:" << lhsString << "RHS: " << rhsString;
-                    // std::cout << _indices_recno[i];
                     recVectr = _indices_recno[i].get(rhsString);
                 }
-                
             }   
         }else if(_string_relational == "<"){
+            // cout<<"_string_relational "<<_string_relational<<endl;
             for(int i = 0; i < numOfField; i++){
                 //get the subtree of the field that we are searching
                 if(fieldNames[i]==lhsString){
@@ -159,8 +164,6 @@ class Relational:public Operator{
                     for(itertrUpper; itertrUpper != MMap<string, long>::Iterator(nullptr); itertrUpper++){
                         for(int i = 0; i < ((*itertrUpper).value_list).size(); i++){
                             //get all the record numbers
-                            // std::cout << "\n" <<((*itertrUpper).value_list[i]) << endl;
-
                             recVectr.push_back(((*itertrUpper).value_list)[i]);
                         }
                     }
@@ -195,7 +198,7 @@ class Relational:public Operator{
             }   
         }
         
-
+        // cout<<"recVectr in realtional virtual evaluate: "<<recVectr<<endl;
         return recVectr;
     }
     private:

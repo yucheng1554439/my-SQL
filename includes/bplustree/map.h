@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "bplustree.h"
+#include "string"
 // #include "btree_array_funcs.h"
 
 
@@ -38,7 +39,9 @@ struct Pair{
         return lhs.key >= rhs.key;
     }
     friend Pair<K, V> operator + (const Pair<K, V>& lhs, const Pair<K, V>& rhs){
-        Pair<K,V> a = Pair<K, V>(lhs.key, lhs.value + rhs.value);
+        // Pair<K,V> a = Pair<K, V>(lhs.key, lhs.value + rhs.value);
+        Pair<K, V> a = lhs;
+        // a.value += rhs.value;
         return a;
     }
 };
@@ -85,7 +88,7 @@ public:
         typename map_base::Iterator _it;
     };
 
-    Map(){
+    Map():map(false){
         key_count = 0;
     }
 //  Iterators
