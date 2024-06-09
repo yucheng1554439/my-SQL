@@ -18,7 +18,7 @@ class Table{
     Table(string a);
     Table(string a, vectorstr b);
     Table(const Table& a);
-    ~Table();
+    // ~Table();
     void insert_into(vectorstr b);
     Table select(vectorstr fieldnames, Queue<Token*> queue_of_compar);
     Table select(vectorstr fieldnames, vector<string> string_of_compar);

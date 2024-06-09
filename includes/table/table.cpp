@@ -78,6 +78,18 @@ Table::Table(string a)
     }
     
 }
+
+Table::Table(const Table& a){
+    field_names = a.field_names;
+    title = a.title;
+    _indices_recno = a._indices_recno;
+    index = a.index;
+    recnoVec = a.recnoVec;
+    selected_recnos = a.selected_recnos;
+    numOfRec = a.numOfRec;
+}
+
+
 Table::Table(string a, vectorstr b)
 :title(a), field_names(b), numOfRec(0)
 {
@@ -111,12 +123,12 @@ Table::Table(string a, vectorstr b)
 }
 
 
-Table::~Table(){
-    fstream file;
-    file.open(title.c_str());
-    file.clear();
-    file.close();
-}
+// Table::~Table(){
+//     fstream file;
+//     file.open(title.c_str());
+//     file.clear();
+//     file.close();
+// }
 
 void Table::insert_into(vectorstr b){
 
