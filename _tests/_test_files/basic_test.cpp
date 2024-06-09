@@ -23,7 +23,7 @@ const vector<string> command_list = {
 /*04*/     "insert into employee values Johnson,    \"Jimmy\",     Chemistry,140000, 2018",
 
 /*05*/     "make table student fields  fname,          lname,    major,    age",
-/*06*/     "insert into student values Flo,            Yao, 	Art, 	20",
+/*06*/     "Insert into student values Flo,            Yao, 	Art, 	20",
 /*07*/     "insert into student values Bo, 		     Yang, 	CS, 		28",
 /*08*/     "insert into student values \"Sammuel L.\", Jackson, 	CS, 		40",
 /*09*/     "insert into student values \"Billy\",	     Jackson, 	Math,	27",
@@ -31,14 +31,14 @@ const vector<string> command_list = {
 
 /*11*/     "select * from employee",
 /*12*/     "select last, first, age from employee",
-/*13*/     "select age from employee",
+/*13*/     "select age fFom employee",
 /*14*/     "select * from employee where last = Johnson",
-/*15*/     "select * from employee where last=Blow and major=\"JoAnn\"",
+/*15*/     "Select * from employee where last=Blow and major=\"JoAnn\"",
 
-/*16*/     "select * from student",
-/*17*/     "select * from student where (major=CS or major=Art)",
-/*18*/     "select * from student where lname>J",
-/*19*/     "select * from student where lname>J and (fname=Billy and (lname>J or (major=CS or major=Art) or (major=CS or major=Art)))"
+/*16*/     "sElect * from student",
+/*17*/     "seLect * from student where (major=CS or major=Art)",
+/*18*/     "SELECT * from student where lname>J",
+/*19*/     "selecT * from student where lname>J and (fname=Billy and (lname>J or (major=CS or major=Art) or (major=CS or major=Art)))"
 
 };
 

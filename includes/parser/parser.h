@@ -17,9 +17,10 @@ class Parser{
     Parser();
     Parser(string string);
     mmap_ss parse_tree();
-    void set_string(string string);
+    bool set_string(string string);
     keys get_column(Token token);
     bool valid_token(string string);
+    bool is_valid();
     bool contains(const char array[], char element);
     bool get_parse_tree();
     // void make
@@ -27,10 +28,11 @@ class Parser{
     private:
 
     string toupper(string string);
+    string tolower(string string);
 
     mmap_ss ptree;
     Map<string, keys> keyword;
-    bool flag;
+    bool _valid;
     STokenizer _table_for_enum; //state machine for enumed vector string
     vector<Token> _token_holder;
     vector<keys> _token_holder_enum_type;

@@ -9,7 +9,6 @@ Parser::Parser(){
 }
 Parser::Parser(string string){
     //set the member buffer to the input
-
     _token_holder.clear();
     _token_holder_enum_type.clear();
     _buffer = string;
@@ -30,13 +29,17 @@ Parser::Parser(string string){
     keyword.insert("*", STARR);
 
 
-    
-
 
     //tokenize the input into our vector string _token_holder
-    set_string(string);
+    _valid = set_string(string);
+
 
 }
+
+bool Parser::is_valid(){
+    return _valid;
+}
+
 mmap_ss Parser::parse_tree(){
     MMap<string,string> temp;
     if(ptree["command"][0] == "select"){
@@ -74,7 +77,7 @@ mmap_ss Parser::parse_tree(){
     }
     return temp;
 }
-void Parser::set_string(string string){
+bool Parser::set_string(string string){
     char charArr[string.length()+1];
 	strcpy(charArr, string.c_str());
     
@@ -113,7 +116,14 @@ void Parser::set_string(string string){
         // }
 
         if(_token_holder[i].type_string() != "SPACE" && _token_holder[i].type_string() != "PUNCTUATION"){
-            temp.push_back(_token_holder[i]);
+            if(_token_holder[i].token_str() == "*"){
+                temp.push_back(_token_holder[i]);
+            }else if(tolower(_token_holder[i].token_str()) != "select" && tolower(_token_holder[i].token_str()) != "insert" && tolower(_token_holder[i].token_str()) != "make" && tolower(_token_holder[i].token_str()) != "from" && tolower(_token_holder[i].token_str()) != "where" && tolower(_token_holder[i].token_str()) != "into"&& tolower(_token_holder[i].token_str()) != "values"&& tolower(_token_holder[i].token_str()) != "fields"&& tolower(_token_holder[i].token_str()) != "table"){
+                temp.push_back(_token_holder[i]);
+            }else{
+                Token temp1(tolower(_token_holder[i].token_str()), _token_holder[i].type());
+                temp.push_back(temp1);
+            }
             // std::cout << _token_holder[i];
         }
     }
@@ -125,7 +135,9 @@ void Parser::set_string(string string){
 
     // ptree
     ptree.clear();
-    get_parse_tree();
+    
+    
+    return get_parse_tree();
     // cout << ptree;
 }
 
@@ -155,6 +167,7 @@ keys Parser::get_column(Token token){
 
     Pair<string, keys> temp(toupper(token.token_str()));
     if(keyword.contains(temp)){
+        // std::cout << "toupper(token.token_str()):" << toupper(token.token_str()) << endl;
         return keyword[toupper(token.token_str())];
     }
     return SYM;
@@ -178,14 +191,20 @@ bool Parser::get_parse_tree(){
 
     _table_for_enum.make_adjacency_table();
     int state = 0;
+    std::string yes = "yes";
+    bool valid = false;
+
     for(int i = 0; i < vecLength; i++){
 
         Token token = _token_holder[i];
-        std::string yes = "yes";
-        state = _table_for_enum.get(state, get_column(token));
-        // std::cout << get_column(token) << endl;
+
         string string = token.token_str();
-        bool valid = false;
+        state = _table_for_enum.get(state, get_column(token));
+        // std::cout << state << endl;
+        
+        valid = _table_for_enum.isSuccess(state);
+        // std::cout << "valid" << valid << endl;
+
         // std::cout << "\nTOKEN|" << string << "|\n";
 
         switch(state)
@@ -197,16 +216,7 @@ bool Parser::get_parse_tree(){
             ptree["table_name"] += token.token_str();
             break;
         case 5:
-            // for(int i = 0; i < string.size(); i++){
-            //     if(isalpha(string[i])){
-            //         valid = true;
-            //     }
-            // }   
-            // if(valid){
-                ptree["col"] += token.token_str();
-            // }
-
-
+            ptree["col"] += token.token_str();
             break;
         case 6:
             ptree["command"] += token.token_str();
@@ -242,22 +252,16 @@ bool Parser::get_parse_tree(){
         default:
             break;
         }
-
-
-        
     }
-    // if(state == 1){
-    //     return true;
-    // }else{
-    //     ptree.clear();
-    //     return false;
-    // }
-
-
+    return valid;
 
 }
 string Parser::toupper(string string){
     transform(string.begin(), string.end(), string.begin(), ::toupper); 
+    return string;
+}
+string Parser::tolower(string string){
+    transform(string.begin(), string.end(), string.begin(), ::tolower); 
     return string;
 }
 
