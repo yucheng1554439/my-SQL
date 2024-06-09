@@ -79,15 +79,15 @@ Table::Table(string a)
     
 }
 
-Table::Table(const Table& a){
-    field_names = a.field_names;
-    title = a.title;
-    _indices_recno = a._indices_recno;
-    index = a.index;
-    recnoVec = a.recnoVec;
-    selected_recnos = a.selected_recnos;
-    numOfRec = a.numOfRec;
-}
+// Table::Table(const Table& a){
+//     field_names = a.field_names;
+//     title = a.title;
+//     _indices_recno = a._indices_recno;
+//     index = a.index;
+//     recnoVec = a.recnoVec;
+//     selected_recnos = a.selected_recnos;
+//     numOfRec = a.numOfRec;
+// }
 
 
 Table::Table(string a, vectorstr b)
@@ -535,15 +535,15 @@ vector<long> Table::select_recnos(){
     return selected_recnos;
 } //return the record numbers
 
-Table& Table::operator =(const Table& RHS){
-    field_names = RHS.field_names;
-    title = RHS.title;
-    _indices_recno = RHS._indices_recno;
-    index = RHS.index;
-    recnoVec = RHS.recnoVec;
-    numOfRec = RHS.numOfRec;
-    return *this;
-}
+// Table& Table::operator =(const Table& RHS){
+//     field_names = RHS.field_names;
+//     title = RHS.title;
+//     _indices_recno = RHS._indices_recno;
+//     index = RHS.index;
+//     recnoVec = RHS.recnoVec;
+//     numOfRec = RHS.numOfRec;
+//     return *this;
+// }
 
 
 ostream& operator <<(ostream& outs, const Table& print_me){
