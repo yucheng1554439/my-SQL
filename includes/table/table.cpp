@@ -280,7 +280,7 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
         }else if(string_of_compar[i] == "and" || string_of_compar[i] == "or"){
             Logical* temp = new Logical(string_of_compar[i]);
             // Queue<Token*> tempForPop;
-            //sink down if the thing that ur sitting above is bigger than you
+            //sink down if the thing that ur sitting above is bigger and equal than you
             while(!tempStack.empty() && (tempStack.top()->type_string() == "RELATIONAL"|| tempStack.top()->type_string() == "LOGICAL")){ //|| tempStack.top()->type_string() == "LOGICAL"
                 // tempForPop.push(tempStack.pop());
                 postOrderQueue.push(tempStack.pop());
@@ -294,7 +294,7 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
             // tempStack.push(temp);
             Relational* temp = new Relational(string_of_compar[i]);
             // Queue<Token*> tempForPop;
-            //sink down if the thing that ur sitting above is bigger than you
+            //sink down if the thing that ur sitting above is bigger and equal than you
             while(!tempStack.empty() && (tempStack.top()->type_string() == "RELATIONAL")){ //|| tempStack.top()->type_string() == "LOGICAL"
                 // tempForPop.push(tempStack.pop());
                 postOrderQueue.push(tempStack.pop());
