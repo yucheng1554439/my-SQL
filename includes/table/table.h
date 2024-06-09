@@ -17,8 +17,8 @@ class Table{
     Table();
     Table(string a);
     Table(string a, vectorstr b);
-    // Table(const Table& a);
-    // ~Table();
+    Table(const Table& a);
+    ~Table();
     void insert_into(vectorstr b);
     Table select(vectorstr fieldnames, Queue<Token*> queue_of_compar);
     Table select(vectorstr fieldnames, vector<string> string_of_compar);
@@ -28,7 +28,7 @@ class Table{
     vectorstr get_field_names();
     Table vector_table(vector<long> vec, string fileName, int fieldNameLength);
     vector<long> select_recnos(); //return the record numbers
-    // Table& operator =(const Table& RHS);
+    Table& operator =(const Table& RHS);
     friend ostream& operator <<(ostream& outs, const Table& print_me);
     static int sequenceNumber;
     

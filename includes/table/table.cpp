@@ -79,15 +79,15 @@ Table::Table(string a)
     
 }
 
-// Table::Table(const Table& a){
-//     field_names = a.field_names;
-//     title = a.title;
-//     _indices_recno = a._indices_recno;
-//     index = a.index;
-//     recnoVec = a.recnoVec;
-//     selected_recnos = a.selected_recnos;
-//     numOfRec = a.numOfRec;
-// }
+Table::Table(const Table& a){
+    field_names = a.field_names;
+    title = a.title;
+    _indices_recno = a._indices_recno;
+    index = a.index;
+    recnoVec = a.recnoVec;
+    selected_recnos = a.selected_recnos;
+    numOfRec = a.numOfRec;
+}
 
 
 Table::Table(string a, vectorstr b)
@@ -123,12 +123,12 @@ Table::Table(string a, vectorstr b)
 }
 
 
-// Table::~Table(){
-//     fstream file;
-//     file.open(title.c_str());
-//     file.clear();
-//     file.close();
-// }
+Table::~Table(){
+    fstream file;
+    file.open(title.c_str());
+    file.clear();
+    file.close();
+}
 
 void Table::insert_into(vectorstr b){
 
@@ -281,7 +281,7 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
             Logical* temp = new Logical(string_of_compar[i]);
             Queue<Token*> tempForPop;
             //sink down if the thing that ur sitting above is bigger than you
-            while(!tempStack.empty() && (tempStack.top()->type_string() == "RELATIONAL" || tempStack.top()->type_string() == "LOGICAL")){
+            while(!tempStack.empty() && (tempStack.top()->type_string() == "RELATIONAL" )){ //|| tempStack.top()->type_string() == "LOGICAL"
                 tempForPop.push(tempStack.pop());
             }
             tempStack.push(temp);
@@ -535,15 +535,15 @@ vector<long> Table::select_recnos(){
     return selected_recnos;
 } //return the record numbers
 
-// Table& Table::operator =(const Table& RHS){
-//     field_names = RHS.field_names;
-//     title = RHS.title;
-//     _indices_recno = RHS._indices_recno;
-//     index = RHS.index;
-//     recnoVec = RHS.recnoVec;
-//     numOfRec = RHS.numOfRec;
-//     return *this;
-// }
+Table& Table::operator =(const Table& RHS){
+    field_names = RHS.field_names;
+    title = RHS.title;
+    _indices_recno = RHS._indices_recno;
+    index = RHS.index;
+    recnoVec = RHS.recnoVec;
+    numOfRec = RHS.numOfRec;
+    return *this;
+}
 
 
 ostream& operator <<(ostream& outs, const Table& print_me){
