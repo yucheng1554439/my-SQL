@@ -279,18 +279,30 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
             tempStack.pop();
         }else if(string_of_compar[i] == "and" || string_of_compar[i] == "or"){
             Logical* temp = new Logical(string_of_compar[i]);
-            Queue<Token*> tempForPop;
+            // Queue<Token*> tempForPop;
             //sink down if the thing that ur sitting above is bigger than you
-            while(!tempStack.empty() && (tempStack.top()->type_string() == "RELATIONAL" || tempStack.top()->type_string() == "LOGICAL")){ //|| tempStack.top()->type_string() == "LOGICAL"
-                tempForPop.push(tempStack.pop());
+            while(!tempStack.empty() && (tempStack.top()->type_string() == "RELATIONAL"|| tempStack.top()->type_string() == "LOGICAL")){ //|| tempStack.top()->type_string() == "LOGICAL"
+                // tempForPop.push(tempStack.pop());
+                postOrderQueue.push(tempStack.pop());
             }
             tempStack.push(temp);
-            while(!tempForPop.empty()){
-                tempStack.push(tempForPop.pop());
-            }
+            // while(!tempForPop.empty()){
+            //     tempStack.push(tempForPop.pop());
+            // }
         }else if(string_of_compar[i] == ">" || string_of_compar[i] == "<" || string_of_compar[i] == ">=" || string_of_compar[i] == "<=" || string_of_compar[i] == "="){
+            // Relational* temp = new Relational(string_of_compar[i]);
+            // tempStack.push(temp);
             Relational* temp = new Relational(string_of_compar[i]);
+            // Queue<Token*> tempForPop;
+            //sink down if the thing that ur sitting above is bigger than you
+            while(!tempStack.empty() && (tempStack.top()->type_string() == "RELATIONAL")){ //|| tempStack.top()->type_string() == "LOGICAL"
+                // tempForPop.push(tempStack.pop());
+                postOrderQueue.push(tempStack.pop());
+            }
             tempStack.push(temp);
+            // while(!tempForPop.empty()){
+            //     tempStack.push(tempForPop.pop());
+            // }
         }else{
             TokenStr* temp = new TokenStr(string_of_compar[i]);
             postOrderQueue.push(temp);

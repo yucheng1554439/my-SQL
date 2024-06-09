@@ -31,7 +31,7 @@ const vector<string> command_list = {
 
 /*11*/     "select * from employee",
 /*12*/     "select last, first, age from employee",
-/*13*/     "select last from employee",
+/*13*/     "select age from employee",
 /*14*/     "select * from employee where last = Johnson",
 /*15*/     "select * from employee where last=Blow and major=\"JoAnn\"",
 
