@@ -281,7 +281,7 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
             Logical* temp = new Logical(string_of_compar[i]);
             Queue<Token*> tempForPop;
             //sink down if the thing that ur sitting above is bigger than you
-            while(!tempStack.empty() && (tempStack.top()->type_string() == "RELATIONAL" )){ //|| tempStack.top()->type_string() == "LOGICAL"
+            while(!tempStack.empty() && (tempStack.top()->type_string() == "RELATIONAL" || tempStack.top()->type_string() == "LOGICAL")){ //|| tempStack.top()->type_string() == "LOGICAL"
                 tempForPop.push(tempStack.pop());
             }
             tempStack.push(temp);
