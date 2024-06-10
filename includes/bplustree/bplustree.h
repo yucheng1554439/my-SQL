@@ -79,12 +79,12 @@ public:
         int key_ptr;
     };
 
-    BPlusTree(bool dups = false){
+    BPlusTree(bool dups = true){  //MADE it true, it was false
         child_count = 0;
         data_count = 0;
         next = nullptr;
     }
-    BPlusTree(T *a, int size, bool dups = false)
+    BPlusTree(T *a, int size, bool dups = true) //MADE it true, it was false
     : child_count(0), data_count(0), next(nullptr)
     {
         //copy_array(data, a, data_count, size);
