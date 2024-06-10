@@ -154,6 +154,7 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
     Stack<Token*> _stack;
     Stack<Token*> _result_stack;
     fstream file;
+    bool falseInput = false;
     // int numOfField = field_names.size();
     selected_recnos.clear();
     //if the queue is not empty
@@ -166,7 +167,15 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
             Token* lhs = _stack.pop();
             // cout<<"LHS: "<<lhs->getString()<<endl;
             // cout<<"RHS: "<<rhs->getString()<<endl;
+            // cout<<"LHS: "<<lhs->getString() << "||index[lhs->getString():" << index[lhs->getString()] << endl;
+
+            if(field_names[index[lhs->getString()]] != lhs->getString()){
+                falseInput = true;
+                break;
+            }
+
             recVectr = queue_of_compar.pop()->evaluate(lhs, rhs, _indices_recno, field_names, index[lhs->getString()]); 
+
             // std::cout << "INSIDE" <<  recVectr;
             ResultSet* result = new ResultSet(recVectr);
             // cout<<"---------result in rpn -----"<<endl<<result->evaluate()<<endl;
@@ -183,9 +192,14 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
             _stack.push(queue_of_compar.pop());
         }
     }
+
     //update of the vector of numbers to the last one in the stack after the operation
     // recVectr = _result_stack.pop()->evaluate();
-    recVectr = _result_stack.pop()->evaluate();
+    if(falseInput){
+        recVectr.clear();
+    }else{
+        recVectr = _result_stack.pop()->evaluate();
+    }
     //We have the record number list, now we just push the record into the new table
     selected_recnos = recVectr;
     int sizeOfRecVectr = recVectr.size();
