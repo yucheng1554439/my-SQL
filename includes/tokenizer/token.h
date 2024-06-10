@@ -22,7 +22,7 @@ class Token
             vector<long> temp;
             return temp;
         }
-        virtual vector<long> evaluate(const Token *lhs, const Token *rhs, vector<MMap<string, long> > _indices_recno,  vector<string> fieldNames, const fstream &file){
+        virtual vector<long> evaluate(const Token *lhs, const Token *rhs, vector<MMap<string, long> > _indices_recno,  vector<string> fieldNames, int index){
             vector<long> temp;
             return temp;
         }

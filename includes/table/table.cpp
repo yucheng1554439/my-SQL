@@ -166,7 +166,7 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
             Token* lhs = _stack.pop();
             // cout<<"LHS: "<<lhs->getString()<<endl;
             // cout<<"RHS: "<<rhs->getString()<<endl;
-            recVectr = queue_of_compar.pop()->evaluate(lhs, rhs, _indices_recno, field_names, file); 
+            recVectr = queue_of_compar.pop()->evaluate(lhs, rhs, _indices_recno, field_names, index[lhs->getString()]); 
             // std::cout << "INSIDE" <<  recVectr;
             ResultSet* result = new ResultSet(recVectr);
             // cout<<"---------result in rpn -----"<<endl<<result->evaluate()<<endl;
@@ -284,7 +284,7 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
             Logical* temp = new Logical(string_of_compar[i]);
             // Queue<Token*> tempForPop;
             //sink down if the thing that ur sitting above is bigger and equal than you
-            while(!tempStack.empty() && (tempStack.top()->type_string() == "RELATIONAL"|| tempStack.top()->type_string() == "LOGICAL")){ //|| tempStack.top()->type_string() == "LOGICAL"
+            while(!tempStack.empty() && (tempStack.top()->type_string() == "RELATIONAL"|| tempStack.top()->getString() == "and")){ //|| tempStack.top()->type_string() == "LOGICAL"
                 // tempForPop.push(tempStack.pop());
                 postOrderQueue.push(tempStack.pop());
             }

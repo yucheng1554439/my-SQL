@@ -121,7 +121,7 @@ class Relational:public Operator{
     virtual std::string getString() const{
         return _string_relational;
     }
-    virtual vector<long> evaluate(const Token *lhs, const Token *rhs, vector<MMap<string, long> > _indices_recno, vector<string> fieldNames, const fstream &file){
+    virtual vector<long> evaluate(const Token *lhs, const Token *rhs, vector<MMap<string, long> > _indices_recno, vector<string> fieldNames, int index){
         // std::cout << "RATION CALLED EVAL";
         string lhsString = lhs->getString();
         string rhsString = rhs->getString();
@@ -135,58 +135,34 @@ class Relational:public Operator{
 
         // cout<<"_string_relational: "<<_string_relational<<endl;
         if(_string_relational == "="){
-            for(int i = 0; i < numOfField; i++){
-                //get the subtree of the field that we are searching
-                if(fieldNames[i]==lhsString){
                     // recVectr = _indices_recno[i].get(rhsString);
-                    recVectr.insert(recVectr.end(), _indices_recno[i].get(rhsString).begin(), _indices_recno[i].get(rhsString).end());
-                }
-            }   
+            recVectr.insert(recVectr.end(), _indices_recno[index].get(rhsString).begin(), _indices_recno[index].get(rhsString).end());   
         }else if(_string_relational == "<"){
-            // cout<<"_string_relational "<<_string_relational<<endl;
-            for(int i = 0; i < numOfField; i++){
-                //get the subtree of the field that we are searching
-                if(fieldNames[i]==lhsString){
-                    MMap<string, long>::Iterator itertrLower = _indices_recno[i].lower_bound(rhsString);
-                    for(MMap<string, long>::Iterator temp = _indices_recno[i].begin(); temp != itertrLower; temp++){
+                    MMap<string, long>::Iterator itertrLower = _indices_recno[index].lower_bound(rhsString);
+                    for(MMap<string, long>::Iterator temp = _indices_recno[index].begin(); temp != itertrLower; temp++){
                         for(int i = 0; i < ((*temp).value_list).size(); i++){
                             //get all the record numbers
                             recVectr.push_back(((*temp).value_list)[i]);
                         }
                     }
-                }
-            }   
         }else if(_string_relational == ">"){
-            for(int i = 0; i < numOfField; i++){
-                //get the subtree of the field that we are searching
-                if(fieldNames[i]==lhsString){
-                    MMap<string, long>::Iterator itertrUpper = _indices_recno[i].upper_bound(rhsString);
+                    MMap<string, long>::Iterator itertrUpper = _indices_recno[index].upper_bound(rhsString);
                     for(itertrUpper; itertrUpper != MMap<string, long>::Iterator(nullptr); itertrUpper++){
                         for(int i = 0; i < ((*itertrUpper).value_list).size(); i++){
                             //get all the record numbers
                             recVectr.push_back(((*itertrUpper).value_list)[i]);
                         }
-                    }
-                }
             } 
         }else if(_string_relational == "<="){
-            for(int i = 0; i < numOfField; i++){
-                //get the subtree of the field that we are searching
-                if(fieldNames[i]==lhsString){
-                    MMap<string, long>::Iterator itertrLower = _indices_recno[i].upper_bound(rhsString);
-                    for(MMap<string, long>::Iterator temp = _indices_recno[i].begin(); temp != itertrLower; temp++){
+                    MMap<string, long>::Iterator itertrLower = _indices_recno[index].upper_bound(rhsString);
+                    for(MMap<string, long>::Iterator temp = _indices_recno[index].begin(); temp != itertrLower; temp++){
                         for(int i = 0; i < ((*temp).value_list).size(); i++){
                             //get all the record numbers
                             recVectr.push_back(((*temp).value_list)[i]);
                         }
                     }
-                }
-            }   
         }else if(_string_relational == ">="){
-            for(int i = 0; i < numOfField; i++){
-                //get the subtree of the field that we are searching
-                if(fieldNames[i]==lhsString){
-                    MMap<string, long>::Iterator itertrUpper = _indices_recno[i].lower_bound(rhsString);
+                    MMap<string, long>::Iterator itertrUpper = _indices_recno[index].lower_bound(rhsString);
 
                     for(MMap<string, long>::Iterator walker = itertrUpper; walker != MMap<string, long>::Iterator(nullptr); walker++){
                         for(int i = 0; i < ((*walker).value_list).size(); i++){
@@ -194,8 +170,6 @@ class Relational:public Operator{
                             recVectr.push_back(((*walker).value_list)[i]);
                         }
                     }
-                }
-            }   
         }
         
         // cout<<"recVectr in realtional virtual evaluate: "<<recVectr<<endl;
