@@ -9,6 +9,7 @@ SQL::SQL(){
     
 }
 
+
 Table SQL::command(string string){
     Parser parser(string);
     if(!parser.is_valid()){
@@ -99,3 +100,7 @@ vector<long> SQL::select_recnos(){
 
 
 #endif
+
+
+
+

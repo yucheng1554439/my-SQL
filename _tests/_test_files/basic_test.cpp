@@ -32,13 +32,13 @@ const vector<string> command_list = {
 /*11*/     "select * from employee",
 /*12*/     "select last, first, age from employee",
 /*13*/     "select last from employee",
-/*14*/     "select * from employee where last = Johnson",
+/*14*/     "select * from employee where (first = Joe)",
 /*15*/     "select * from employee where last=Blow and major=\"JoAnn\"",
 
 /*16*/     "select * from student",
 /*17*/     "select * from student where (major=CS or major=Art)",
 /*18*/     "select * from student where lname>J",
-/*19*/     "select * from student where lname>J and (major=CS or major=Art)"
+/*19*/     "select * from student where lname>J and major=CS or (major=Art and fname = \"Flo\")"
 
 };
 
@@ -77,7 +77,7 @@ bool sql_basic(bool debug = false)
 
 // ==============================
 // global BAD!
-bool debug = true;
+bool debug = false;
 // ==============================
 
 TEST(SQL_BASIC, SQLBasic) {

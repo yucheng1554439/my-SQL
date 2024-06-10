@@ -155,7 +155,6 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
     Stack<Token*> _result_stack;
     fstream file;
     // int numOfField = field_names.size();
-    open_fileRW(file, (title+".bin").c_str());
     selected_recnos.clear();
     //if the queue is not empty
     while(!queue_of_compar.empty()){
@@ -192,6 +191,7 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
     int sizeOfRecVectr = recVectr.size();
     int numOfField = fieldnames.size();
 
+    open_fileRW(file, (title+".bin").c_str());
     for(int j = 0; j < sizeOfRecVectr; j++){
         FileRecord record;
         vectorstr newRecordValue = record.readVector(file, recVectr[j], field_names.size());
@@ -203,7 +203,11 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
         temp.insert_into(inOrderRec);
     }
     // cout<<"sizeOfRecVectr in select(vectorstr fieldnames, Queue<Token*> queue_of_compar): "<<sizeOfRecVectr<<endl;
-    temp.numOfRec = sizeOfRecVectr;
+    // std::cout << "temp.numOfRec:" << temp.numOfRec << endl;
+    // temp.numOfRec = sizeOfRecVectr;
+    // std::cout << "temp.numOfRecAfter:" << temp.numOfRec << endl;
+    // temp.numOfRec = sizeOfRecVectr;
+
     // cout<<"Printing temp in select(vectorstr fieldnames, Queue<Token*> queue_of_compar)"<<endl;
     // cout<<temp<<endl;
     file.close();
@@ -252,12 +256,11 @@ Table Table::select(vectorstr fieldnames){
         // std::cout << "inOrderRec" << inOrderRec << endl;
         temp.insert_into(inOrderRec);
     }
-    temp.numOfRec = sizeOfRecVectr;
-
+    // std::cout << "temp.numOfRec:" << temp.numOfRec << endl;
+    // temp.numOfRec = sizeOfRecVectr;
+    // std::cout << "temp.numOfRecAfter:" << temp.numOfRec << endl;
     file1.close();
     return temp;
-
-
 }
 
 
@@ -277,11 +280,23 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
                 postOrderQueue.push(tempStack.pop());
             }
             tempStack.pop();
-        }else if(string_of_compar[i] == "and" || string_of_compar[i] == "or"){
+        }else if(string_of_compar[i] == "or"){
             Logical* temp = new Logical(string_of_compar[i]);
             // Queue<Token*> tempForPop;
             //sink down if the thing that ur sitting above is bigger and equal than you
             while(!tempStack.empty() && (tempStack.top()->type_string() == "RELATIONAL"|| tempStack.top()->type_string() == "LOGICAL")){ //|| tempStack.top()->type_string() == "LOGICAL"
+                // tempForPop.push(tempStack.pop());
+                postOrderQueue.push(tempStack.pop());
+            }
+            tempStack.push(temp);
+            // while(!tempForPop.empty()){
+            //     tempStack.push(tempForPop.pop());
+            // }
+        }else if(string_of_compar[i] == "and"){
+            Logical* temp = new Logical(string_of_compar[i]);
+            // Queue<Token*> tempForPop;
+            //sink down if the thing that ur sitting above is bigger and equal than you
+            while(!tempStack.empty() && (tempStack.top()->type_string() == "RELATIONAL")){ //|| tempStack.top()->type_string() == "LOGICAL"
                 // tempForPop.push(tempStack.pop());
                 postOrderQueue.push(tempStack.pop());
             }
@@ -569,11 +584,11 @@ ostream& operator <<(ostream& outs, const Table& print_me){
     //     open_fileRW(print_me.file, print_me.title.c_str());
     //     std::cout << "          " << record.read(print_me.file, i);
     // } 
-    std::cout << "Table Name: " << print_me.title << "\tNumbers of Record:" << print_me.numOfRec << endl;
+    std::cout << "Table Name: " << setw(10)<< print_me.title << "\tNumbers of Record:" << print_me.numOfRec << endl;
     FileRecord record;
     std::cout << "Record";
     for(int i = 0; i < print_me.field_names.size(); i++){
-        std::cout << "          " << print_me.field_names[i];
+        std::cout << setw(10) << print_me.field_names[i];
     }
     std::cout << std::endl;
     fstream f;
@@ -584,7 +599,7 @@ ostream& operator <<(ostream& outs, const Table& print_me){
         // int i=0;
         // while(record.read(f, i)!=0){   
             record.read(f, i);
-            std::cout  << setw(10)<< i << "\t" << record << "\t" << setw(10)<< endl;
+            std::cout  << setw(10)<< i << record << endl;
             // i++;
         // }
     }
