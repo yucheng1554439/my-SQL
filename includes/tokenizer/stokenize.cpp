@@ -187,6 +187,10 @@ void STokenizer::make_table(int _table[][MAX_COLUMNS]){
     mark_cells(9, _table, ALFA, 9);    //state [5] --- ALFA ---> [5]
     mark_cells(9, _table, SPACES, 9);    //state [5] --- ALFA ---> [5]
     mark_cells(9, _table, PERIOD, 9);    //state [5] --- ALFA ---> [5]
+    mark_cells(9, _table, DIGITS, 9);    //state [5] --- ALFA ---> [5]
+    mark_cells(9, _table, OPERATORS, 9);    //state [5] --- ALFA ---> [5]
+    mark_cells(9, _table, PUNC, 9);    //state [5] --- ALFA ---> [5]
+    mark_cells(9, _table, STAR, 9);    //state [5] --- ALFA ---> [5]
     mark_cells(9, _table, QUOTATION, 10);    //state [0] --- ALFA ---> [5]
     
 
