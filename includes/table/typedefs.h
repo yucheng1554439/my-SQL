@@ -138,8 +138,8 @@ class Relational:public Operator{
             for(int i = 0; i < numOfField; i++){
                 //get the subtree of the field that we are searching
                 if(fieldNames[i]==lhsString){
-                    // int sizeOfRecVectr = _indices_recno[i].get(rhsString).size();
-                    recVectr = _indices_recno[i].get(rhsString);
+                    // recVectr = _indices_recno[i].get(rhsString);
+                    recVectr.insert(recVectr.end(), _indices_recno[i].get(rhsString).begin(), _indices_recno[i].get(rhsString).end());
                 }
             }   
         }else if(_string_relational == "<"){
