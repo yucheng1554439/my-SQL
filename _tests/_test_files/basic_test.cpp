@@ -16,29 +16,29 @@ using namespace std;
 
 const vector<string> command_list = {
 
-/*00*/     "make table employee fields  last,       first,         dep,      salary, year",
-/*01*/     "insert into employee values Blow,       Joe,           CS,       100000, 2018",
-/*02*/     "insert into employee values Blow,       JoAnn,         Physics,  200000, 2016",
-/*03*/     "insert into employee values Johnson,    Jack,          HR,       150000, 2014",
-/*04*/     "insert into employee values Johnson,    \"Jimmy\",     Chemistry,140000, 2018",
+/*00*/     "make table labors fields  last,       first,         dep,      salary, year",
+/*01*/     "insert into labors values Blow,       Joe,           CS,       100000, 2018",
+/*02*/     "insert into labors values Blow,       JoAnn,         Physics,  200000, 2016",
+/*03*/     "insert into labors values Johnson,    Jack,          HR,       150000, 2014",
+/*04*/     "insert into labors values Johnson,    \"Jimmy\",     Chemistry,140000, 2018",
 
-/*05*/     "make table student fields  fname,          lname,    major,    age",
-/*06*/     "insert into student values Flo,            Yao, 	Art, 	20",
-/*07*/     "insert into student values Bo, 		     Yang, 	CS, 		28",
-/*08*/     "insert into student values \"Sammuel L.\", Jackson, 	CS, 		40",
-/*09*/     "insert into student values \"Billy\",	     Jackson, 	Math,	27",
-/*10*/     "insert into student values \"Mary Ann\",   Davis,	Math,	30",
+/*05*/     "make table child fields  fname,          lname,    major,    age",
+/*06*/     "insert into child values Flo,            Yao, 	Art, 	20",
+/*07*/     "insert into child values Bo, 		     Yang, 	CS, 		28",
+/*08*/     "insert into child values \"Sammuel L.\", Jackson, 	CS, 		40",
+/*09*/     "insert into child values \"Billy\",	     Jackson, 	Math,	27",
+/*10*/     "insert into child values \"Mary Ann\",   Davis,	Math,	30",
 
-/*11*/     "select * from employee",
-/*12*/     "select last, first, age from employee",
-/*13*/     "select last from employee",
-/*14*/     "select * from employee where last = Johnson",
-/*15*/     "select * from employee where last=Blow and major=\"JoAnn\"",
+/*11*/     "select * from labors",
+/*12*/     "select last, first, age from labors",
+/*13*/     "select last from labors",
+/*14*/     "select * from labors where last = Johnson",
+/*15*/     "select * from labors where last=Blow and major=\"JoAnn\"",
 
-/*16*/     "select * from student",
-/*17*/     "select * from student where (major=CS or major=Art)",
-/*18*/     "select * from student where lname>J",
-/*19*/     "select * from student where lname>J and (major=CS or major=Art)"
+/*16*/     "select * from child",
+/*17*/     "select * from child where (major=CS or major=Art)",
+/*18*/     "select * from child where lname>J",
+/*19*/     "select * from child where lname>J and (major=CS or major=Art)"
 
 };
 
@@ -61,7 +61,7 @@ bool sql_basic(bool debug = false)
 
      cout << endl
           << endl;
-     for (int i = MAKE_TABLE_COMMANDS; i < command_list.size(); i++)
+     for (int i = MAKE_TABLE_COMMANDS; i < SELECT_COMMANDS; i++)
      {
           cout << "\n>" << command_list[i] << endl;
           if (debug)

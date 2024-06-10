@@ -83,6 +83,7 @@ public:
         child_count = 0;
         data_count = 0;
         next = nullptr;
+        dups_ok = dups;
     }
     BPlusTree(T *a, int size, bool dups = true) //MADE it true, it was false
     : child_count(0), data_count(0), next(nullptr)
@@ -479,6 +480,7 @@ private:
     void loose_insert(const T& entry){
         int i = first_ge(data, data_count, entry);
         bool found = (i<data_count && data[i] == entry);
+        dups_ok = true;
         if(found && is_leaf()){
             if(dups_ok)
                 data[i] = data[i] + entry;
