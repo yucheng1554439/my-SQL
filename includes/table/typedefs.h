@@ -128,7 +128,7 @@ class Relational:public Operator{
         vector<long> recVectr;
         recVectr.clear();
         int numOfField = fieldNames.size();
-        if(_indices_recno[index].contains(rhsString)){
+        // if(_indices_recno[index].contains(rhsString)){
 
             // cout<<"numOfField: "<<numOfField<<endl;
             // cout<<"printing the trees in relational evaluate: "<<endl;
@@ -137,9 +137,9 @@ class Relational:public Operator{
 
             // cout<<"_string_relational: "<<_string_relational<<endl;
             if(_string_relational == "="){
-                recVectr = _indices_recno[index].get(rhsString);
+                // recVectr = _indices_recno[index].get(rhsString);
 
-                // recVectr.insert(recVectr.end(), _indices_recno[index].get(rhsString).begin(), _indices_recno[index].get(rhsString).end());
+                recVectr.insert(recVectr.end(), _indices_recno[index].get(rhsString).begin(), _indices_recno[index].get(rhsString).end());
 
                 // MMap<string, long>::Iterator itertrLower = _indices_recno[index].lower_bound(rhsString);
                 // for(int i = 0; i < ((*itertrLower).value_list).size(); i++){
@@ -181,7 +181,7 @@ class Relational:public Operator{
                             }
                         }
             }
-        }
+        // }
         // cout<<"recVectr in realtional virtual evaluate: "<<recVectr<<endl;
         return recVectr;
     }
