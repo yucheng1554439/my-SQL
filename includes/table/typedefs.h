@@ -135,8 +135,14 @@ class Relational:public Operator{
 
         // cout<<"_string_relational: "<<_string_relational<<endl;
         if(_string_relational == "="){
-                    // recVectr = _indices_recno[i].get(rhsString);
-            recVectr.insert(recVectr.end(), _indices_recno[index].get(rhsString).begin(), _indices_recno[index].get(rhsString).end());   
+            // recVectr = _indices_recno[i].get(rhsString);
+            // recVectr.insert(recVectr.end(), _indices_recno[index].get(rhsString).begin(), _indices_recno[index].get(rhsString).end());   
+            MMap<string, long>::Iterator itertrLower = _indices_recno[index].lower_bound(rhsString);
+            for(int i = 0; i < ((*itertrLower).value_list).size(); i++){
+                //get all the record numbers
+                recVectr.push_back(((*itertrLower).value_list)[i]);
+            }
+
         }else if(_string_relational == "<"){
                     MMap<string, long>::Iterator itertrLower = _indices_recno[index].lower_bound(rhsString);
                     for(MMap<string, long>::Iterator temp = _indices_recno[index].begin(); temp != itertrLower; temp++){

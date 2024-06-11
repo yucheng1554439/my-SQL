@@ -22,36 +22,36 @@ const vector<string> command_list = {
 /*03*/     "insert into employee values Johnson,    Jack,          HR,       150000, 2014",
 /*04*/     "insert into employee values Johnson,    \"Jimmy\",     Chemistry,140000, 2018",
 
-/*05*/     "make table chil fields  fname,          lname,    major,    age",
-/*06*/     "insert into chil values Flo,            Yao, 	Art, 	20",
-/*07*/     "insert into chil values Bo, 		     Yang, 	CS, 		28",
-/*08*/     "insert into chil values Sammuel L., Jackson, 	CS, 		40",
-/*09*/     "insert into chil values \"Billy\",	     Jackson, 	Math,	27",
-/*10*/     "insert into chil values \"Mary Ann\",   Davis,	Math,	30",
+/*05*/     "make table student fields  fname,          lname,    major,    age",
+/*06*/     "insert into student values Flo,            Yao, 	Art, 	20",
+/*07*/     "insert into student values Bo, 		     Yang, 	CS, 		28",
+/*08*/     "insert into student values \"Sammuel L.\", Jackson, 	CS, 		40",
+/*09*/     "insert into student values \"Billy\",	     Jackson, 	Math,	27",
+/*10*/     "insert into student values \"Mary Ann\",   Davis,	Math,	30",
 
-// /*11*/     "select * from employee",
-// /*12*/     "select last, first, age from employee",
-// /*13*/     "select last from employee",
-// /*14*/     "select * from employee where last=\"Mary Ann\"",
-// /*15*/     "select * from employee where first=Jimmy",
+/*11*/     "select * from employee",
+/*12*/     "select last, first, age from employee",
+/*13*/     "select last from employee",
+/*14*/     "select * from employee where last = Johnson",
+/*15*/     "select * from employee where last=Blow and major=\"JoAnn\"",
 
-// /*16*/     "select * from student",
-// /*17*/     "select * from student where (major=CS or major=Art)",
-// /*18*/     "select * from student",
-/*19*/     "select * from chil where fname = \"Mary Ann\""
+/*16*/     "select * from student",
+/*17*/     "select * from student where (major=CS or major=Art)",
+/*18*/     "select * from student where lname>J",
+/*19*/     "select * from student where lname>J and (major=CS or major=Art)"
 
 };
 
 const int MAKE_TABLE_COMMANDS = 11;
-const int SELECT_COMMANDS = 12;
+const int SELECT_COMMANDS = 20;
 
 bool sql_basic(bool debug = false)
 {
      SQL sql;
      Table t;
-     // cout << ">" << command_list[0] << endl;
-     // sql.command(command_list[0]);
-     // cout << "basic_test: table created." << endl<<endl;
+     cout << ">" << command_list[0] << endl;
+     sql.command(command_list[0]);
+     cout << "basic_test: table created." << endl<<endl;
 
      for (int i = 0; i < MAKE_TABLE_COMMANDS; i++)
      {
@@ -61,7 +61,7 @@ bool sql_basic(bool debug = false)
 
      cout << endl
           << endl;
-     for (int i = MAKE_TABLE_COMMANDS; i < SELECT_COMMANDS; i++)
+     for (int i = MAKE_TABLE_COMMANDS; i < command_list.size(); i++)
      {
           cout << "\n>" << command_list[i] << endl;
           if (debug)
@@ -77,7 +77,7 @@ bool sql_basic(bool debug = false)
 
 // ==============================
 // global BAD!
-bool debug = true;
+bool debug = false;
 // ==============================
 
 TEST(SQL_BASIC, SQLBasic) {
