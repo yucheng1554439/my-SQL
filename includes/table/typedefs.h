@@ -128,56 +128,60 @@ class Relational:public Operator{
         vector<long> recVectr;
         recVectr.clear();
         int numOfField = fieldNames.size();
-        // cout<<"numOfField: "<<numOfField<<endl;
-        // cout<<"printing the trees in relational evaluate: "<<endl;
-        // for(int i = 0; i < _indices_recno.size(); i++)
-        //     cout<<_indices_recno[i]<<endl;
+        if(_indices_recno[index].contains(rhsString)){
 
-        // cout<<"_string_relational: "<<_string_relational<<endl;
-        if(_string_relational == "="){
-            // recVectr = _indices_recno[i].get(rhsString);
-            // recVectr.insert(recVectr.end(), _indices_recno[index].get(rhsString).begin(), _indices_recno[index].get(rhsString).end());   
-            MMap<string, long>::Iterator itertrLower = _indices_recno[index].lower_bound(rhsString);
-            for(int i = 0; i < ((*itertrLower).value_list).size(); i++){
-                //get all the record numbers
-                recVectr.push_back(((*itertrLower).value_list)[i]);
+            // cout<<"numOfField: "<<numOfField<<endl;
+            // cout<<"printing the trees in relational evaluate: "<<endl;
+            // for(int i = 0; i < _indices_recno.size(); i++)
+            //     cout<<_indices_recno[i]<<endl;
+
+            // cout<<"_string_relational: "<<_string_relational<<endl;
+            if(_string_relational == "="){
+                // recVectr = _indices_recno[index].get(rhsString);
+
+                // recVectr.insert(recVectr.end(), _indices_recno[index].get(rhsString).begin(), _indices_recno[index].get(rhsString).end());
+
+                MMap<string, long>::Iterator itertrLower = _indices_recno[index].lower_bound(rhsString);
+                for(int i = 0; i < ((*itertrLower).value_list).size(); i++){
+                    //get all the record numbers
+                    recVectr.push_back(((*itertrLower).value_list)[i]);
+                }
+
+            }else if(_string_relational == "<"){
+                        MMap<string, long>::Iterator itertrLower = _indices_recno[index].lower_bound(rhsString);
+                        for(MMap<string, long>::Iterator temp = _indices_recno[index].begin(); temp != itertrLower; temp++){
+                            for(int i = 0; i < ((*temp).value_list).size(); i++){
+                                //get all the record numbers
+                                recVectr.push_back(((*temp).value_list)[i]);
+                            }
+                        }
+            }else if(_string_relational == ">"){
+                        MMap<string, long>::Iterator itertrUpper = _indices_recno[index].upper_bound(rhsString);
+                        for(itertrUpper; itertrUpper != MMap<string, long>::Iterator(nullptr); itertrUpper++){
+                            for(int i = 0; i < ((*itertrUpper).value_list).size(); i++){
+                                //get all the record numbers
+                                recVectr.push_back(((*itertrUpper).value_list)[i]);
+                            }
+                } 
+            }else if(_string_relational == "<="){
+                        MMap<string, long>::Iterator itertrLower = _indices_recno[index].upper_bound(rhsString);
+                        for(MMap<string, long>::Iterator temp = _indices_recno[index].begin(); temp != itertrLower; temp++){
+                            for(int i = 0; i < ((*temp).value_list).size(); i++){
+                                //get all the record numbers
+                                recVectr.push_back(((*temp).value_list)[i]);
+                            }
+                        }
+            }else if(_string_relational == ">="){
+                        MMap<string, long>::Iterator itertrUpper = _indices_recno[index].lower_bound(rhsString);
+
+                        for(MMap<string, long>::Iterator walker = itertrUpper; walker != MMap<string, long>::Iterator(nullptr); walker++){
+                            for(int i = 0; i < ((*walker).value_list).size(); i++){
+                                //get all the record numbers
+                                recVectr.push_back(((*walker).value_list)[i]);
+                            }
+                        }
             }
-
-        }else if(_string_relational == "<"){
-                    MMap<string, long>::Iterator itertrLower = _indices_recno[index].lower_bound(rhsString);
-                    for(MMap<string, long>::Iterator temp = _indices_recno[index].begin(); temp != itertrLower; temp++){
-                        for(int i = 0; i < ((*temp).value_list).size(); i++){
-                            //get all the record numbers
-                            recVectr.push_back(((*temp).value_list)[i]);
-                        }
-                    }
-        }else if(_string_relational == ">"){
-                    MMap<string, long>::Iterator itertrUpper = _indices_recno[index].upper_bound(rhsString);
-                    for(itertrUpper; itertrUpper != MMap<string, long>::Iterator(nullptr); itertrUpper++){
-                        for(int i = 0; i < ((*itertrUpper).value_list).size(); i++){
-                            //get all the record numbers
-                            recVectr.push_back(((*itertrUpper).value_list)[i]);
-                        }
-            } 
-        }else if(_string_relational == "<="){
-                    MMap<string, long>::Iterator itertrLower = _indices_recno[index].upper_bound(rhsString);
-                    for(MMap<string, long>::Iterator temp = _indices_recno[index].begin(); temp != itertrLower; temp++){
-                        for(int i = 0; i < ((*temp).value_list).size(); i++){
-                            //get all the record numbers
-                            recVectr.push_back(((*temp).value_list)[i]);
-                        }
-                    }
-        }else if(_string_relational == ">="){
-                    MMap<string, long>::Iterator itertrUpper = _indices_recno[index].lower_bound(rhsString);
-
-                    for(MMap<string, long>::Iterator walker = itertrUpper; walker != MMap<string, long>::Iterator(nullptr); walker++){
-                        for(int i = 0; i < ((*walker).value_list).size(); i++){
-                            //get all the record numbers
-                            recVectr.push_back(((*walker).value_list)[i]);
-                        }
-                    }
         }
-        
         // cout<<"recVectr in realtional virtual evaluate: "<<recVectr<<endl;
         return recVectr;
     }
