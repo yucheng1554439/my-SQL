@@ -7,101 +7,400 @@
 
 //------------------------------------------------------------------------------------------
 //Files we are testing:
-#include "../../includes/sql/sql.h"
-
-const vector<string> command_list = {
-
-// /*00*/     "make table employee fields  last,       first,         dep,      salary, year",
-// /*01*/     "insert into employee values Blow,       Joe,           CS,       100000, 2018",
-// /*02*/     "insert into employee values Blow,       JoAnn,         Physics,  200000, 2016",
-// /*03*/     "insert into employee values Johnson,    Jack,          HR,       150000, 2014",
-// /*04*/     "insert into employee values Johnson,    \"Jimmy\",     Chemistry,140000, 2018",
-
-/*05*/     "make table student fields  fname,          lname,    major,    age",
-/*06*/     "insert into student values Flo,            Yao, Art, 20",
-/*07*/     "insert into student values Bo,      Yang, CS, 28",
-/*08*/     "insert into student values \"Sammuel L.\", Jackson, CS, 40",
-/*09*/     "insert into student values \"Billy\",     Jackson, Math,27",
-/*10*/     "insert into student values \"Mary Ann\",   Davis,Math,30",
-/*10*/     "insert into student values \"Mary Ann\",   Davi,Math,30",
-/*10*/     "insert into student values \"Mary Ann\",   Da,Math,30",
-            "insert into student values Johnson, \"Mary Ann\", \"Biology\"",
-// /*11*/     "select * from employee",
-// /*12*/     "select last, first, age from employee",
-// /*13*/     "select last from employee",
-// /*14*/     "select first from employee where year <= 2016 and dep = Physics and first = JoAnn and last = Blow and salary > 20000",
-// /*15*/     "select * from employee where last=Blow and major=\"JoAnn\"",
-
-// /*16*/     "select * from student",
-// /*17*/     "select * from student where (major=CS or major=Art)",
-/*18*/     "select * from student where (fname = \"Sammuel L.\" and fname = Billy) or (major = CS and major = Math) or age = 27",
-// /*19*/     "select * from student where lname>J and (major=CS or major=Art)"
-// /*20*/     "select * from student where age <= 20"
-
-};
-
-const int MAKE_TABLE_COMMANDS = 11;
-const int SELECT_COMMANDS = 20;
-
-bool test_stub(bool debug = false)
-{
-  if (debug){
-
-    SQL sql;
-     Table t;
-     cout << ">" << command_list[0] << endl;
-     sql.command(command_list[0]);
-     cout << "basic_test: table created." << endl<<endl;
-
-     for (int i = 0; i < command_list.size(); i++)
-     {
-          cout << ">" << command_list[i] << endl;
-          cout<< "here is yo table \n" << sql.command(command_list[i]);
-          cout << "basic_test: records selected: "<<sql.select_recnos() << endl;
-
-     }
+#include "../../includes/table/table.h"
 
 
-  }
+//------------------------------------------------------------------------------------------
+
+using namespace std;
+
+Table make_table(){
+    vectorstr fields={"fname", "lname", "age"};
+
+    Table t("student", fields);
+    vectorstr row;
+    row = {"Joe", "Gomez", "20"};
+    t.insert_into(row);
+    row = {"Karen", "Orozco", "21"};
+    t.insert_into(row);
+    row = {"Flo", "Yao", "29"};
+    t.insert_into(row);
+    row = {"Jack", "Yao", "19"};
+    t.insert_into(row);
+    row = {"Flo", "Jackson", "20"};
+    t.insert_into(row);
+    row = {"Flo", "Gomez", "20"};
+    t.insert_into(row);
+    row = {"Karen", "Jackson", "15"};
+    t.insert_into(row);
+    return t;
+}
+
+
+bool table_basic(bool debug = false){
+     Table t = make_table();
+     cout<< "Here is table t: " << endl << t << endl;
+
+     cout << "Here are all the Yaos:" << endl;
+     cout << t.select({"fname", "lname", "age"}, "lname", "=", "Yao");
+
+     Table tbl_student("student");
+     cout << "\n\nhere is the student table: " << tbl_student << endl;
+
+     cout << "\n20 year-olds:" << endl;
+     cout << tbl_student.select({"age", "fname", "lname"}, "age", "=", "20");
+     cout <<"record numbers from original table: "<< tbl_student.select_recnos() << endl
+          << endl;
+
+     cout << "\nolder than 20 years old:" << endl;
+     cout << tbl_student.select({"age", "fname", "lname"}, "age", ">", "20");
+     cout <<"record numbers from original table: "<< tbl_student.select_recnos() << endl
+          << endl;
+
+     cout << "\nyounger than 20 years old:" << endl;
+     cout << tbl_student.select({"age", "fname", "lname"}, "age", "<", "20");
+     cout <<"record numbers from original table: "<< tbl_student.select_recnos() << endl
+          << endl;
+
+     cout << "\n20 or younger:" << endl;
+     cout << tbl_student.select({"age", "fname", "lname"}, "age", "<=", "20");
+     cout <<"record numbers from original table: "<< tbl_student.select_recnos() << endl
+          << endl;
+
+
+     cout << "\n20 or older:" << endl;
+     cout << tbl_student.select({"age", "fname", "lname"}, "age", ">=", "20");
+     cout <<"record numbers from original table: "<< tbl_student.select_recnos() << endl
+          << endl;
+
+
+     cout << "----- END TEST --------" << endl;
+     return true;
+}
+
+bool table_relational(bool debug = false){
+  Queue<Token *> post;
+  Table t = make_table();
+  post.push(new TokenStr("lname"));
+  post.push(new TokenStr("Yao"));
+  post.push(new Relational("="));
+  Table selected = t.select({"lname", "age"}, post);
+  cout << "recnos from all the Yaos query: " << t.select_recnos() << endl;
+  cout << "all the Yaos: " << endl
+     << selected << endl;
   return true;
 }
 
-bool test_steps(bool debug = false)
-{
-  if (debug){
-
-      // vector<long>v1 = {5,3,1};
-      // vector<long>v2 = {6,4,2,1, 0};
-      // Resultset r1;
-      // string s = "or";
-      // r1 = Resultset(v1, v2, s);
-      // cout<< "result : " << r1.get_resultset_vtrlong();
-
-     }
+bool table_logical(bool debug = false){
+  Queue<Token *> post;
+  Table t = make_table();
+  cout << "here is the table: " << endl
+       << t << endl;
+  post = Queue<Token *>();
+  post.push(new TokenStr("age"));
+  post.push(new TokenStr("20"));
+  post.push(new Relational("<="));
+  post.push(new TokenStr("age"));
+  post.push(new TokenStr("17"));
+  post.push(new Relational(">="));
+  post.push(new Logical("and"));
+  Table selected = t.select({"lname", "age"}, post);
+  cout << "recnos from all the 17 to 20 year olds: " << t.select_recnos() << endl;
+  cout << "all the 17 to 20 year olds : " << endl
+     << selected << endl;
   return true;
+
 }
 
-TEST(TEST_STUB, TestStub) {
-  
-  //EXPECT_EQ(0, <your individual test functions are called here>);
+bool table_full_condition(bool debug = false){
+  Queue<Token *> post;
+  Table t = make_table();
+  cout << "here is the table: " << endl
+       << t << endl;
+  post = Queue<Token *>();
+  post.push(new TokenStr("age"));
+  post.push(new TokenStr("20"));
+  post.push(new Relational("<"));
+  post.push(new TokenStr("age"));
+  post.push(new TokenStr("17"));
+  post.push(new Relational(">"));
+  post.push(new Logical("and"));
+  post.push(new TokenStr("lname"));
+  post.push(new TokenStr("Gomez"));
+  post.push(new Relational("="));
+  post.push(new Logical("or"));
+  Table selected = t.select({"lname", "age"}, post);
+  cout << "recnos from all all the 17 to 20 year olds (non inclusive) along with all the Gomezes: " << t.select_recnos() << endl;
+  cout << "" << endl
+     << selected << endl;
+  return true;
 
-  EXPECT_EQ(1, test_stub(true));
 }
 
-TEST(TEST_STEPS, TestSteps) {
-  
-  //EXPECT_EQ(0, <your individual test functions are called here>);
+bool condition_from_strings(bool debug = false){
+     vector<string> condition = {"(", "age", "<", "17", "or", "age", ">", "20", ")", "and", "lname", "=", "Jackson"};
+     Table t = make_table();
+     cout << "here is the table: " << endl
+          << t << endl;
+     Table selected = t.select({"lname", "age"}, condition);
+     cout << "recnos from all all younger than 17, all older than 20, who are Jacksons: " << t.select_recnos() << endl;
+     cout << endl
+          << selected << endl;
+     return true;
 
-  EXPECT_EQ(1, test_steps(false));
+}
+
+
+TEST(TABLE_BASIC, TableBasic) {
+  bool success = table_basic();
+  EXPECT_EQ(success, true);
+}
+TEST(TABLE_INTERMEDIATE, TableRelational) {
+  bool success = table_relational(false);
+  EXPECT_EQ(success, true);
+}
+TEST(TABLE_INTERMEDIATE, TableLogical) {
+     bool success = table_logical(false);
+}
+TEST(TABLE_ADVANCED, TableFullCondition) {
+     bool success = table_full_condition(false);
+}
+
+TEST(TABLE_ADVANCED, TableStringCondition) {
+     bool success = condition_from_strings(false);
 }
 
 int main(int argc, char **argv) {
-//   if (argc > 1)
-//   {
-//     debug = !strcmp(argv[1], "debug");
-//   }
-
   ::testing::InitGoogleTest(&argc, argv);
   std::cout<<"\n\n----------running basic_test.cpp---------\n\n"<<std::endl;
   return RUN_ALL_TESTS();
 }
+
+
+
+/*
+build git:(master) ✗  😊 $> tree ../includes/table
+../includes/table
+├── table.cpp
+├── table.h
+└── typedefs.h
+
+0 directories, 3 files
+build git:(master) ✗  😊 $> ./bin/basic_test       
+
+
+----------running basic_test.cpp---------
+
+
+[==========] Running 5 tests from 3 test cases.
+[----------] Global test environment set-up.
+[----------] 1 test from TABLE_BASIC
+[ RUN      ] TABLE_BASIC.TableBasic
+Here is table t: 
+
+Table name: student, records: 7
+                   record                    fname                    lname                      age
+
+                        0                      Joe                    Gomez                       20
+                        1                    Karen                   Orozco                       21
+                        2                      Flo                      Yao                       29
+                        3                     Jack                      Yao                       19
+                        4                      Flo                  Jackson                       20
+                        5                      Flo                    Gomez                       20
+                        6                    Karen                  Jackson                       15
+
+
+Here are all the Yaos:
+
+Table name: _select_table_1, records: 2
+                   record                    fname                    lname                      age
+
+                        0                      Flo                      Yao                       29
+                        1                     Jack                      Yao                       19
+
+
+
+here is the student table: 
+Table name: student, records: 7
+                   record                    fname                    lname                      age
+
+                        0                      Joe                    Gomez                       20
+                        1                    Karen                   Orozco                       21
+                        2                      Flo                      Yao                       29
+                        3                     Jack                      Yao                       19
+                        4                      Flo                  Jackson                       20
+                        5                      Flo                    Gomez                       20
+                        6                    Karen                  Jackson                       15
+
+
+
+20 year-olds:
+
+Table name: _select_table_4, records: 3
+                   record                      age                    fname                    lname
+
+                        0                       20                      Joe                    Gomez
+                        1                       20                      Flo                  Jackson
+                        2                       20                      Flo                    Gomez
+
+record numbers from original table: 0 4 5 
+
+
+older than 20 years old:
+
+Table name: _select_table_6, records: 2
+                   record                      age                    fname                    lname
+
+                        0                       21                    Karen                   Orozco
+                        1                       29                      Flo                      Yao
+
+record numbers from original table: 1 2 
+
+
+younger than 20 years old:
+
+Table name: _select_table_8, records: 2
+                   record                      age                    fname                    lname
+
+                        0                       15                    Karen                  Jackson
+                        1                       19                     Jack                      Yao
+
+record numbers from original table: 6 3 
+
+
+20 or younger:
+
+Table name: _select_table_10, records: 5
+                   record                      age                    fname                    lname
+
+                        0                       15                    Karen                  Jackson
+                        1                       19                     Jack                      Yao
+                        2                       20                      Joe                    Gomez
+                        3                       20                      Flo                  Jackson
+                        4                       20                      Flo                    Gomez
+
+record numbers from original table: 6 3 0 4 5 
+
+
+20 or older:
+
+Table name: _select_table_12, records: 5
+                   record                      age                    fname                    lname
+
+                        0                       20                      Joe                    Gomez
+                        1                       20                      Flo                  Jackson
+                        2                       20                      Flo                    Gomez
+                        3                       21                    Karen                   Orozco
+                        4                       29                      Flo                      Yao
+
+record numbers from original table: 0 4 5 1 2 
+
+----- END TEST --------
+[       OK ] TABLE_BASIC.TableBasic (23 ms)
+[----------] 1 test from TABLE_BASIC (23 ms total)
+
+[----------] 2 tests from TABLE_INTERMEDIATE
+[ RUN      ] TABLE_INTERMEDIATE.TableRelational
+recnos from all the Yaos query: 2 3 
+all the Yaos: 
+
+Table name: _select_table_15, records: 2
+                   record                    lname                      age
+
+                        0                      Yao                       29
+                        1                      Yao                       19
+
+
+[       OK ] TABLE_INTERMEDIATE.TableRelational (7 ms)
+[ RUN      ] TABLE_INTERMEDIATE.TableLogical
+here is the table: 
+
+Table name: student, records: 7
+                   record                    fname                    lname                      age
+
+                        0                      Joe                    Gomez                       20
+                        1                    Karen                   Orozco                       21
+                        2                      Flo                      Yao                       29
+                        3                     Jack                      Yao                       19
+                        4                      Flo                  Jackson                       20
+                        5                      Flo                    Gomez                       20
+                        6                    Karen                  Jackson                       15
+
+
+recnos from all the 17 to 20 year olds: 0 3 4 5 
+all the 17 to 20 year olds : 
+
+Table name: _select_table_18, records: 4
+                   record                    lname                      age
+
+                        0                    Gomez                       20
+                        1                      Yao                       19
+                        2                  Jackson                       20
+                        3                    Gomez                       20
+
+
+[       OK ] TABLE_INTERMEDIATE.TableLogical (5 ms)
+[----------] 2 tests from TABLE_INTERMEDIATE (12 ms total)
+
+[----------] 2 tests from TABLE_ADVANCED
+[ RUN      ] TABLE_ADVANCED.TableFullCondition
+here is the table: 
+
+Table name: student, records: 7
+                   record                    fname                    lname                      age
+
+                        0                      Joe                    Gomez                       20
+                        1                    Karen                   Orozco                       21
+                        2                      Flo                      Yao                       29
+                        3                     Jack                      Yao                       19
+                        4                      Flo                  Jackson                       20
+                        5                      Flo                    Gomez                       20
+                        6                    Karen                  Jackson                       15
+
+
+recnos from all all the 17 to 20 year olds (non inclusive) along with all the Gomezes: 0 3 5 
+
+
+Table name: _select_table_21, records: 3
+                   record                    lname                      age
+
+                        0                    Gomez                       20
+                        1                      Yao                       19
+                        2                    Gomez                       20
+
+
+[       OK ] TABLE_ADVANCED.TableFullCondition (7 ms)
+[ RUN      ] TABLE_ADVANCED.TableStringCondition
+here is the table: 
+
+Table name: student, records: 7
+                   record                    fname                    lname                      age
+
+                        0                      Joe                    Gomez                       20
+                        1                    Karen                   Orozco                       21
+                        2                      Flo                      Yao                       29
+                        3                     Jack                      Yao                       19
+                        4                      Flo                  Jackson                       20
+                        5                      Flo                    Gomez                       20
+                        6                    Karen                  Jackson                       15
+
+
+recnos from all all younger than 17, all older than 20, who are Jacksons: 6 
+
+
+Table name: _select_table_24, records: 1
+                   record                    lname                      age
+
+                        0                  Jackson                       15
+
+
+[       OK ] TABLE_ADVANCED.TableStringCondition (5 ms)
+[----------] 2 tests from TABLE_ADVANCED (12 ms total)
+
+[----------] Global test environment tear-down
+[==========] 5 tests from 3 test cases ran. (47 ms total)
+[  PASSED  ] 5 tests.
+build git:(master) ✗  😊 $> 
+
+
+ */

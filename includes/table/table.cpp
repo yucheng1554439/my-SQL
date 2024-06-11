@@ -363,161 +363,135 @@ Table Table::select(vectorstr fieldnames, string field_searching, string operatr
     open_fileRW(file, (title+".bin").c_str());
     selected_recnos.clear();
 
+    int indexx = index[field_searching];
+
     //for operator =
     if(operatr == "="){
-
-        for(int i = 0; i < numOfField; i++){
-            if(field_names[i]==field_searching){
-                
-                int sizeOfRecVectr = _indices_recno[i].get(value_searching).size();
-                vector<long> recVectr = _indices_recno[i].get(value_searching);
-                selected_recnos = recVectr;
-                for(int j = 0; j < sizeOfRecVectr; j++){
-                    
-                    FileRecord record;
-                    vectorstr newRecordValue = record.readVector(file, recVectr[j], field_names.size());
-                    vectorstr inOrderRec;
-                    for(int i = 0; i < numOfField; i++){
-                        //we are pushing back in the order of field
-                        inOrderRec.push_back(newRecordValue[index[fieldnames[i]]]);
-                    }
-                    temp.insert_into(inOrderRec);
-                }
+        int sizeOfRecVectr = _indices_recno[indexx].get(value_searching).size();
+        vector<long> recVectr = _indices_recno[indexx].get(value_searching);
+        selected_recnos = recVectr;
+        for(int j = 0; j < sizeOfRecVectr; j++){
+            
+            FileRecord record;
+            vectorstr newRecordValue = record.readVector(file, recVectr[j], field_names.size());
+            vectorstr inOrderRec;
+            for(int i = 0; i < numOfField; i++){
+                //we are pushing back in the order of field
+                inOrderRec.push_back(newRecordValue[index[fieldnames[i]]]);
             }
-        }       
-
+            temp.insert_into(inOrderRec);
+        }
     }
     //for operator >
     if(operatr == ">"){
 
-        for(int i = 0; i < numOfField; i++){
-            //find the subtree i that has the value we are searching for
-            if(field_names[i]==field_searching){
-                //get the upperbound of the valueSearching in the tree
-                MMap<string, long>::Iterator itertrUpper = _indices_recno[i].upper_bound(value_searching);
-                vector<long> recVectr;
+        //get the upperbound of the valueSearching in the tree
+        MMap<string, long>::Iterator itertrUpper = _indices_recno[indexx].upper_bound(value_searching);
+        vector<long> recVectr;
 
-                for(itertrUpper; itertrUpper != MMap<string, long>::Iterator(nullptr); itertrUpper++){
-                    for(int i = 0; i < ((*itertrUpper).value_list).size(); i++){
-                        //get all the record numbers
-                        recVectr.push_back(((*itertrUpper).value_list)[i]);
-                    }
-                }
-
-                int sizeOfRecVectr = recVectr.size();
-                selected_recnos = recVectr;
-                for(int j = 0; j < sizeOfRecVectr; j++){
-                    
-                    FileRecord record;
-                    vectorstr newRecordValue = record.readVector(file, recVectr[j], field_names.size());
-                    vectorstr inOrderRec;
-                    for(int i = 0; i < numOfField; i++){
-                        //we are pushing back in the order of field
-                        inOrderRec.push_back(newRecordValue[index[fieldnames[i]]]);
-                    }
-                    temp.insert_into(inOrderRec);
-                }
+        for(itertrUpper; itertrUpper != MMap<string, long>::Iterator(nullptr); itertrUpper++){
+            for(int i = 0; i < ((*itertrUpper).value_list).size(); i++){
+                //get all the record numbers
+                recVectr.push_back(((*itertrUpper).value_list)[i]);
             }
         }
-        
+
+        int sizeOfRecVectr = recVectr.size();
+        selected_recnos = recVectr;
+        for(int j = 0; j < sizeOfRecVectr; j++){
+            
+            FileRecord record;
+            vectorstr newRecordValue = record.readVector(file, recVectr[j], field_names.size());
+            vectorstr inOrderRec;
+            for(int i = 0; i < numOfField; i++){
+                //we are pushing back in the order of field
+                inOrderRec.push_back(newRecordValue[index[fieldnames[i]]]);
+            }
+            temp.insert_into(inOrderRec);
+        }
     }
     //for operator <
     if(operatr == "<"){
 
-        for(int i = 0; i < numOfField; i++){
-            //find the subtree i that has the value we are searching for
-            if(field_names[i]==field_searching){
-                //get the lowerBound of the valueSearching in the tree
-                MMap<string, long>::Iterator itertrLower = _indices_recno[i].lower_bound(value_searching);
-                vector<long> recVectr;
+        //get the lowerBound of the valueSearching in the tree
+        MMap<string, long>::Iterator itertrLower = _indices_recno[indexx].lower_bound(value_searching);
+        vector<long> recVectr;
 
-                for(MMap<string, long>::Iterator temp = _indices_recno[i].begin(); temp != itertrLower; temp++){
-                    for(int i = 0; i < ((*temp).value_list).size(); i++){
-                        //get all the record numbers
-                        recVectr.push_back(((*temp).value_list)[i]);
-                    }
-                }
-
-                int sizeOfRecVectr = recVectr.size();
-                selected_recnos = recVectr;
-                for(int j = 0; j < sizeOfRecVectr; j++){
-                    
-                    FileRecord record;
-                    vectorstr newRecordValue = record.readVector(file, recVectr[j], field_names.size());
-                    vectorstr inOrderRec;
-                    for(int i = 0; i < numOfField; i++){
-                        //we are pushing back in the order of field
-                        inOrderRec.push_back(newRecordValue[index[fieldnames[i]]]);
-                    }
-                    temp.insert_into(inOrderRec);
-                }
+        for(MMap<string, long>::Iterator temp = _indices_recno[indexx].begin(); temp != itertrLower; temp++){
+            for(int i = 0; i < ((*temp).value_list).size(); i++){
+                //get all the record numbers
+                recVectr.push_back(((*temp).value_list)[i]);
             }
+        }
+
+        int sizeOfRecVectr = recVectr.size();
+        selected_recnos = recVectr;
+        for(int j = 0; j < sizeOfRecVectr; j++){
+            
+            FileRecord record;
+            vectorstr newRecordValue = record.readVector(file, recVectr[j], field_names.size());
+            vectorstr inOrderRec;
+            for(int i = 0; i < numOfField; i++){
+                //we are pushing back in the order of field
+                inOrderRec.push_back(newRecordValue[index[fieldnames[i]]]);
+            }
+            temp.insert_into(inOrderRec);
         }
     }
     //for operator <=
     if(operatr == "<="){
 
-        for(int i = 0; i < numOfField; i++){
-            //find the subtree i that has the value we are searching for
-            if(field_names[i]==field_searching){
-                //get the upperBound of the valueSearching in the tree
-                MMap<string, long>::Iterator itertrLower = _indices_recno[i].upper_bound(value_searching);
-                vector<long> recVectr;
+        //get the upperBound of the valueSearching in the tree
+        MMap<string, long>::Iterator itertrLower = _indices_recno[indexx].upper_bound(value_searching);
+        vector<long> recVectr;
 
-                for(MMap<string, long>::Iterator temp = _indices_recno[i].begin(); temp != itertrLower; temp++){
-                    for(int i = 0; i < ((*temp).value_list).size(); i++){
-                        //get all the record numbers
-                        recVectr.push_back(((*temp).value_list)[i]);
-                    }
-                }
-
-                int sizeOfRecVectr = recVectr.size();
-                selected_recnos = recVectr;
-                for(int j = 0; j < sizeOfRecVectr; j++){
-                    
-                    FileRecord record;
-                    vectorstr newRecordValue = record.readVector(file, recVectr[j], field_names.size());
-                    vectorstr inOrderRec;
-                    for(int i = 0; i < numOfField; i++){
-                        //we are pushing back in the order of field
-                        inOrderRec.push_back(newRecordValue[index[fieldnames[i]]]);
-                    }
-                    temp.insert_into(inOrderRec);
-                }
+        for(MMap<string, long>::Iterator temp = _indices_recno[indexx].begin(); temp != itertrLower; temp++){
+            for(int i = 0; i < ((*temp).value_list).size(); i++){
+                //get all the record numbers
+                recVectr.push_back(((*temp).value_list)[i]);
             }
+        }
+
+        int sizeOfRecVectr = recVectr.size();
+        selected_recnos = recVectr;
+        for(int j = 0; j < sizeOfRecVectr; j++){
+            
+            FileRecord record;
+            vectorstr newRecordValue = record.readVector(file, recVectr[j], field_names.size());
+            vectorstr inOrderRec;
+            for(int i = 0; i < numOfField; i++){
+                //we are pushing back in the order of field
+                inOrderRec.push_back(newRecordValue[index[fieldnames[i]]]);
+            }
+            temp.insert_into(inOrderRec);
         }
     }
     //for operator >=
     if(operatr == ">="){
 
-        for(int i = 0; i < numOfField; i++){
-            //find the subtree i that has the value we are searching for
-            if(field_names[i]==field_searching){
-                //get the lowerBound of the valueSearching in the tree
-                MMap<string, long>::Iterator itertrUpper = _indices_recno[i].lower_bound(value_searching);
-                vector<long> recVectr;
+        //get the lowerBound of the valueSearching in the tree
+        MMap<string, long>::Iterator itertrUpper = _indices_recno[indexx].lower_bound(value_searching);
+        vector<long> recVectr;
 
-                for(itertrUpper; itertrUpper != MMap<string, long>::Iterator(nullptr); itertrUpper++){
-                    for(int i = 0; i < ((*itertrUpper).value_list).size(); i++){
-                        //get all the record numbers
-                        recVectr.push_back(((*itertrUpper).value_list)[i]);
-                    }
-                }
-
-                int sizeOfRecVectr = recVectr.size();
-                selected_recnos = recVectr;
-                for(int j = 0; j < sizeOfRecVectr; j++){
-                    
-                    FileRecord record;
-                    vectorstr newRecordValue = record.readVector(file, recVectr[j], field_names.size());
-                    vectorstr inOrderRec;
-                    for(int i = 0; i < numOfField; i++){
-                        //we are pushing back in the order of field
-                        inOrderRec.push_back(newRecordValue[index[fieldnames[i]]]);
-                    }
-                    temp.insert_into(inOrderRec);
-                }
+        for(itertrUpper; itertrUpper != MMap<string, long>::Iterator(nullptr); itertrUpper++){
+            for(int i = 0; i < ((*itertrUpper).value_list).size(); i++){
+                //get all the record numbers
+                recVectr.push_back(((*itertrUpper).value_list)[i]);
             }
+        }
+
+        int sizeOfRecVectr = recVectr.size();
+        selected_recnos = recVectr;
+        for(int j = 0; j < sizeOfRecVectr; j++){
+            
+            FileRecord record;
+            vectorstr newRecordValue = record.readVector(file, recVectr[j], field_names.size());
+            vectorstr inOrderRec;
+            for(int i = 0; i < numOfField; i++){
+                //we are pushing back in the order of field
+                inOrderRec.push_back(newRecordValue[index[fieldnames[i]]]);
+            }
+            temp.insert_into(inOrderRec);
         }
     }
 

@@ -12,14 +12,13 @@ SQL::SQL(){
 
 Table SQL::command(string string){
     Parser parser(string);
+    // _recnos_selected.clear();  //COMMNETED OUT
     if(!parser.is_valid()){
         Table temp;
         std::cout << "Invalid Command\n";
-        _recnos_selected.clear();
         return temp;
     }else{
         MMap<std::string, std::string> ptree = parser.parse_tree();
-        _recnos_selected.clear();
         // std::cout << "ptree[values].size()" << ptree["values"].size() << endl;
 
         // std::cout << "\nptreee" << ptree << "\n\n";

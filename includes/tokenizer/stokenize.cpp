@@ -33,7 +33,7 @@ STokenizer& operator>> (STokenizer& s, Token& t){
     int start_state = 0;
     if(s.get_token(start_state, token)){
         t.setToken(token);
-        // std::cout << "SETTOKEN: " << token << endl;
+        // std::cout << "TOKEN: " << token << endl;
         if(token.length() > 1){
             if(s.contains(ALFA, token[0]) || s.contains(ALFA, token[1])){
                 t.setType(TOKEN_ALPHA);
@@ -66,7 +66,7 @@ STokenizer& operator>> (STokenizer& s, Token& t){
             
         }
     }
-    // std::cout << "\nTokenSSS: |" << t << "|" << std::endl;
+    // std::cout << "\nTokenSSS: |" << t << "| TokenType: |" << t.type_string() << "|" << std::endl;
     // std::cout << "Position: " << s._pos << std::endl;
     return s;
 }
