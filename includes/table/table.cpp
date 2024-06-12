@@ -262,6 +262,7 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
             for(Stack<Token*>::Iterator it = tempStack.begin(); it != tempStack.end(); it++){
                 if((*it)->type_string() == "LPAREN"){
                     containLParen = true;
+                    std::cout << "containLParen" << containLParen << endl;
                 }
             }
             //if the temporary copy of the stack doesnt have a LParen 
@@ -303,20 +304,24 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
         }
     }
 
-    while(!tempStack.empty() && tempStack.top()->type_string() == "LPAREN"){
-        std::cout << "(Extra Left Parenthesis)";
-        tempStack.pop();
+    while(!tempStack.empty() ){
+        if(tempStack.top()->type_string() == "LPAREN"){
+            std::cout << "(Extra Left Parenthesis)\n";
+            tempStack.pop();
+        }else{
+            postOrderQueue.push(tempStack.pop());
+        }
     }
-    while(!tempStack.empty()){
-        postOrderQueue.push(tempStack.pop());
-    }
+    // while(!tempStack.empty()){
+    //     postOrderQueue.push(tempStack.pop());
+    // }
     // ---------- Debugging ----------
     // printing the post order experission
-    Queue<Token*> printingtest = postOrderQueue;
-    while(!printingtest.empty()){
-        std::cout << "|" <<printingtest.pop()->getString() << "| ";
-    }
-    std::cout << endl;
+    // Queue<Token*> printingtest = postOrderQueue;
+    // while(!printingtest.empty()){
+    //     std::cout << "|" <<printingtest.pop()->getString() << "| ";
+    // }
+    // std::cout << endl;
     
     //calling the select with the postorder input
     return select(fieldnames, postOrderQueue);

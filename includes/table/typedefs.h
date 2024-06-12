@@ -61,6 +61,9 @@ class LParen:public Token{
         setType(7);
         _string = input;
     }
+    std::string type_string(){
+        return "LPAREN";
+    }
     virtual std::string getString() const{
         return _string;
     }

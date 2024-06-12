@@ -16,12 +16,14 @@ void SQL::run(){
     while((toupper(commandString) != "EXIT") && (tolower(commandString) != "quit")){
         Table table = command(commandString);
         //after parse the string, if it is valid string
-        if(_valid_String){
+        // if(_valid_String){
             std::cout << table;
             if(select_recnos().size() != 0){
                 std::cout << "records selected: "<< select_recnos() << endl;
             }
-        }
+        // }else if(!_valid_String){
+        //     std::cout << "Invalid String\n";
+        // }
         std::cout << "Input your command.(\"exit\" to quit)\n";
         std::cout << ">";
         std::getline(std::cin, commandString);
@@ -55,7 +57,6 @@ Table SQL::command(string string){
         }
         if(ptree["command"][0] == "select")
         {
-
             std::string tableName = ptree["table_name"][0];
             Table table(tableName);
             if(ptree["fields"][0] == "*"){
