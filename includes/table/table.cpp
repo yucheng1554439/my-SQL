@@ -256,12 +256,26 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
         }else if(string_of_compar[i] == ")"){
             //pop out all the operator from the stack above ( to the queue
             RParen* temp = new RParen(string_of_compar[i]);
-            while(tempStack.top()->type_string() != "LPAREN"){
-                postOrderQueue.push(tempStack.pop());
+            bool containLParen = false;
+
+            //there is a Left Parenthesis in the stack
+            for(Stack<Token*>::Iterator it = tempStack.begin(); it != tempStack.end(); it++){
+                if((*it)->type_string() == "LPAREN"){
+                    containLParen = true;
+                }
             }
-            if(!tempStack.empty()){
-                tempStack.pop();
+            //if the temporary copy of the stack doesnt have a LParen 
+            if(!containLParen){
+                std::cout << "(Extra Right Parenthesis)\n";
+            }else{
+                while(tempStack.top()->type_string() != "LPAREN"){
+                    postOrderQueue.push(tempStack.pop());
+                }
+                if(!tempStack.empty()){
+                    tempStack.pop();
+                }
             }
+            
         }else if(string_of_compar[i] == "or"){
             Logical* temp = new Logical(string_of_compar[i]);
             //poping the stack if the thing that ur sitting above is bigger and equal than you
@@ -287,6 +301,11 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
             TokenStr* temp = new TokenStr(string_of_compar[i]);
             postOrderQueue.push(temp);
         }
+    }
+
+    while(!tempStack.empty() && tempStack.top()->type_string() == "LPAREN"){
+        std::cout << "(Extra Left Parenthesis)";
+        tempStack.pop();
     }
     while(!tempStack.empty()){
         postOrderQueue.push(tempStack.pop());
