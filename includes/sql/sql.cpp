@@ -5,11 +5,9 @@
 
 SQL::SQL(){
     //trying to get the table from previous run
-
+    _table_name_list = "_table_name_list";
     // fstream file;
     // string tableName;
-    // _table_name_list = "_table_name_list";
-    
     // file.open((_table_name_list + ".txt").c_str());
     // //geting the table names from the txt file
     // while(getline(file, tableName)){
@@ -17,6 +15,12 @@ SQL::SQL(){
     //     _table_map[tableName] = temp;
     // }
     // file.close();
+
+
+    //new version with no memory feature
+    clearTableNameTxtFile();
+
+
 }
 
 void SQL::run(){
@@ -24,7 +28,7 @@ void SQL::run(){
     std::string commandString;
     std::cout << "Input your command.(\"exit\" to quit)\n";
     std::cout << ">";
-    std::cout << "TEST\n" << _table_map << endl;
+    // std::cout << "TEST\n" << _table_map << endl;
     std::getline(std::cin, commandString);
 
     while((toupper(commandString) != "EXIT") && (tolower(commandString) != "quit")){
@@ -95,8 +99,8 @@ Table SQL::command(string string){
 
             if(!_table_map.contains(ptree["table_name"][0])){
                 std::cout << "MESSAGE: (Can not insert to a non-exist Table)\n";
-                // Table temp;
-                // return temp;
+                Table temp;
+                return temp;
             }else{
                 _table_map[ptree["table_name"][0]].insert_into(ptree["values"]);
                 return _table_map[ptree["table_name"][0]];
@@ -167,8 +171,9 @@ string SQL::tolower(string string){
 //feature when user want to clear the txt file with table and also delete previous tables
 void SQL::clearTableNameTxtFile()
 {
-    ofstream file(_table_name_list);
-    file<<"";
+    fstream file;
+    file.open(_table_name_list+ ".txt", std::ofstream::out | std::ofstream::trunc);
+    file.close();
 }
 
 
