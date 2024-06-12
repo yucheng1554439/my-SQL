@@ -34,11 +34,11 @@ Table SQL::command(string string){
     Parser parser(string);
     _valid_String = parser.is_valid();
     // _recnos_selected.clear();  //COMMNETED OUT
-    if(!_valid_String){
-        Table temp;
-        std::cout << "Invalid Command\n";
-        return temp;
-    }else{
+    // if(!_valid_String){
+    //     Table temp;
+    //     std::cout << "Invalid Command\n";
+    //     return temp;
+    // }else{
         MMap<std::string, std::string> ptree = parser.parse_tree();
         //----- debugging -----
         // std::cout << "\nptreee" << ptree << "\n\n";
@@ -85,7 +85,7 @@ Table SQL::command(string string){
             }
         }
     }
-}
+// }
 
 vector<long> SQL::select_recnos(){
     return _recnos_selected;
