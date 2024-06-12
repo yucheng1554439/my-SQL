@@ -317,11 +317,11 @@ public:
 
     bool is_valid(){return mmap.is_valid();}
 
-    MMap& operator =(const MMap& RHS){
-        key_count = RHS.key_count;
-        mmap = RHS.mmap;
-        return *this;
-    }   
+    // MMap& operator =(const MMap& RHS){
+    //     key_count = RHS.key_count;
+    //     mmap = RHS.mmap;
+    //     return *this;
+    // }   
 
     friend ostream& operator<<(ostream& outs, const MMap<K, V>& print_me){
         outs<<print_me.mmap<<endl;

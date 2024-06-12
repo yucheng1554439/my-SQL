@@ -31,6 +31,7 @@ class Table{
     vectorstr get_field_names();
     Table vector_table(vector<long> vec, string fileName, int fieldNameLength);
     vector<long> select_recnos(); //return the record numbers
+    void set_selected_recnos(vector<long> vector);
     friend ostream& operator <<(ostream& outs, const Table& print_me);
     static int sequenceNumber;
     

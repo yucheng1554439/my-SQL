@@ -66,9 +66,11 @@ bool sql_basic(bool debug = false)
           cout << "\n>" << command_list[i] << endl;
           if (debug)
                cout<< sql.command(command_list[i])<<endl;
-          else
+          else{
                t = sql.command(command_list[i]);
-          cout << "basic_test: records selected: "<<sql.select_recnos() << endl;
+               cout<< t <<endl;
+          }
+          cout << "basic_test: records selected from: "<<sql.select_recnos() << endl;
      }
 
      cout << "----- END TEST --------" << endl;
@@ -77,7 +79,7 @@ bool sql_basic(bool debug = false)
 
 // ==============================
 // global BAD!
-bool debug = true;
+bool debug = false;
 // ==============================
 
 TEST(SQL_BASIC, SQLBasic) {

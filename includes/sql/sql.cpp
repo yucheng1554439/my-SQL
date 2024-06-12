@@ -61,29 +61,33 @@ Table SQL::command(string string){
 
             std::string tableName = ptree["table_name"][0];
             Table table(tableName);
-
+            _table = table; //new added
             if(ptree["fields"][0] == "*"){
                 if(ptree.contains("where")){
                     //select the records from the table with condition
                     Table temp = table.select(table.get_field_names(), ptree["condition"]);
-                    _recnos_selected = table.select_recnos();
+                    // _recnos_selected = table.select_recnos(); //old version
+                    _table.set_selected_recnos(table.select_recnos());
                     return temp;
                 }else{
                     //select all the records from the table
                     Table temp = table.select_all();
-                    _recnos_selected = table.select_recnos();
+                    // _recnos_selected = table.select_recnos(); //old version
+                    _table.set_selected_recnos(table.select_recnos());
                     return temp;
                 }
             }else{
                 if(ptree.contains("where")){
                     //the chosen fields with the conditions
                     Table temp = table.select(ptree["fields"], ptree["condition"]);
-                    _recnos_selected = table.select_recnos();
+                    // _recnos_selected = table.select_recnos(); //old version
+                    _table.set_selected_recnos(table.select_recnos());
                     return temp;
                 }else{
                     //only select certain fields
                     Table temp = table.select(ptree["fields"]);
-                    _recnos_selected = table.select_recnos();
+                    // _recnos_selected = table.select_recnos(); //old version
+                    _table.set_selected_recnos(table.select_recnos());
                     return temp;
                 }
             }
@@ -92,7 +96,7 @@ Table SQL::command(string string){
 }
 
 vector<long> SQL::select_recnos(){
-    return _recnos_selected;
+    return _table.select_recnos();
 }
 
 string SQL::toupper(string string){

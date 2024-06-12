@@ -61,11 +61,11 @@ Table::Table(string tableName)
         file.close();
         // printing the error message
         cout << "File does not exists" << endl;
-        for(int i = 0; i < field_names.size(); i++){
-            MMap<string, long> temp;
-            temp.clear();
-            _indices_recno.push_back(temp);
-        }
+        // for(int i = 0; i < field_names.size(); i++){
+        //     MMap<string, long> temp;
+        //     temp.clear();
+        //     _indices_recno.push_back(temp);
+        // }
     }
     
 }
@@ -443,7 +443,9 @@ Table Table::select_all(){
     sequenceNumber++;
     fstream file;
     selected_recnos = recnoVec;
+    cout<<"selected_recnos: "<<selected_recnos<<endl;
     temp.recnoVec = recnoVec;
+
 
     FileRecord record;
     long recordNumbers = 0;
@@ -462,6 +464,7 @@ Table Table::select_all(){
         temp.insert_into(inOrderRec);
     }
     file.close();
+    cout<<"selected_recnos: "<<selected_recnos<<endl;
     return temp;
 }
 //----Unused----
@@ -482,6 +485,11 @@ Table Table::vector_table(vector<long> vec, string fileName, int fieldNameLength
 vector<long> Table::select_recnos(){
     return selected_recnos;
 }
+
+void Table::set_selected_recnos(vector<long> vector){
+    selected_recnos = vector;
+}
+
 
 // Table& Table::operator =(const Table& RHS){
 //     field_names = RHS.field_names;

@@ -18,7 +18,7 @@ class SQL{
     string toupper(string string);
     string tolower(string string);
     vector<long> _recnos_selected;
-    // Table _table;
+    Table _table;
     bool _valid_String;
 
 };

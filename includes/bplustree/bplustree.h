@@ -79,19 +79,20 @@ public:
         int key_ptr;
     };
 
-    BPlusTree(bool dups = true){  //MADE it true, it was false
+    BPlusTree(bool dups = false){  //MADE it true, it was false
         child_count = 0;
         data_count = 0;
         next = nullptr;
         dups_ok = dups;
     }
-    BPlusTree(T *a, int size, bool dups = true) //MADE it true, it was false
-    : child_count(0), data_count(0), next(nullptr)
+    BPlusTree(T *a, int size, bool dups = false) //MADE it true, it was false
+    : child_count(0), data_count(0), next(nullptr), dups_ok(dups)
     {
+
         //copy_array(data, a, data_count, size);
         for(int i = 0; i < size; i++)
         {
-            insert(a[i]);
+            insert(*a[i]);
         }
     }
 
@@ -101,6 +102,7 @@ public:
         data_count = 0;
         next = nullptr;
         copy_tree(other);
+        dups_ok = other.dups_ok;
     }
     ~BPlusTree(){
         // clear_tree();
@@ -109,7 +111,7 @@ public:
         clear_tree();
         copy_array(data, RHS.data, data_count, RHS.data_count);
         copy_array(subset, RHS.subset, child_count, RHS.child_count);
-
+        dups_ok = RHS.dups_ok;
         // copy_tree(RHS);
         return *this;
     }
