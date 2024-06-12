@@ -288,7 +288,34 @@ public:
             }
         }
     }         //return an iterator to this key.
-    Iterator findWhenNotExist(const T& key){
+    Iterator findWhenNotExistLower(const T& key, int previousFirstGreater){
+        if(data_count<=0){
+            return nullptr;
+        }
+        bool found = false;
+        int i = first_ge(data, data_count, key);
+        if(data_count < 0){ return nullptr; }
+
+        if(data[i] == key && i < data_count)
+        { found = true; }
+
+        if(found)
+            return Iterator(this, i); 
+        else{
+            if(subset[i]->is_leaf()){
+                if(i!=0){
+                    return Iterator(subset[i-1], i-1); //is thats the leaf, return this
+                }else{
+                    std::cout << "NULLLLL";
+                    return nullptr;
+                }
+            } else { 
+                return subset[i]->findWhenNotExistLower(key, i); //if not, go down til leaf
+            }
+        }
+    }         //return an iterator to this key.
+
+    Iterator findWhenNotExistUpper(const T& key, int previousFirstGreater){
         if(data_count<=0){
             return nullptr;
         }
@@ -303,9 +330,9 @@ public:
             return Iterator(this, i); 
         else{
             if(is_leaf()){
-                return Iterator(this); //is thats the leaf, return this
+                return ++Iterator(this, previousFirstGreater); //is thats the leaf, return this
             } else { 
-                return subset[i]->findWhenNotExist(key); //if not, go down til leaf
+                return subset[i]->findWhenNotExistUpper(key, i); //if not, go down til leaf
             }
         }
     }         //return an iterator to this key.
@@ -440,6 +467,7 @@ public:
         return cout;
 
     }
+
 
 private:
     static const int MINIMUM = 1;

@@ -445,17 +445,17 @@ Table Table::select_all(){
     selected_recnos = recnoVec;
     cout<<"selected_recnos: "<<selected_recnos<<endl;
     temp.recnoVec = recnoVec;
+    temp.selected_recnos = recnoVec;
 
 
     FileRecord record;
     long recordNumbers = 0;
-    int fieldLength = field_names.size();
     int sizeOfRecVectr = recnoVec.size();
     int numOfField = field_names.size();
     open_fileRW(file, (title+".bin").c_str());
     for(int j = 0; j < sizeOfRecVectr; j++){
         FileRecord record1;
-        vectorstr newRecordValue = record1.readVector(file, recnoVec[j], field_names.size());
+        vectorstr newRecordValue = record1.readVector(file, recnoVec[j], numOfField);
         vectorstr inOrderRec;
         for(int i = 0; i < numOfField; i++){
             //we are pushing back in the order of field

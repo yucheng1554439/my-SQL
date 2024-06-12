@@ -69,6 +69,8 @@ bool sql_basic(bool debug = false)
           else{
                t = sql.command(command_list[i]);
                cout<< t <<endl;
+               Table temp(t);
+               // std::cout << "Table temp(t): "<<temp.select_recnos() << endl;
           }
           cout << "basic_test: records selected from: "<<sql.select_recnos() << endl;
      }

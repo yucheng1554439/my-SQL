@@ -216,7 +216,7 @@ public:
         return Iterator(mmap.find(MPair<K,V>(key)));
     }
     Iterator findWhenNotExist(const K& key){
-        return Iterator(mmap.findWhenNotExist(MPair<K,V>(key)));
+        return Iterator(mmap.findWhenNotExist(MPair<K,V>(key), 0));
     }
     bool contains(const MPair<K, V>& target) const{
         return mmap.contains(target);
@@ -271,43 +271,60 @@ public:
     //NEED TO BE FIXED
     Iterator lower_bound(const K& key){
 
-        // Iterator foundedKey = find(key);
-        // if(foundedKey == Iterator(NULL)){
-        //     return findWhenNotExist(key);
-        // }
-        // return foundedKey;
-
-        for(Iterator it = begin(); it != end(); it++)
-        {
-            MPair<K, V> MPair = *it;
-            if(key <= MPair.key) 
-            {
-                return it;
+        Iterator foundedKey = find(key);
+        if(foundedKey == Iterator(NULL)){
+            Iterator temp =  mmap.findWhenNotExistLower(key, 0);
+            if(temp != Iterator(NULL)){
+                return temp;
+            }else{
+                for(Iterator it = begin(); it != end(); it++)
+                {
+                    MPair<K, V> MPair = *it;
+                    if(key <= MPair.key) 
+                    {
+                        return it;
+                    }
+                }
             }
         }
-        return end();
+        return foundedKey;
+        
+
+        //Sequencial Version
+        // for(Iterator it = begin(); it != end(); it++)
+        // {
+        //     MPair<K, V> MPair = *it;
+        //     if(key <= MPair.key) 
+        //     {
+        //         return it;
+        //     }
+        // }
+        // return end();
+
     }  //return first that goes NOT BEFORE
                                          // key entry or next if does not
                                          // exist: >= entry
     //NEED TO BE FIXED
     Iterator upper_bound(const K& key){
 
-        // Iterator foundedKey = find(key);
-        // if(foundedKey == Iterator(NULL)){
-        //     return findWhenNotExist(key);
-        // }
-        // foundedKey++;
-        // return foundedKey;
-
-        for(Iterator it = begin(); it != end(); it++)
-        {
-            MPair<K, V> MPair = *it;
-            if(key < MPair.key)  //go for larger one after 
-            {
-                return it;
-            }
+        Iterator foundedKey = find(key);
+        if(foundedKey == Iterator(NULL)){
+            return mmap.findWhenNotExistUpper(key, 0);
         }
-        return end();
+        foundedKey++;
+        return foundedKey;
+
+
+        //Sequencial Version
+        // for(Iterator it = begin(); it != end(); it++)
+        // {
+        //     MPair<K, V> MPair = *it;
+        //     if(key < MPair.key)  //go for larger one after 
+        //     {
+        //         return it;
+        //     }
+        // }
+        // return end();
     }  //return first that goes AFTER key
                                          //exist or not, the next entry  >entry
 

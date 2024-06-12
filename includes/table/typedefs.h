@@ -141,8 +141,13 @@ class Relational:public Operator{
                     }
                 }
             }else if(_string_relational == "<"){
+                        
                         MMap<string, long>::Iterator itertrLower = _indices_recno[index].lower_bound(rhsString);
-                        //loop through all the valuelist
+                        // //loop through all the valuelist
+                    //    if(_indices_recno[index].begin() == itertrLower){
+
+                        // std::cout << "_indices_recno[index].begin()" << *_indices_recno[index].begin() << endl;
+                        // std::cout << "itertrLower" << *itertrLower << endl;
                         for(MMap<string, long>::Iterator temp = _indices_recno[index].begin(); temp != itertrLower; temp++){
                             //push each other record number in the valuelist
                             for(int i = 0; i < ((*temp).value_list).size(); i++){
@@ -150,8 +155,12 @@ class Relational:public Operator{
                                 recVectr.push_back(((*temp).value_list)[i]);
                             }
                         }
+                    //    }
+                        
+
             }else if(_string_relational == ">"){
                         MMap<string, long>::Iterator itertrUpper = _indices_recno[index].upper_bound(rhsString);
+                        // itertrUpper++;
                         for(itertrUpper; itertrUpper != MMap<string, long>::Iterator(nullptr); itertrUpper++){
                             for(int i = 0; i < ((*itertrUpper).value_list).size(); i++){
                                 //get all the record numbers
