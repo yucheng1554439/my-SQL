@@ -6,14 +6,50 @@
 
 
 SQL::SQL(){
-    
+    _valid_String = false;
+    _recnos_selected.clear();
+}
+
+void SQL::run(){
+    std::cout << "\n\n---------------- SQL Running ----------------\n\n";
+    std::string commandString;
+    std::cout << "Input your command.(\"exit\" to quit)\n";
+    std::cout << ">";
+    std::getline(std::cin, commandString);
+    while((toupper(commandString) != "EXIT") && (tolower(commandString) != "quit")){
+        
+        // std::cout << "COMMAND: " <<commandString <<endl;
+        Table table = command(commandString);
+        if(_valid_String){
+            std::cout << table;
+            if(select_recnos().size() != 0){
+                std::cout << "records selected: "<< select_recnos() << endl;
+            }
+            
+        }
+        std::cout << "Input your command.(\"exit\" to quit)\n";
+        std::cout << ">";
+        std::getline(std::cin, commandString);
+
+    };
+    std::cout << "\n\n------------------ SQL End ------------------\n\n";
+}
+
+string SQL::toupper(string string){
+    transform(string.begin(), string.end(), string.begin(), ::toupper); 
+    return string;
+}
+string SQL::tolower(string string){
+    transform(string.begin(), string.end(), string.begin(), ::tolower); 
+    return string;
 }
 
 
 Table SQL::command(string string){
     Parser parser(string);
+    _valid_String = parser.is_valid();
     // _recnos_selected.clear();  //COMMNETED OUT
-    if(!parser.is_valid()){
+    if(!_valid_String){
         Table temp;
         std::cout << "Invalid Command\n";
         return temp;

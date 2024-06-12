@@ -199,6 +199,7 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
         recVectr.clear();
     }else{
         recVectr = _result_stack.pop()->evaluate();
+        // std::cout << recVectr;
     }
     //We have the record number list, now we just push the record into the new table
     selected_recnos = recVectr;
@@ -499,36 +500,38 @@ Table Table::select(vectorstr fieldnames, string field_searching, string operatr
     return temp;
 }
 Table Table::select_all(){
-    Table temp(title);
-    selected_recnos = recnoVec;
-    // int vecSize = recnoVec.size();
+
+    Table temp(title+"_"+to_string(sequenceNumber), field_names);
+    sequenceNumber++;
+    fstream file;
     // int numOfField = field_names.size();
-    // FileRecord record;
-    // fstream file;
-    // open_fileRW(file, (title+".bin").c_str());
-    // for(int recnooo = 0; recnooo < vecSize; recnooo++){
+    selected_recnos = recnoVec;
+    temp.recnoVec = recnoVec;
 
-    //     vectorstr recorVector = record.readVector(file, recnooo, numOfField);
-    //     // std::cout << "NMSL" << recon;
-    //     std::cout << recorVector;
-    //     for(int i = 0; i < recorVector.size(); i++){
-    //         // std::cout << b[i];
-    //         temp._indices_recno[i].insert(recorVector[i], recnooo);
-    //     }
-    //     // std::cout << b << endl;
-    //     temp.recnoVec.push_back(recnooo);
-    //     temp.numOfRec++;
-        
-    // }
-    // file.close();
+    FileRecord record;
+    long recordNumbers = 0;
+    int fieldLength = field_names.size();
 
-    //old version
-    // temp = vector_table(recnoVec, title, field_names.size());
-    // temp.field_names = field_names;
-    // temp._indices_recno = _indices_recno;
-    // temp.index = index;
-    // temp.recnoVec = recnoVec;
-    // temp.numOfRec = numOfRec;
+    
+
+    int sizeOfRecVectr = recnoVec.size();
+    int numOfField = field_names.size();
+    open_fileRW(file, (title+".bin").c_str());
+    for(int j = 0; j < sizeOfRecVectr; j++){
+        FileRecord record1;
+        vectorstr newRecordValue = record1.readVector(file, recnoVec[j], field_names.size());
+        vectorstr inOrderRec;
+        for(int i = 0; i < numOfField; i++){
+            //we are pushing back in the order of field
+            inOrderRec.push_back(newRecordValue[index[field_names[i]]]);
+        }
+        // std::cout << "inOrderRec" << inOrderRec << endl;
+        temp.insert_into(inOrderRec);
+    }
+    // std::cout << "temp.numOfRec:" << temp.numOfRec << endl;
+    // temp.numOfRec = sizeOfRecVectr;
+    // std::cout << "temp.numOfRecAfter:" << temp.numOfRec << endl;
+    file.close();
     return temp;
 }
 
@@ -572,26 +575,31 @@ ostream& operator <<(ostream& outs, const Table& print_me){
     //     open_fileRW(print_me.file, print_me.title.c_str());
     //     std::cout << "          " << record.read(print_me.file, i);
     // } 
-    std::cout << "Table Name: " << setw(10)<< print_me.title << "\tNumbers of Record:" << print_me.numOfRec << endl;
-    FileRecord record;
-    std::cout << "Record";
-    for(int i = 0; i < print_me.field_names.size(); i++){
-        std::cout << setw(10) << print_me.field_names[i];
+    if(print_me.numOfRec != 0 && print_me.title != ""){
+        std::cout << "Table Name: " << setw(10)<< print_me.title << "\tNumbers of Record:" << print_me.numOfRec << endl;
+        FileRecord record;
+        std::cout << "Record";
+        for(int i = 0; i < print_me.field_names.size(); i++){
+            std::cout << setw(10) << print_me.field_names[i];
+        }
+        std::cout << std::endl;
+        fstream f;
+        open_fileRW(f, (print_me.title+".bin").c_str());
+        // cout<<"!!!!!!!print_me.numOfRec"<<print_me.numOfRec<<endl;
+        for(int i = 0; i < print_me.numOfRec; i ++){
+            // open_fileRW(file, title.c_str());
+            // int i=0;
+            // while(record.read(f, i)!=0){   
+                record.read(f, i);
+                std::cout  << setw(10)<< i << record << endl;
+                // i++;
+            // }
+        }
+        f.close();
+    }else{
+        std::cout << "Record not Found\n";
     }
-    std::cout << std::endl;
-    fstream f;
-    open_fileRW(f, (print_me.title+".bin").c_str());
-    // cout<<"!!!!!!!print_me.numOfRec"<<print_me.numOfRec<<endl;
-    for(int i = 0; i < print_me.numOfRec; i ++){
-        // open_fileRW(file, title.c_str());
-        // int i=0;
-        // while(record.read(f, i)!=0){   
-            record.read(f, i);
-            std::cout  << setw(10)<< i << record << endl;
-            // i++;
-        // }
-    }
-    f.close();
+    
     return outs;
 }
 

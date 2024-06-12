@@ -32,13 +32,13 @@ const vector<string> command_list = {
 /*11*/     "select * from employee",
 /*12*/     "select last, first, age from employee",
 /*13*/     "select last from employee",
-/*14*/     "select * from employee where last = \"Johnson\"",
-/*15*/     "select * from employee where last=Blow and first=\"JoAnn\" and dep = Physics and salary =200000 and year = 2016",
+/*14*/     "select * from employee where last = Johnson",
+/*15*/     "select * from employee where last=Blow and major=\"JoAnn\"",
 
-/*16*/     "select * from student where lname = Jay",
-/*17*/     "select * from student where lname = Jay",
-/*18*/     "insert into student values Zhou, Jay, CS, 30",
-/*19*/     "select * from student where (lname = Jay or fname = Billy) or (major = CS and major = Math or age = 27)"
+/*16*/     "select * from student",
+/*17*/     "select * from student where (major=CS or major=Art)",
+/*18*/     "select * from student where lname>J",
+/*19*/     "select * from student where lname>J and (major=CS or major=Art)"
 
 };
 
@@ -70,7 +70,6 @@ bool sql_basic(bool debug = false)
                t = sql.command(command_list[i]);
           cout << "basic_test: records selected: "<<sql.select_recnos() << endl;
      }
-
 
      cout << "----- END TEST --------" << endl;
      return true;
