@@ -49,15 +49,15 @@ bool sql_basic(bool debug = false)
 {
      SQL sql;
      Table t;
-     // cout << ">" << command_list[0] << endl;
-     // sql.command(command_list[0]);
-     // cout << "basic_test: table created." << endl<<endl;
+     cout << ">" << command_list[0] << endl;
+     sql.command(command_list[0]);
+     cout << "basic_test: table created." << endl<<endl;
 
-     // for (int i = 0; i < MAKE_TABLE_COMMANDS; i++)
-     // {
-     //      cout << ">" << command_list[i] << endl;
-     //      sql.command(command_list[i]);
-     // }
+     for (int i = 0; i < MAKE_TABLE_COMMANDS; i++)
+     {
+          cout << ">" << command_list[i] << endl;
+          sql.command(command_list[i]);
+     }
 
      cout << endl
           << endl;

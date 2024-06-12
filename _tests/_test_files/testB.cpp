@@ -38,16 +38,47 @@ const vector<string> command_list = {
 /*16*/     "select * from student",
 /*17*/     "select * from student where (major=CS or major=Art)",
 /*18*/     "select * from student where lname>J",
-/*19*/     "select * from student where (((((lname>J and (((major=CS or major=Art)"
+/*19*/     "select * from student where ((lname>J and major=CS or major=Art",
+
+"select last, first, major from student where ((lname=Yang or major=CS) and age<23 )or lname=Jackson",
+// 2. Expected comma:
+"select last first, major from student where ((lname=Yang or major=CS) and age<23 )or lname=Jackson",
+// 3. Expected: Missing field name
+"select last, , major from student where ((lname=Yang or major=CS) and age<23 )or lname=Jackson",
+// 4. Expected from:
+"select last, first, major  student where ((lname=Yang or major=CS) and age<23 )or lname=Jackson",
+// 5. Expected table name:
+"select last, first, major from  where ((lname=Yang or major=CS) and age<23 )or lname=Jackson",
+// 6. Expected condition:
+"select last, first, major from student where ",
+// 7. Missing left paren:
+"select last, first, major from student where (lname=Yang or major=CS) and age<23 )or lname=Jackson",
+// 8. Missing right paren:
+"select last, first, major from student where ((lname=Yang or major=CS and age<23 )or lname=Jackson",
+// 9. :
+"select last, first, major from student where ((lname= or major=CS) and age<23 )or lname=Jackson",
+// 10. :
+"select last, first, major from student where ((lname=Yang or major=CS) and age<23 )or lname=Jackson",
+// 11. :
+"select last, first, major from student where ((lname=Yang  major=CS) and age<23 )or lname=Jackson",
+// 12. :
+"select last, first, major from student where ((lname=Yang or ) and age<23 )or lname=Jackson",
+// 13. :
+"select last, first, major from student where ((lname=Yang or major=CS) and age<23 )or ",
+// 14. :
+"select last, first, major from student where ((lname=Yang or major=CS) and age<23 )or lname=Jackson"
+
+
 
 };
 
 const int MAKE_TABLE_COMMANDS = 11;
-const int SELECT_COMMANDS = 20;
+const int SELECT_COMMANDS = 34;
 
 bool sql_basic(bool debug = false)
 {
      SQL sql;
+     cout << "basic_test: records selected: "<<sql.select_recnos() << endl;
      Table t;
      cout << ">" << command_list[0] << endl;
      sql.command(command_list[0]);
@@ -61,7 +92,7 @@ bool sql_basic(bool debug = false)
 
      cout << endl
           << endl;
-     for (int i = MAKE_TABLE_COMMANDS; i < command_list.size(); i++)
+     for (int i = MAKE_TABLE_COMMANDS; i < SELECT_COMMANDS; i++)
      {
           cout << "\n>" << command_list[i] << endl;
           if (debug)
@@ -77,7 +108,7 @@ bool sql_basic(bool debug = false)
 
 // ==============================
 // global BAD!
-bool debug = false;
+bool debug = true;
 // ==============================
 
 TEST(SQL_BASIC, SQLBasic) {

@@ -134,6 +134,7 @@ void Table::insert_into(vectorstr recordString){
     for(int i = 0; i < recordString.size(); i++){
         _indices_recno[i].insert(recordString[i], recon);
     }
+    std::cout << "_indices_recno" << _indices_recno << endl;
     recnoVec.push_back(recon);
     numOfRec++;
     file.close();
@@ -473,7 +474,7 @@ Table Table::select(vectorstr fieldnames, string field_searching, string operatr
     return temp;
 }
 Table Table::select_all(){
-    if(!file_exists((title+".bin").c_str())){return Table();}
+    // if(!file_exists((title+".bin").c_str())){return Table();} //COMMENTED
     Table temp(title+"_"+to_string(sequenceNumber), field_names);
     sequenceNumber++;
     fstream file;
