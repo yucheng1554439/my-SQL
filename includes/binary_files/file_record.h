@@ -167,7 +167,7 @@ vector<string> FileRecord::readVector(fstream &ins, long recno, int totalFieldNu
 
 ostream& operator<<(ostream& outs, const FileRecord& r){
     for(int i = 0; i < r.MAX; i++){
-        outs << setw(10) << r._record[i];
+        outs << setw(11) << r._record[i];
     }
     return outs;
 }

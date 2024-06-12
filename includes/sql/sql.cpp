@@ -3,8 +3,6 @@
 
 #include "sql.h"
 
-
-
 SQL::SQL(){
     _valid_String = false;
     _recnos_selected.clear();
@@ -16,34 +14,23 @@ void SQL::run(){
     std::cout << "Input your command.(\"exit\" to quit)\n";
     std::cout << ">";
     std::getline(std::cin, commandString);
+
     while((toupper(commandString) != "EXIT") && (tolower(commandString) != "quit")){
-        
-        // std::cout << "COMMAND: " <<commandString <<endl;
         Table table = command(commandString);
+        //after parse the string, if it is valid string
         if(_valid_String){
             std::cout << table;
             if(select_recnos().size() != 0){
                 std::cout << "records selected: "<< select_recnos() << endl;
             }
-            
         }
         std::cout << "Input your command.(\"exit\" to quit)\n";
         std::cout << ">";
         std::getline(std::cin, commandString);
-
     };
+
     std::cout << "\n\n------------------ SQL End ------------------\n\n";
 }
-
-string SQL::toupper(string string){
-    transform(string.begin(), string.end(), string.begin(), ::toupper); 
-    return string;
-}
-string SQL::tolower(string string){
-    transform(string.begin(), string.end(), string.begin(), ::tolower); 
-    return string;
-}
-
 
 Table SQL::command(string string){
     Parser parser(string);
@@ -55,8 +42,7 @@ Table SQL::command(string string){
         return temp;
     }else{
         MMap<std::string, std::string> ptree = parser.parse_tree();
-        // std::cout << "ptree[values].size()" << ptree["values"].size() << endl;
-
+        //----- debugging -----
         // std::cout << "\nptreee" << ptree << "\n\n";
         if(ptree["command"][0] == "make")
         {
@@ -65,7 +51,6 @@ Table SQL::command(string string){
         }
         if(ptree["command"][0] == "insert")
         {
-            // std::cout << "WCNM";
             Table table(ptree["table_name"][0]);
             table.insert_into(ptree["values"]);
 
@@ -79,48 +64,26 @@ Table SQL::command(string string){
 
             if(ptree["fields"][0] == "*"){
                 if(ptree.contains("where")){
-                    // std::cout << "\nptree[condition]" << ptree["condition"] << endl;
-                    // table.select(table.get_field_names(), ptree["condition"]);
-                    // cout<<"_recnos_selected: "<<_recnos_selected<<endl;
-                    // std::cout << "FIRST PARE: " << table.get_field_names() << endl;
-                    // std::cout << "SECOND PARE: " << ptree["condition"] << endl;
-
-
+                    //select the records from the table with condition
                     Table temp = table.select(table.get_field_names(), ptree["condition"]);
                     _recnos_selected = table.select_recnos();
-
-                    // cout<<"--------Printing directly from select"<<endl;
-                    // cout<<"fielddd_names.size(): "<<fielddd_names.size()<<endl;
-                    // cout<< table.select(fielddd_names, ptree_condition);
-                    // cout<<"-----------temp:\n" <<temp<<endl;
-                    
                     return temp;
                 }else{
-
+                    //select all the records from the table
                     Table temp = table.select_all();
                     _recnos_selected = table.select_recnos();
-
                     return temp;
                 }
             }else{
                 if(ptree.contains("where")){
-                    // table.select(ptree["fields"], ptree["condition"]);
-                    // std::cout << table.select_recnos() << endl;
-
+                    //the chosen fields with the conditions
                     Table temp = table.select(ptree["fields"], ptree["condition"]);
                     _recnos_selected = table.select_recnos();
-
                     return temp;
                 }else{
-                    //this this the case where you just reduce the num of the fields, need to work on
-                    // Queue<Token*> temp;
-                    // table.select(ptree["fields"], temp);
-                    // std::cout << table.select_recnos() << endl;
+                    //only select certain fields
                     Table temp = table.select(ptree["fields"]);
-
                     _recnos_selected = table.select_recnos();
-                    // return table.select(ptree["fields"], temp);
-
                     return temp;
                 }
             }
@@ -130,6 +93,15 @@ Table SQL::command(string string){
 
 vector<long> SQL::select_recnos(){
     return _recnos_selected;
+}
+
+string SQL::toupper(string string){
+    transform(string.begin(), string.end(), string.begin(), ::toupper); 
+    return string;
+}
+string SQL::tolower(string string){
+    transform(string.begin(), string.end(), string.begin(), ::tolower); 
+    return string;
 }
 
 

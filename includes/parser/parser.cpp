@@ -42,6 +42,7 @@ bool Parser::is_valid(){
 
 mmap_ss Parser::parse_tree(){
     MMap<string,string> temp;
+    //depends on different values insert into the mmap(ptree)
     if(ptree["command"][0] == "select"){
         temp.insert("command", "select");
         if(ptree.contains("condition")){
@@ -78,96 +79,67 @@ mmap_ss Parser::parse_tree(){
     return temp;
 }
 bool Parser::set_string(string string){
-    char charArr[string.length()+1];
+    char charArr[string.length()];
 	strcpy(charArr, string.c_str());
-    
+    //tokenize the string
     STokenizer stringTokenizer(charArr);
     _token_holder.clear();
 
     Token t;
     stringTokenizer>>t;
+    //if it is space, we don't include them in our token holder
     if(t.type_string()!= "SPACE")
         _token_holder.push_back(t);
 
     
     //get the token into the vector
     while(stringTokenizer.more()){
-        // for(int i = 0; i < _token_holder.size(); i++){
-        //     std::cout  << "_token_holder"<< _token_holder[i] << endl;
-        // }
+        // ---- debugging ----
         // cout << "\nTOken:|" << t << "|TOKENTYPE:|" << setw(25)<<t.type_string() << "|\t\n";
         stringTokenizer>>t;
         if(t.type_string()!= "SPACE")
             _token_holder.push_back(t);
-
     }
-
-    
-
     
     vector<Token> temp;
     temp.clear();
     //filter thru the raw vector
     int vecLength = _token_holder.size();
     for(int i = 0; i < vecLength; i++){
-        
-        // if(valid_token(_token_holder[i].token_str())){
-        //     temp.push_back(_token_holder[i]);
-        // }
-
+        //we are going to ignore the spaces and the punctuations, only push the tokens we want
         if(_token_holder[i].type_string() != "SPACE" && _token_holder[i].type_string() != "PUNCTUATION"){
-            if(_token_holder[i].token_str() == "*"){
-                temp.push_back(_token_holder[i]);
-            }else if(tolower(_token_holder[i].token_str()) != "select" && tolower(_token_holder[i].token_str()) != "insert" && tolower(_token_holder[i].token_str()) != "make" && tolower(_token_holder[i].token_str()) != "from" && tolower(_token_holder[i].token_str()) != "where" && tolower(_token_holder[i].token_str()) != "into"&& tolower(_token_holder[i].token_str()) != "values"&& tolower(_token_holder[i].token_str()) != "fields"&& tolower(_token_holder[i].token_str()) != "table"){
-                temp.push_back(_token_holder[i]);
-            }else{
-                Token temp1(tolower(_token_holder[i].token_str()), _token_holder[i].type());
-                temp.push_back(temp1);
-            }
-            // std::cout << _token_holder[i];
+            
+            temp.push_back(_token_holder[i]);
+            
+            //old version
+            // if(_token_holder[i].token_str() == "*"){
+            //     temp.push_back(_token_holder[i]);
+            // }else if(tolower(_token_holder[i].token_str()) != "select" && tolower(_token_holder[i].token_str()) != "insert" && tolower(_token_holder[i].token_str()) != "make" && tolower(_token_holder[i].token_str()) != "from" && tolower(_token_holder[i].token_str()) != "where" && tolower(_token_holder[i].token_str()) != "into"&& tolower(_token_holder[i].token_str()) != "values"&& tolower(_token_holder[i].token_str()) != "fields"&& tolower(_token_holder[i].token_str()) != "table"){
+            //     temp.push_back(_token_holder[i]);
+            // }else{
+            //     //we are puting all the command and keywords into a token
+            //     Token temp1(tolower(_token_holder[i].token_str()), _token_holder[i].type());
+            //     temp.push_back(temp1);
+            // }
         }
     }
     _token_holder.clear();
     _token_holder = temp;
 
-
-
-
-    // ptree
+    //ptree
     ptree.clear();
     
     
     return get_parse_tree();
-    // cout << ptree;
 }
 
-// bool Parser::valid_token(string string){
-//     bool Value = false;
-//     for(int i = 0; i < string.length(); i++){
-//         if(isnumber(string[i]) || isalpha(string[i]) || (string[i] == '*') || contains(OPERATORS, string[i])){
-//             Value = true;
-//         }
-//     }
-//     return Value;
-// }
-
-// bool Parser::contains(const char array[], char element){
-//     for(int i = 0; i < strlen(array); i ++){
-//         if(array[i] == element){
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
 keys Parser::get_column(Token token){
+    //marking the Enum of the given token
     if(token.token_str()=="*"){
         return STARR;
     }
-
     Pair<string, keys> temp(toupper(token.token_str()));
     if(keyword.contains(temp)){
-        // std::cout << "toupper(token.token_str()):" << toupper(token.token_str()) << endl;
         return keyword[toupper(token.token_str())];
     }
     return SYM;
@@ -194,18 +166,13 @@ bool Parser::get_parse_tree(){
     std::string yes = "yes";
     bool valid = false;
 
+    //find the correct state from the state machine and insert into corresponded index of the ptree
     for(int i = 0; i < vecLength; i++){
 
         Token token = _token_holder[i];
-
         string string = token.token_str();
         state = _table_for_enum.get(state, get_column(token));
-        // std::cout << state << endl;
-        
         valid = _table_for_enum.isSuccess(state);
-        // std::cout << "valid" << valid << endl;
-
-        // std::cout << "\nTOKEN|" << string << "|\n";
 
         switch(state)
         {
@@ -256,10 +223,12 @@ bool Parser::get_parse_tree(){
     return valid;
 
 }
+//Get the upper case of a string
 string Parser::toupper(string string){
     transform(string.begin(), string.end(), string.begin(), ::toupper); 
     return string;
 }
+//Get the lower case of a string
 string Parser::tolower(string string){
     transform(string.begin(), string.end(), string.begin(), ::tolower); 
     return string;

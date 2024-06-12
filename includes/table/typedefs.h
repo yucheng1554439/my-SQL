@@ -89,8 +89,6 @@ class ResultSet:public Token{
         setType(13);
     }
     virtual vector<long> evaluate() const{
-        // cout<<"Entered resultSet virtual evaluate and printing _result_vecno"<<endl;
-        // cout<<_result_vecno<<endl;
         return _result_vecno;
     }
     private: 
@@ -128,29 +126,25 @@ class Relational:public Operator{
         vector<long> recVectr;
         recVectr.clear();
         int numOfField = fieldNames.size();
-        // if(_indices_recno[index].contains(rhsString)){
-
-            // cout<<"numOfField: "<<numOfField<<endl;
-            // cout<<"printing the trees in relational evaluate: "<<endl;
-            // for(int i = 0; i < _indices_recno.size(); i++)
-            //     cout<<_indices_recno[i]<<endl;
-
-            // cout<<"_string_relational: "<<_string_relational<<endl;
             if(_string_relational == "="){
                 if(_indices_recno[index].contains(rhsString)){
-                // recVectr = _indices_recno[index].get(rhsString);
 
+                    //old versions
+                    // recVectr = _indices_recno[index].get(rhsString);
                     // recVectr.insert(recVectr.end(), _indices_recno[index].get(rhsString).begin(), _indices_recno[index].get(rhsString).end());
-
+                    
+                    //get the pointer to that node and push back the valuelist at that node
                     MMap<string, long>::Iterator itertrLower = _indices_recno[index].lower_bound(rhsString);
                     for(int i = 0; i < ((*itertrLower).value_list).size(); i++){
-                        //get all the record numbers
+                        //get the value list
                         recVectr.push_back(((*itertrLower).value_list)[i]);
                     }
                 }
             }else if(_string_relational == "<"){
                         MMap<string, long>::Iterator itertrLower = _indices_recno[index].lower_bound(rhsString);
+                        //loop through all the valuelist
                         for(MMap<string, long>::Iterator temp = _indices_recno[index].begin(); temp != itertrLower; temp++){
+                            //push each other record number in the valuelist
                             for(int i = 0; i < ((*temp).value_list).size(); i++){
                                 //get all the record numbers
                                 recVectr.push_back(((*temp).value_list)[i]);
@@ -182,8 +176,6 @@ class Relational:public Operator{
                             }
                         }
             }
-        // }
-        // cout<<"recVectr in realtional virtual evaluate: "<<recVectr<<endl;
         return recVectr;
     }
     private:

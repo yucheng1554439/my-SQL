@@ -19,9 +19,7 @@ class Parser{
     mmap_ss parse_tree();
     bool set_string(string string);
     keys get_column(Token token);
-    bool valid_token(string string);
     bool is_valid();
-    bool contains(const char array[], char element);
     bool get_parse_tree();
     // void make
 
