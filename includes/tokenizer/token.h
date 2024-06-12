@@ -4,7 +4,7 @@
 #include "constants.h"
 #include "../bplustree/map.h" 
 #include "../bplustree/multimap.h"
-enum keys{ZERO, SELECT, FROM, WHERE, INSERT, MAKE, INTO, TABLE, FIELDS, CONDITION, SYM, VALUES, STARR};
+enum keys{ZERO, SELECT, FROM, WHERE, INSERT, MAKE, INTO, TABLE, FIELDS, CONDITION, SYM, VALUES, STARR, CREATE};
 
 using namespace std;
 class Token

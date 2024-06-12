@@ -16,13 +16,13 @@ using namespace std;
 
 const vector<string> command_list = {
 
-/*00*/     "make table employee fields  last,       first,         dep,      salary, year",
+/*00*/     "create table employee fields  last,       first,         dep,      salary, year",
 /*01*/     "insert into employee values Blow,       Joe,           CS,       100000, 2018",
 /*02*/     "insert into employee values Blow,       JoAnn,         Physics,  200000, 2016",
 /*03*/     "insert into employee values Johnson,    Jack,          HR,       150000, 2014",
 /*04*/     "insert into employee values Johnson,    \"Jimmy\",     Chemistry,140000, 2018",
 
-/*05*/     "make table student fields  fname,          lname,    major,    age",
+/*05*/     "create table student fields  fname,          lname,    major,    age",
 /*06*/     "insert into student values Flo,            Yao, 	Art, 	20",
 /*07*/     "insert into student values Bo, 		     Yang, 	CS, 		28",
 /*08*/     "insert into student values \"Sammuel L.\", Jackson, 	CS, 		40",
@@ -49,15 +49,15 @@ bool sql_basic(bool debug = false)
 {
      SQL sql;
      Table t;
-     // cout << ">" << command_list[0] << endl;
-     // sql.command(command_list[0]);
-     // cout << "basic_test: table created." << endl<<endl;
+     cout << ">" << command_list[0] << endl;
+     sql.command(command_list[0]);
+     cout << "basic_test: table created." << endl<<endl;
 
-     // for (int i = 0; i < MAKE_TABLE_COMMANDS; i++)
-     // {
-     //      cout << ">" << command_list[i] << endl;
-     //      sql.command(command_list[i]);
-     // }
+     for (int i = 0; i < MAKE_TABLE_COMMANDS; i++)
+     {
+          cout << ">" << command_list[i] << endl;
+          sql.command(command_list[i]);
+     }
 
      cout << endl
           << endl;

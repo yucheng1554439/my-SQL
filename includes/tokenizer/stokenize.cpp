@@ -268,6 +268,7 @@ void STokenizer::make_table_enum(int _table[][MAX_COLUMNS]){
 
     //make case
     mark_cells(0, _table, MAKE, 1);
+    mark_cells(0, _table, CREATE, 1);
     mark_cells(1, _table, TABLE, 2);
     mark_cells(2, _table, SYM, 3);
     mark_cells(3, _table, FIELDS, 4);

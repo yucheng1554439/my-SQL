@@ -27,13 +27,11 @@ Parser::Parser(string string){
     keyword.insert("CONDITION", CONDITION);
     keyword.insert("SYM", SYM);
     keyword.insert("*", STARR);
-
+    keyword.insert("CREATE", CREATE);
 
 
     //tokenize the input into our vector string _token_holder
     _valid = set_string(string);
-
-
 }
 
 bool Parser::is_valid(){
@@ -67,7 +65,7 @@ mmap_ss Parser::parse_tree(){
         for(int i = 0; i < ptree["values"].size(); i++){
             temp.insert("values", ptree["values"][i]);
         }
-    }else if(ptree["command"][0] == "make"){
+    }else if(ptree["command"][0] == "make" || ptree["command"][0] == "create"){
         for(int i = 0; i < ptree["col"].size(); i++){
             temp.insert("col", ptree["col"][i]);
         }

@@ -4,8 +4,8 @@
 #include "sql.h"
 
 SQL::SQL(){
-    _valid_String = false;
-    _recnos_selected.clear();
+    // _valid_String = false;
+    // _recnos_selected.clear();
 }
 
 void SQL::run(){
@@ -44,7 +44,7 @@ Table SQL::command(string string){
         MMap<std::string, std::string> ptree = parser.parse_tree();
         //----- debugging -----
         // std::cout << "\nptreee" << ptree << "\n\n";
-        if(ptree["command"][0] == "make")
+        if(ptree["command"][0] == "make" || ptree["command"][0] == "create")
         {
             Table table(ptree["table_name"][0], ptree["col"]);
             return table;

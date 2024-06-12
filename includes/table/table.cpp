@@ -146,7 +146,7 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
     // Stack<Token*> _result_stack;
     fstream file;
     bool falseInput = false;
-    selected_recnos.clear();
+    selected_recnos.clear(); //Commented
 
     //if the queue is not empty
     while(!queue_of_compar.empty()){
@@ -179,7 +179,7 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
     //update of the vector of numbers to the last Token in the stack after the operation
     //if there is a false input we just make the record vector empty
     if(falseInput){
-        recVectr.clear();
+        recVectr.clear();    //commented
     }else{
         recVectr = _stack.pop()->evaluate();
     }
@@ -213,7 +213,7 @@ Table Table::select(vectorstr fieldnames){
     fstream file;
     FileRecord record;
     long recordNumbers = 0;
-    selected_recnos.clear();
+    selected_recnos.clear(); //Commented
 
     open_fileRW(file, (title+".bin").c_str());
     //selected record numbers are the same as all the mother record numbers
@@ -301,7 +301,7 @@ Table Table::select(vectorstr fieldnames, string field_searching, string operatr
     fstream file;
     int numOfField = field_names.size();
     open_fileRW(file, (title+".bin").c_str());
-    selected_recnos.clear();
+    selected_recnos.clear(); //Commented
 
     int indexx = index[field_searching];
 
