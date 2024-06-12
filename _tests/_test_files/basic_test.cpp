@@ -39,7 +39,8 @@ const vector<string> command_list = {
 /*17*/     "select * from student where (major=CS or major=Art)",
 /*18*/     "select * from student where lname>J",
 /*19*/     "select * from student where lname>J and (major=CS or major=Art)"
-
+//  select * from student where major=CS or major=Art and lname=   Jackson or lname=Yang or lname = Davis and age = 30
+//  select * from student where (major=CS or major=Art) and (lname=   Jackson or lname=Yang or lname = Davis) and age = 30
 };
 
 const int MAKE_TABLE_COMMANDS = 11;

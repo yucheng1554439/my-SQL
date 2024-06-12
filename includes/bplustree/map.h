@@ -139,7 +139,7 @@ public:
         key_count = 0;
     }
     V get(const K& key){
-        return map.get(Pair<K,V>(key));
+        return map.get(Pair<K,V>(key)).value;
     }
 
 //  Operations:
@@ -187,11 +187,11 @@ public:
         return 1;
     }  
 
-    Map& operator =(const Map& RHS){
-        key_count = RHS.key_count;
-        map = RHS.map;
-        return *this;
-    }   
+    // Map& operator =(const Map& RHS){
+    //     key_count = RHS.key_count;
+    //     map = RHS.map;
+    //     return *this;
+    // }   
 
     bool is_valid(){return map.is_valid();}
 

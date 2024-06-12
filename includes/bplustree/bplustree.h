@@ -306,7 +306,6 @@ public:
                 if(i!=0){
                     return Iterator(subset[i-1], i-1); //is thats the leaf, return this
                 }else{
-                    std::cout << "NULLLLL";
                     return nullptr;
                 }
             } else { 

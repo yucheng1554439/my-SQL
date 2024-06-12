@@ -443,7 +443,6 @@ Table Table::select_all(){
     sequenceNumber++;
     fstream file;
     selected_recnos = recnoVec;
-    cout<<"selected_recnos: "<<selected_recnos<<endl;
     temp.recnoVec = recnoVec;
     temp.selected_recnos = recnoVec;
 
@@ -464,7 +463,6 @@ Table Table::select_all(){
         temp.insert_into(inOrderRec);
     }
     file.close();
-    cout<<"selected_recnos: "<<selected_recnos<<endl;
     return temp;
 }
 //----Unused----
@@ -518,8 +516,10 @@ ostream& operator <<(ostream& outs, const Table& print_me){
                 std::cout << "\n" << setw(8)<< i << setw(8) << record ;
         }
         f.close();
-    }else{
-        std::cout << "Record not Found\n";
+    }else if(!print_me.field_names.empty() && print_me._indices_recno.size() == 0){
+        std::cout << "MESSAGE: (Table Created)\n";
+    }else if(print_me.title == ""){
+        std::cout << "MESSAGE: (Record not Found)\n";
     }
     return outs;
 }
