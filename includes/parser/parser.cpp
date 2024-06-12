@@ -170,7 +170,10 @@ bool Parser::get_parse_tree(){
         Token token = _token_holder[i];
         string string = token.token_str();
         state = _table_for_enum.get(state, get_column(token));
+
         valid = _table_for_enum.isSuccess(state);
+
+        // std::cout << "Valid:" << valid << endl;
 
         switch(state)
         {

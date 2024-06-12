@@ -101,6 +101,7 @@ long FileRecord::read(fstream &ins, long recno){
         ins.read(_record[i], sizeof(_record[i]));
         _record[i][ins.gcount()] = '\0';
     }
+    // cout<<"ins.gcount "<<ins.gcount()<<endl;
 
     return ins.gcount();
 }
