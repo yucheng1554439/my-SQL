@@ -47,28 +47,30 @@ const int SELECT_COMMANDS = 20;
 
 bool sql_basic(bool debug = false)
 {
-     SQL sql;
-     Table t;
-     cout << ">" << command_list[0] << endl;
-     sql.command(command_list[0]);
-     cout << "basic_test: table created." << endl<<endl;
+     // SQL sql;
+     // Table t;
+     // cout << ">" << command_list[0] << endl;
+     // sql.command(command_list[0]);
+     // cout << "basic_test: table created." << endl<<endl;
 
-     for (int i = 0; i < MAKE_TABLE_COMMANDS; i++)
-     {
-          cout << ">" << command_list[i] << endl;
-          sql.command(command_list[i]);
-     }
+     // for (int i = 0; i < MAKE_TABLE_COMMANDS; i++)
+     // {
+     //      cout << ">" << command_list[i] << endl;
+     //      sql.command(command_list[i]);
+     // }
 
+
+     SQL sql2;
      cout << endl
           << endl;
      for (int i = MAKE_TABLE_COMMANDS; i < command_list.size(); i++)
      {
           cout << "\n>" << command_list[i] << endl;
           if (debug)
-               cout<< sql.command(command_list[i])<<endl;
+               cout<< sql2.command(command_list[i])<<endl;
           else
-               t = sql.command(command_list[i]);
-          cout << "basic_test: records selected: "<<sql.select_recnos() << endl;
+               cout << sql2.command(command_list[i]);
+          cout << "basic_test: records selected: "<<sql2.select_recnos() << endl;
      }
 
      cout << "----- END TEST --------" << endl;

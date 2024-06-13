@@ -56,5 +56,4 @@ void open_fileW(fstream& f, const char filename[]){
 
 }
 
-
 #endif
