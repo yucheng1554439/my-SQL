@@ -139,12 +139,13 @@ string SQL::tolower(string string){
 //             Table temp(tableName);
 //             _table_map[tableName] = temp;
 //         }
+//         // file.close();
+//     } //else{
+//         // ofstream f;
+//         // f.open((_table_name_list + ".txt").c_str());
+//         // f.close();
 //         file.close();
-//     }else{
-//         ofstream f;
-//         f.open((_table_name_list + ".txt").c_str());
-//         f.close();
-//     }
+//     // }
 
 //     //new version with no memory feature
 //     // clearTableNameTxtFile();
@@ -278,8 +279,10 @@ string SQL::tolower(string string){
 //     file.open((_table_name_list + ".txt").c_str());
 //     //geting the field names from the txt file
 //     std::cout << endl;
-//     while(getline(file, tableName)){
-//         std::cout << setw(20) <<tableName << endl;
+//     if(file){
+//         while(getline(file, tableName)){
+//             std::cout << setw(20) <<tableName << endl;
+//         }
 //     }
 //     file.close();
 // }

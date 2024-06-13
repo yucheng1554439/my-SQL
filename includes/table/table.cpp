@@ -11,7 +11,12 @@ int Table::sequenceNumber = 0;
 Table::Table()
 :numOfRec(0)
 {
-
+    field_names.clear();
+    string title = "";
+    _indices_recno.clear();
+    index.clear();
+    recnoVec.clear();
+    selected_recnos.clear();
 }
 //constructor with one parameter where open and make a copy of the table with the table_name
 Table::Table(string tableName)
@@ -125,7 +130,7 @@ Table::Table(string tableName, vectorstr fields)
 // }
 
 void Table::insert_into(vectorstr recordString){
-    if(!file_exists((title+".bin").c_str())){return;}
+    if(!file_exists((title+".bin").c_str()) || field_names.empty()){return;}
     FileRecord record(recordString);
     fstream file;
     //inserting the record number into the corresponded index of _indices_recno
@@ -134,7 +139,7 @@ void Table::insert_into(vectorstr recordString){
     for(int i = 0; i < recordString.size(); i++){
         _indices_recno[i].insert(recordString[i], recon);
     }
-    std::cout << "_indices_recno" << _indices_recno << endl;
+    // std::cout << "_indices_recno" << _indices_recno << endl;
     recnoVec.push_back(recon);
     numOfRec++;
     file.close();
@@ -305,7 +310,7 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
         }
     }
 
-    while(!tempStack.empty() ){
+    while(!tempStack.empty()){
         if(tempStack.top()->type_string() == "LPAREN"){
             std::cout << "(Extra Left Parenthesis)\n";
             tempStack.pop();
@@ -474,7 +479,7 @@ Table Table::select(vectorstr fieldnames, string field_searching, string operatr
     return temp;
 }
 Table Table::select_all(){
-    // if(!file_exists((title+".bin").c_str())){return Table();} //COMMENTED
+    if(!file_exists((title+".bin").c_str())){return Table();} //COMMENTED
     Table temp(title+"_"+to_string(sequenceNumber), field_names);
     sequenceNumber++;
     fstream file;
