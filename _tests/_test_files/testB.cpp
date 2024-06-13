@@ -77,8 +77,8 @@ const int SELECT_COMMANDS = 34;
 
 bool sql_basic(bool debug = false)
 {
-     SQL sql;
-     sql.batch();
+     // SQL sql;
+     // sql.batch();
      // SQL sql;
      // cout << ">" << command_list[0] << endl;
      // sql.command(command_list[0]);
@@ -86,9 +86,9 @@ bool sql_basic(bool debug = false)
      // cout << sql.command("insert into employee values \" Something Like This \",           \"a Yao\", 	 \"asdsad Yao \",  \"Yao \"");
      // cout << sql.command("insert into employee values \"Jay chou\",     \"hehe      Cjhou\", 	ASD, 	20");
      
-     // SQL sql2;
-     // cout << sql2.command("select * from employee");
-     // cout << "sql2.select_recnos(): " << sql2.select_recnos() << endl;
+     SQL sql2;
+     cout << sql2.command("select * from employee");
+     cout << "sql2.select_recnos(): " << sql2.select_recnos() << endl;
 
      // for (int i = 0; i < MAKE_TABLE_COMMANDS; i++)
      // {
