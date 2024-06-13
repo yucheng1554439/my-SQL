@@ -20,7 +20,7 @@ const vector<string> command_list = {
 /*01*/     "insert into employee values Blow,       Joe,           CS,       100000, 2018",
 /*02*/     "insert into employee values Blow,       JoAnn,         Physics,  200000, 2016",
 /*03*/     "insert into employee values Johnson,    Jack,          HR,       150000, 2014",
-/*04*/     "insert into employee values Johnson,    \"Jimmy \",     Chemistry,140000, 2018",
+/*04*/     "insert into employee values Johnson,    \" Jimmy \",     Chemistry,140000, 2018",
 
 /*05*/     "make table student fields  fname,          lname,    major,    age",
 /*06*/     "insert into student values Flo,            Yao, 	Art, 	20",
@@ -33,12 +33,12 @@ const vector<string> command_list = {
 /*12*/     "select last, first, age from employee",
 /*13*/     "select last from employee",
 /*14*/     "select * from employee where last = Johnson",
-/*15*/     "select * from employee where last=Johnson and first=\"Jimmy \"",
+/*15*/     "select * from employee where last=Johnson and first=\" Jimmy \"",
 
 /*16*/     "select * from student",
 /*17*/     "select * from student where (major=CS or major=Art)",
 /*18*/     "select * from student where lname>J",
-/*19*/     "select * from student where (((lname>J and major=CS) (or major=Art"
+/*19*/     "select * from student where lname>J and major=CS or major=Art"
 
 };
 
