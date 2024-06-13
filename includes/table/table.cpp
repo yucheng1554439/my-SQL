@@ -18,7 +18,7 @@ Table::Table(string tableName)
 :title(tableName), numOfRec(0)
 {
     fstream file;
-    file.open((tableName + ".txt").c_str());
+    open_fileRW(file, (tableName + ".txt").c_str());
     if (file.is_open())
     {
         string fields;
@@ -92,8 +92,10 @@ Table::Table(string tableName, vectorstr fields)
     }
 
 
-    ofstream f;
-    f.open((tableName + ".txt").c_str(), ios::trunc);
+    fstream f;
+    // ofstream f;
+    // f.open((tableName + ".txt").c_str(), ios::trunc);
+    open_fileW(f, (tableName + ".txt").c_str());
     int length = fields.size();
     //input the field names into the txt file
     for(int i = 0; i < length; i++){
