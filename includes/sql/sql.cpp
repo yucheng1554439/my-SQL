@@ -16,12 +16,14 @@ void SQL::run(){
     while((toupper(commandString) != "EXIT") && (tolower(commandString) != "quit")){
         Table table = command(commandString);
         //after parse the string, if it is valid string
-        if(_valid_String){
+        // if(_valid_String){
             std::cout << table;
             if(select_recnos().size() != 0){
                 std::cout << "records selected: "<< select_recnos() << endl;
             }
-        }
+        // }else if(!_valid_String){
+        //     std::cout << "Invalid String\n";
+        // }
         std::cout << "Input your command.(\"exit\" to quit)\n";
         std::cout << ">";
         std::getline(std::cin, commandString);
@@ -34,11 +36,11 @@ Table SQL::command(string string){
     Parser parser(string);
     _valid_String = parser.is_valid();
     // _recnos_selected.clear();  //COMMNETED OUT
-    if(!_valid_String){
-        Table temp;
-        std::cout << "Invalid Command\n";
-        return temp;
-    }else{
+    // if(!_valid_String){
+    //     Table temp;
+    //     std::cout << "Invalid Command\n";
+    //     return temp;
+    // }else{
         MMap<std::string, std::string> ptree = parser.parse_tree();
         //----- debugging -----
         // std::cout << "\nptreee" << ptree << "\n\n";
@@ -55,7 +57,6 @@ Table SQL::command(string string){
         }
         if(ptree["command"][0] == "select")
         {
-
             std::string tableName = ptree["table_name"][0];
             Table table(tableName);
             if(ptree["fields"][0] == "*"){
@@ -85,7 +86,7 @@ Table SQL::command(string string){
             }
         }
     }
-}
+// }
 
 vector<long> SQL::select_recnos(){
     return _recnos_selected;
@@ -119,7 +120,7 @@ string SQL::tolower(string string){
 
 
 
-// // new version
+// // // new version
 // #ifndef SQL_CPP
 // #define SQL_CPP
 
@@ -135,15 +136,17 @@ string SQL::tolower(string string){
 //     if(file){
 //         // geting the table names from the txt file
 //         while(getline(file, tableName)){
+//             std::cout << "CNM";
 //             Table temp(tableName);
 //             _table_map[tableName] = temp;
 //         }
+//         // file.close();
+//     } //else{
+//         // ofstream f;
+//         // f.open((_table_name_list + ".txt").c_str());
+//         // f.close();
 //         file.close();
-//     }else{
-//         ofstream f;
-//         f.open((_table_name_list + ".txt").c_str());
-//         f.close();
-//     }
+//     // }
 
 //     //new version with no memory feature
 //     // clearTableNameTxtFile();
@@ -157,7 +160,7 @@ string SQL::tolower(string string){
 //     // std::cout << "TEST\n" << _table_map << endl;
 //     std::getline(std::cin, commandString);
 
-//     while((toupper(commandString) != "EXIT") && (tolower(commandString) != "quit")){
+//     while((toupper(commandString) != "EXIT") && (tolower(commandString) != "quit") && (tolower(commandString) != "clear")){
 //         Table table = command(commandString);
 //         //after parse the string, if it is valid string
 //         if(_valid_String){
@@ -169,10 +172,13 @@ string SQL::tolower(string string){
 //         std::cout << "\n\n\n***** Current Existing Tables *****\n";
 //         currentExistTables();
 //         std::cout << "\n***********************************\n\n";
-//         std::cout << "Input your command.(\"exit\" to quit)\n";
+//         std::cout << "Input your command.(\"exit\" to quit, clear to delete all table)\n";
 //         std::cout << ">";
 //         std::getline(std::cin, commandString);
 //     };
+//     if(tolower(commandString) == "clear"){
+//         clearTableNameTxtFile();
+//     }
 
 //     std::cout << "\n\n------------------ SQL End ------------------\n\n";
 // }
@@ -277,8 +283,10 @@ string SQL::tolower(string string){
 //     file.open((_table_name_list + ".txt").c_str());
 //     //geting the field names from the txt file
 //     std::cout << endl;
-//     while(getline(file, tableName)){
-//         std::cout << setw(20) <<tableName << endl;
+//     if(file){
+//         while(getline(file, tableName)){
+//             std::cout << setw(20) <<tableName << endl;
+//         }
 //     }
 //     file.close();
 // }
@@ -297,7 +305,8 @@ string SQL::tolower(string string){
 // void SQL::clearTableNameTxtFile()
 // {
 //     fstream file;
-//     file.open(_table_name_list+ ".txt", std::ofstream::out | std::ofstream::trunc);
+//     file.open((_table_name_list+ ".txt").c_str(), std::ofstream::out | std::ofstream::trunc);
+//     // remove(_table_name_list+ ".txt");
 //     file.close();
 // }
 

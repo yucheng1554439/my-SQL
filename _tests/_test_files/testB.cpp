@@ -81,8 +81,8 @@ bool sql_basic(bool debug = false)
      cout << ">" << command_list[0] << endl;
      sql.command(command_list[0]);
      cout << "basic_test: table created." << endl<<endl;
-     cout << sql.command("insert into employee values Flo,            Yao, 	Art, 	20");
-     cout << sql.command("insert into employee values Jay,            Cjhou, 	ASD, 	20");
+     cout << sql.command("insert into employee values \" Something Like This \",           \"a Yao\", 	 \"asdsad Yao \",  \"Yao \"");
+     cout << sql.command("insert into employee values \"Jay chou\",     \"hehe      Cjhou\", 	ASD, 	20");
      
      SQL sql2;
      cout << sql2.command("select * from employee");

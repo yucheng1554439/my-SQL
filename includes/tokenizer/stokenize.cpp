@@ -34,7 +34,18 @@ STokenizer& operator>> (STokenizer& s, Token& t){
     if(s.get_token(start_state, token)){
         t.setToken(token);
         // std::cout << "TOKEN: " << token << endl;
-        if(token.length() > 1){
+        if(token.length() > 2){
+            if(s.contains(ALFA, token[0]) || s.contains(ALFA, token[2])){
+                t.setType(TOKEN_ALPHA);
+            }else if(s.contains(DIGITS, token[0])||s.contains(DIGITS, token[2])){
+                t.setType(TOKEN_NUMBER);
+            }else if(s.contains(SPACES, token[0]) && !s.contains(ALFA, token[2]) && !s.contains(ALFA, token[1])){
+                t.setType(TOKEN_SPACE);
+            }else if(s.contains(OPERATORS, token[1])){
+                t.setType(OPERATOR);
+            }
+            
+        }else if(token.length() > 1){
             if(s.contains(ALFA, token[0]) || s.contains(ALFA, token[1])){
                 t.setType(TOKEN_ALPHA);
             }else if(s.contains(DIGITS, token[0])||s.contains(DIGITS, token[1])){
@@ -44,7 +55,6 @@ STokenizer& operator>> (STokenizer& s, Token& t){
             }else if(s.contains(OPERATORS, token[1])){
                 t.setType(OPERATOR);
             }
-            
         }else{
             if(s.contains(ALFA, token[0])){
                 t.setType(TOKEN_ALPHA);
