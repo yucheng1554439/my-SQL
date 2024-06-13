@@ -19,7 +19,7 @@ Table::Table(string tableName)
 {
     fstream file;
     file.open((tableName + ".txt").c_str());
-    if (file)
+    if (file.is_open())
     {
         string fields;
         //geting the field names from the txt file
@@ -46,10 +46,10 @@ Table::Table(string tableName)
         }
         //loop thru the bin file and get the information to our table
         while(record.read(file2, recordNumbers) != 0){
-            vectorstr b = record.readVector(file2, recordNumbers, fieldLength);
+            vectorstr vectorString = record.readVector(file2, recordNumbers, fieldLength);
             long recon = recordNumbers;
-            for(int j = 0; j < b.size(); j++){
-                _indices_recno[index[field_names[j]]].insert(b[j], recon);
+            for(int j = 0; j < vectorString.size(); j++){
+                _indices_recno[index[field_names[j]]].insert(vectorString[j], recon);
             }
             recnoVec.push_back(recon);
             numOfRec++;
@@ -57,8 +57,8 @@ Table::Table(string tableName)
         }
         file2.close();
     }else{
-        open_fileW(file, (tableName + ".txt").c_str());
-        file.close();
+        // open_fileW(file, (tableName + ".txt").c_str());
+        // file.close();
         // printing the error message
         cout << "File does not exists" << endl;
         // for(int i = 0; i < field_names.size(); i++){
@@ -127,12 +127,13 @@ void Table::insert_into(vectorstr recordString){
     //inserting the record number into the corresponded index of _indices_recno
     open_fileRW(file, (title+".bin").c_str());
     long recon = record.write(file);
+    file.close();
     for(int i = 0; i < recordString.size(); i++){
         _indices_recno[i].insert(recordString[i], recon);
     }
     recnoVec.push_back(recon);
     numOfRec++;
-    file.close();
+    
 }
 
 
@@ -442,18 +443,13 @@ Table Table::select_all(){
     Table temp(title+"_"+to_string(sequenceNumber), field_names);
     sequenceNumber++;
     fstream file;
-    selected_recnos = recnoVec;
-    temp.recnoVec = recnoVec;
-    temp.selected_recnos = recnoVec;
-
-
     FileRecord record;
     long recordNumbers = 0;
     int sizeOfRecVectr = recnoVec.size();
     int numOfField = field_names.size();
     open_fileRW(file, (title+".bin").c_str());
+    FileRecord record1;
     for(int j = 0; j < sizeOfRecVectr; j++){
-        FileRecord record1;
         vectorstr newRecordValue = record1.readVector(file, recnoVec[j], numOfField);
         vectorstr inOrderRec;
         for(int i = 0; i < numOfField; i++){
@@ -463,6 +459,7 @@ Table Table::select_all(){
         temp.insert_into(inOrderRec);
     }
     file.close();
+    selected_recnos = recnoVec;
     return temp;
 }
 //----Unused----
