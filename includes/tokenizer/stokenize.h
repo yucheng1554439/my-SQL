@@ -10,7 +10,7 @@ class STokenizer
 public:
     STokenizer();
     STokenizer(char str[]);
-    STokenizer(vector<string> vector_enum);
+    // STokenizer(vector<string> vector_enum);
     bool done();            //true: there are no more tokens
     bool more();            //true: there are more tokens
     //
