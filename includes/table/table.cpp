@@ -22,7 +22,7 @@ Table::Table()
 Table::Table(string tableName)
 :title(tableName), numOfRec(0)
 {
-    if(!file_exists((tableName + ".bin").c_str())){return;}
+    // if(!file_exists((tableName + ".bin").c_str())){return;}
     fstream file;
 
     file.open((tableName + ".txt").c_str());
@@ -130,7 +130,7 @@ Table::Table(string tableName, vectorstr fields)
 // }
 
 void Table::insert_into(vectorstr recordString){
-    if(!file_exists((title+".bin").c_str()) || field_names.empty()){return;}
+    // if(!file_exists((title+".bin").c_str()) || field_names.empty()){return;}
     FileRecord record(recordString);
     fstream file;
     //inserting the record number into the corresponded index of _indices_recno
@@ -150,7 +150,7 @@ void Table::insert_into(vectorstr recordString){
 Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
     //----------My main select using a postorder of input-----------
     //create a child table named after mother table
-    if(!file_exists((title+".bin").c_str())){return Table();}
+    // if(!file_exists((title+".bin").c_str())){return Table();}
     Table temp(title+"_"+to_string(sequenceNumber), fieldnames);
     sequenceNumber++;
     vector<long> recVectr;
@@ -220,7 +220,7 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
 
 Table Table::select(vectorstr fieldnames){
     //----------Select which gives you only certain fields----------
-    if(!file_exists((title+".bin").c_str())){return Table();}
+    // if(!file_exists((title+".bin").c_str())){return Table();}
     Table temp(title+"_"+to_string(sequenceNumber), fieldnames); //child table
     sequenceNumber++;
     fstream file;
@@ -335,7 +335,7 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
 
 
 Table Table::select(vectorstr fieldnames, string field_searching, string operatr, string value_searching){
-    if(!file_exists((title+".bin").c_str())){return Table();}
+    // if(!file_exists((title+".bin").c_str())){return Table();}
     Table temp(value_searching, fieldnames);
     fstream file;
     int numOfField = field_names.size();
@@ -479,7 +479,7 @@ Table Table::select(vectorstr fieldnames, string field_searching, string operatr
     return temp;
 }
 Table Table::select_all(){
-    if(!file_exists((title+".bin").c_str())){return Table();} //COMMENTED
+    // if(!file_exists((title+".bin").c_str())){return Table();} //COMMENTED
     Table temp(title+"_"+to_string(sequenceNumber), field_names);
     sequenceNumber++;
     fstream file;
@@ -541,7 +541,7 @@ void Table::set_selected_recnos(vector<long> vector){
 
 
 ostream& operator <<(ostream& outs, const Table& print_me){
-    if(!file_exists((print_me.title+".bin").c_str())){return outs;}
+    // if(!file_exists((print_me.title+".bin").c_str())){return outs;}
     if(print_me.numOfRec != 0 && print_me.title != ""){
         std::cout << "Table Name: " << setw(10)<< print_me.title << "\tNumbers of Record:" << print_me.numOfRec << endl;
         FileRecord record;
