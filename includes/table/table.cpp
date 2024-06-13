@@ -1073,9 +1073,8 @@ Table Table::select(vectorstr fieldnames, string field_searching, string operatr
 Table Table::select_all(){
     if(!file_exists((title+".bin").c_str())){
         Table temp;
-        temp.selected_recnos = {-1, -1, -1, -1, -1};
+        selected_recnos = {-1, -1, -1, -1, -1};
         return temp;
-    
     } 
     Table temp(title+"_"+to_string(sequenceNumber), field_names);
     sequenceNumber++;
