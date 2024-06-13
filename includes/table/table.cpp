@@ -502,11 +502,11 @@ Table Table::select_all(){
     FileRecord record1;
     for(int j = 0; j < sizeOfRecVectr; j++){
         vectorstr newRecordValue = record1.readVector(file, recnoVec[j], numOfField);
-        // vectorstr inOrderRec;
-        // for(int i = 0; i < numOfField; i++){
-        //     //we are pushing back in the order of field
-        //     inOrderRec.push_back(newRecordValue[index[field_names[i]]]);
-        // }
+        vectorstr inOrderRec;
+        for(int i = 0; i < numOfField; i++){
+            //we are pushing back in the order of field
+            inOrderRec.push_back(newRecordValue[index[field_names[i]]]);
+        }
         temp.insert_into(newRecordValue); //inOrderRec
     }
     file.close();
