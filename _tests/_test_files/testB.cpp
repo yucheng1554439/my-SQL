@@ -72,42 +72,62 @@ const vector<string> command_list = {
 
 };
 
-const int MAKE_TABLE_COMMANDS = 11;
-const int SELECT_COMMANDS = 34;
+const int MAKE_TABLE_COMMANDS = 14;
+const int SELECT_COMMANDS = 20;
 
 bool sql_basic(bool debug = false)
 {
-     // SQL sql;
+     SQL sql;
      // // sql.batch();
-     // SQL sql;
+
+     
+     Table t;
      // cout << ">" << command_list[0] << endl;
      // sql.command(command_list[0]);
-     // cout << "basic_test: table created." << endl<<endl;
-     // cout << sql.command("insert into employee values \" Something Like This \",           \"a Yao\", 	 \"asdsad Yao \",  \"Yao \"");
-     // cout << sql.command("insert into employee values \"Jay chou\",     \"hehe      Cjhou\", 	ASD, 	20");
+     // // cout << "basic_test: table created." << endl<<endl;
+     // cout << sql.command("insert into employee values Blow,       JoAnn,         Physics,  200000, 2016");
+     // // cout << sql.command("insert into employee values \"Jay chou\",     \"hehe      Cjhou\", 	ASD, 	20");
      
+     // // SQL sql2;
+     // cout << "FIRST SELECT";
+     // cout << sql.command("select * from employee");
+     // cout << "sql2.select_recnos(): " << sql.select_recnos() << endl;
+     // cout << "---------------------";
+     // // SQL sq3;
+     // cout << "SECOND SELECT";
+     // cout << sql.command("select * from employee where year = 2016");
+     // cout << "sql2.select_recnos(): " << sql.select_recnos() << endl;
+
+     for (int i = 0; i < MAKE_TABLE_COMMANDS; i++)
+     {
+          cout << ">" << command_list[i] << endl;
+          sql.command(command_list[i]);
+     }
+
+     cout << endl
+          << endl;
+     for (int i = MAKE_TABLE_COMMANDS; i < SELECT_COMMANDS; i++)
+     {
+          cout << "\n>" << command_list[i] << endl;
+          if (debug)
+               cout<< sql.command(command_list[i])<<endl;
+          else
+               t = sql.command(command_list[i]);
+          cout << "basic_test: records selected: "<<sql.select_recnos() << endl;
+     }
+     cout<<"==============================="<<endl;
+     sql.command("insert into student values \"Mary Ann\",   Davis,	Math,	30");
+     sql.command("insert into student values \"Mary Ann\",   Davis,	Math,	30");
+     sql.command("insert into student values \"Mary Ann\",   Davis,	Math,	30");
+     sql.command("insert into student values \"Mary Ann\",   Davis,	Math,	30");
+     sql.command("insert into student values \"Mary Ann\",   Davis,	Math,	30");
+     sql.command("insert into student values \"Mary Ann\",   Davis,	Math,	30");
+
+     cout<<sql.command("select * from student");
+     cout<<sql.select_recnos();
      SQL sql2;
-     cout << sql2.command("select * from employee");
-     cout << "sql2.select_recnos(): " << sql2.select_recnos() << endl;
-
-     // for (int i = 0; i < MAKE_TABLE_COMMANDS; i++)
-     // {
-     //      cout << ">" << command_list[i] << endl;
-     //      sql.command(command_list[i]);
-     // }
-
-     // cout << endl
-     //      << endl;
-     // for (int i = MAKE_TABLE_COMMANDS; i < SELECT_COMMANDS; i++)
-     // {
-     //      cout << "\n>" << command_list[i] << endl;
-     //      if (debug)
-     //           cout<< sql.command(command_list[i])<<endl;
-     //      else
-     //           t = sql.command(command_list[i]);
-     //      cout << "basic_test: records selected: "<<sql.select_recnos() << endl;
-     // }
-
+     cout<<sql2.command("select * from student");
+     cout<<sql2.select_recnos();
      // cout << "----- END TEST --------" << endl;
      return true;
 }

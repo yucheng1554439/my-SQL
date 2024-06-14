@@ -18,17 +18,32 @@ class FileRecord{
 public:
     //when you construct a Record, it's either empty or it contains a word
     FileRecord(){
+        for(int i = 0; i < MAX; i++){
+            for(int j = 0; j < MAX+1; j++){
+                _record[i][j] = '\0';
+            }
+        }
     }
 
     FileRecord(vector<char*> str){
+        for(int i = 0; i < MAX; i++){
+            for(int j = 0; j < MAX+1; j++){
+                _record[i][j] = '\0';
+            }
+        }
         for (int i = 0; i < MAX && i < str.size(); i++){
             strcpy(_record[i], str[i]); //, MAX
         }
     }
 
     FileRecord(vector<string> s){
+        for(int i = 0; i < MAX; i++){
+            for(int j = 0; j < MAX+1; j++){
+                _record[i][j] = '\0';
+            }
+        }
         for(int i = 0; i < s.size(); i++){
-            strncpy(_record[i], s[i].c_str(), MAX);
+            strcpy(_record[i], s[i].c_str()); // , MAX //NNEEEEEEEEEED TO BE FIXED------------
         }
     }
 
@@ -43,7 +58,7 @@ public:
     friend ostream& operator<<(ostream& outs, const FileRecord& r);
 
     static const int MAX = 100;
-    char _record[MAX][MAX+1] = {};
+    char _record[MAX][MAX+1];
 
 private:
     //static const int MAX = 100;

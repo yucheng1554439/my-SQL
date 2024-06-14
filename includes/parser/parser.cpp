@@ -105,7 +105,7 @@ bool Parser::set_string(string string){
     int vecLength = _token_holder.size();
     for(int i = 0; i < vecLength; i++){
         //we are going to ignore the spaces and the punctuations, only push the tokens we want
-        if(_token_holder[i].type_string() != "SPACE" && _token_holder[i].type_string() != "PUNCTUATION"){ // && _token_holder[i].token_str() != " "
+        if(_token_holder[i].type_string() != "SPACE" && _token_holder[i].type_string() != "PUNCTUATION"){
             
             temp.push_back(_token_holder[i]);
             
@@ -123,9 +123,7 @@ bool Parser::set_string(string string){
     }
     _token_holder.clear();
     _token_holder = temp;
-    // for(int i =0; i < _token_holder.size(); i++){
-    //     std::cout << "_token_holder|" << _token_holder[i] << "|" << endl;
-    // }
+
     //ptree
     ptree.clear();
     

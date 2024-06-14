@@ -13,7 +13,7 @@ class SQL{
     Table command(string string);
     vector<long> select_recnos();
     void run();
-    void batch();
+    
 
     private:
     string _table_name_list;

@@ -44,7 +44,6 @@ class Table{
     vector<long> recnoVec;
     vector<long> selected_recnos;
     int numOfRec;
-    // fstream file;
 };
 
 
