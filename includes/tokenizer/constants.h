@@ -15,7 +15,6 @@ const char PARENTHSIS[] = "()";
 const char QUOTATION[] = "\"";
 const char STAR[] = "*";
 const char PERIOD[] = ".";
-
 const int START_DOUBLE = 0;
 const int START_SPACES = 4;
 const int START_ALPHA = 6;

@@ -2,6 +2,7 @@
 #define SQL_CPP
 
 #include "sql.h"
+#include "../ErrorCode/ErrorCode.h"
 
 SQL::SQL(){
 }
@@ -30,69 +31,113 @@ void SQL::run(){
     std::cout << "\n\n------------------ SQL End ------------------\n\n";
 }
 
+void SQL::batch(){
+    const int SELECT_COMMANDS = 13;
+    const vector<string> command_list = {
+    "select nim, first, major from student where (lname=Yang or major=CS) and age<23 or lname=Jackson",
+    // 2. Expected comma: 
+    "select last first, major from student where ((lname=Yang or major=CS) and age<23 )or lname=Jackson",
+    // 3. Expected: Missing field name
+    "select last, , major from student where ((lname=Yang or major=CS) and age<23 )or lname=Jackson",
+    // 4. Expected from:
+    "select last, first, major  student where ((lname=Yang or major=CS) and age<23 )or lname=Jackson",
+    // 5. Expected table name:
+    "select last, first, major from  where ((lname=Yang or major=CS) and age<23 )or lname=Jackson",
+    // 6. Expected condition:
+    "select last, first, major from student where ",
+    // 7. Missing left paren:
+    "select last, first, major from student where (lname=Yang or major=CS) and age<23 )or lname=Jackson",
+    // 8. Missing right paren:
+    "select last, first, major from student where ((lname=Yang or major=CS and age<23 )or lname=Jackson",
+    // 9. :
+    "select last, first, major from student where ((lname= or major=CS) and age<23 )or lname=Jackson",
+    // 10. :
+    "select last, first, major from student where ((lname=Yang or major=CS) and age<23 )or lname=Jackson",
+    // 11. :
+    "select last, first, major from student where ((lname=Yang  major=CS) and age<23 )or lname=Jackson",
+    // 12. :
+    "select last, first, major from student where ((lname=Yang or ) and age<23 )or lname=Jackson",
+    // 13. :
+    "select last, first, major from student where ((lname=Yang or major=CS) and age<23 )or ",
+    // 14. :
+    "select last, first, major from student where ((lname=Yang or major=CS) and age<23 )or lname=Jackson"
+    };
+
+    for (int i = 0; i < SELECT_COMMANDS; i++)
+    {
+        try{
+                cout << ">" << command_list[i] << endl;
+                command(command_list[i]);
+            
+        }catch(Code errorcode){
+            std::cout << ErrorCode::getCodeString(errorcode);
+        }
+    }
+}
+
 Table SQL::command(string string){
     Parser parser(string);
     _valid_String = parser.is_valid();
     _recnos_selected.clear();  //COMMNETED OUT
-    if(!_valid_String){
-        Table temp;
-        std::cout << "Invalid Command\n";
-        return temp;
-    }else{
-        MMap<std::string, std::string> ptree = parser.parse_tree();
-        //----- debugging -----
-        // std::cout << "\nptreee" << ptree << "\n\n";
-        if(ptree["command"][0] == "make" || ptree["command"][0] == "create")
-        {
-            Table table(ptree["table_name"][0], ptree["col"]);
-            return table;
-        }
-        if(ptree["command"][0] == "insert")
-        {
-            Table table(ptree["table_name"][0]);
-            table.insert_into(ptree["values"]);
-            return table;
-        }
-        if(ptree["command"][0] == "select")
-        {
+    // if(!_valid_String){
+    //     Table temp;
+    //     std::cout << "Invalid Command\n";
+    //     return temp;
+    // }else{
+    MMap<std::string, std::string> ptree = parser.parse_tree();
+    //----- debugging -----
+    // std::cout << "\nptreee" << ptree << "\n\n";
+    if(ptree["command"][0] == "make" || ptree["command"][0] == "create")
+    {
+        Table table(ptree["table_name"][0], ptree["col"]);
+        return table;
+    }
+    if(ptree["command"][0] == "insert")
+    {
+        Table table(ptree["table_name"][0]);
+        table.insert_into(ptree["values"]);
+        return table;
+    }
+    if(ptree["command"][0] == "select")
+    {
 
-            std::string tableName = ptree["table_name"][0];
-            Table table(tableName);
-            if(ptree["fields"][0] == "*"){
-                if(ptree.contains("where")){
-                    //select the records from the table with condition
-                    Table temp = table.select(table.get_field_names(), ptree["condition"]);
-                    for(int i = 0; i < table.select_recnos().size(); i++){
-                        _recnos_selected.push_back(table.select_recnos()[i]);
-                    }
-                    return temp;
-                }else{
-                    //select all the records from the table
-                    Table temp = table.select_all();
-                    for(int i = 0; i < table.select_recnos().size(); i++){
-                        _recnos_selected.push_back(table.select_recnos()[i]);
-                    }
-                    return temp;
+        std::string tableName = ptree["table_name"][0];
+        Table table(tableName);
+        if(ptree["fields"][0] == "*"){
+            if(ptree.contains("where")){
+                //select the records from the table with condition
+                Table temp = table.select(table.get_field_names(), ptree["condition"]);
+                for(int i = 0; i < table.select_recnos().size(); i++){
+                    _recnos_selected.push_back(table.select_recnos()[i]);
                 }
+                return temp;
             }else{
-                if(ptree.contains("where")){
-                    //the chosen fields with the conditions
-                    Table temp = table.select(ptree["fields"], ptree["condition"]);
-                    for(int i = 0; i < table.select_recnos().size(); i++){
-                        _recnos_selected.push_back(table.select_recnos()[i]);
-                    }
-                    return temp;
-                }else{
-                    //only select certain fields
-                    Table temp = table.select(ptree["fields"]);
-                    for(int i = 0; i < table.select_recnos().size(); i++){
-                        _recnos_selected.push_back(table.select_recnos()[i]);
-                    }
-                    return temp;
+                //select all the records from the table
+                Table temp = table.select_all();
+                for(int i = 0; i < table.select_recnos().size(); i++){
+                    _recnos_selected.push_back(table.select_recnos()[i]);
                 }
+                return temp;
+            }
+        }else{
+            if(ptree.contains("where")){
+                //the chosen fields with the conditions
+                Table temp = table.select(ptree["fields"], ptree["condition"]);
+                for(int i = 0; i < table.select_recnos().size(); i++){
+                    _recnos_selected.push_back(table.select_recnos()[i]);
+                }
+                return temp;
+            }else{
+                //only select certain fields
+                Table temp = table.select(ptree["fields"]);
+                for(int i = 0; i < table.select_recnos().size(); i++){
+                    _recnos_selected.push_back(table.select_recnos()[i]);
+                }
+                return temp;
             }
         }
     }
+    // }
 }
 
 vector<long> SQL::select_recnos(){

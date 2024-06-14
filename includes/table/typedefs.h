@@ -21,6 +21,19 @@ typedef vector<string> vectorstr;
 typedef vector<long> vectorlong;
 typedef Queue<string> queuestr;
 
+
+enum Code{
+    missing_from = 501,
+    missing_table_name = 502,
+    missing_codition = 503,
+    command_syntax_error = 504,
+    invalid_condition = 505,
+    missing_left_parenthesis = 506,
+    missing_right_parenthesis = 507,
+    invalid_field_name = 508,
+    missing_comma = 509
+};
+
 // enum TokenType
 // { TOKEN, //6
 // LPAREN, //7

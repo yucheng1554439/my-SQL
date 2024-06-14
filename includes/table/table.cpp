@@ -155,10 +155,12 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
             Token* rhs = _stack.pop();
             Token* lhs = _stack.pop();
             //if the field name(lhs) is not in the table then we mark that there is false input
-            if(field_names[index[lhs->getString()]] != lhs->getString()){
-                falseInput = true;
-                break;
-            }
+            // std::cout << index << endl;
+            // if(!index.contains(lhs->getString())){
+            //     std::cout << "ausidnouiasdnaisndoasnd!!!!\n\n\n\n";
+            //     falseInput = true;
+            //     break;
+            // }
             //get the record vector after evaluating with that equation
             recVectr = queue_of_compar.pop()->evaluate(lhs, rhs, _indices_recno, field_names, index[lhs->getString()]); 
             ResultSet* result = new ResultSet(recVectr);
@@ -180,6 +182,7 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
     //if there is a false input we just make the record vector empty
     if(falseInput){
         recVectr.clear();    //commented
+        // throw(invalid_field_name);
     }else{
         recVectr = _stack.pop()->evaluate();
     }
@@ -248,11 +251,32 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
         }else if(string_of_compar[i] == ")"){
             //pop out all the operator from the stack above ( to the queue
             RParen* temp = new RParen(string_of_compar[i]);
-            while(tempStack.top()->type_string() != "LPAREN"){
-                postOrderQueue.push(tempStack.pop());
+            bool containLParen = false;
+
+            //there is a Left Parenthesis in the stack
+            Stack<Token*> tempForFindLParen = tempStack;
+            while(!tempForFindLParen.empty()){
+                if(tempForFindLParen.top()->type_string() == "LPAREN"){
+                    containLParen = true;
+                }
+                tempForFindLParen.pop();
             }
-            if(!tempStack.empty()){
-                tempStack.pop();
+            // for(Stack<Token*>::Iterator it = tempStack.begin(); it != tempStack.end(); it++){
+            //     if((*it)->type_string() == "LPAREN"){
+            //         containLParen = true;
+            //         std::cout << "containLParen" << containLParen << endl;
+            //     }
+            // }
+            //if the temporary copy of the stack doesnt have a LParen 
+            if(!containLParen){
+                throw(missing_left_parenthesis);
+            }else{
+                while(tempStack.top()->type_string() != "LPAREN"){
+                    postOrderQueue.push(tempStack.pop());
+                }
+                if(!tempStack.empty()){
+                    tempStack.pop();
+                }
             }
         }else if(string_of_compar[i] == "or"){
             Logical* temp = new Logical(string_of_compar[i]);
@@ -281,8 +305,16 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
         }
     }
     while(!tempStack.empty()){
-        postOrderQueue.push(tempStack.pop());
+        if(tempStack.top()->type_string() == "LPAREN"){
+            throw(missing_right_parenthesis);
+            tempStack.pop();
+        }else{
+            postOrderQueue.push(tempStack.pop());
+        }
     }
+    // while(!tempStack.empty()){
+    //     postOrderQueue.push(tempStack.pop());
+    // }
     // ---------- Debugging ----------
     // printing the post order experission
     Queue<Token*> printingtest = postOrderQueue;
@@ -440,10 +472,10 @@ Table Table::select(vectorstr fieldnames, string field_searching, string operatr
 }
 Table Table::select_all(){
     if(!file_exists((title+".bin").c_str())){
-         Table temp;
-         temp.selected_recnos = {-1, -1, -1, -1, -1};
-         return temp;
-     } 
+        Table temp;
+        temp.selected_recnos = {-1, -1, -1, -1, -1};
+        return temp;
+    } 
     Table temp(title+"_"+to_string(sequenceNumber), field_names);
     sequenceNumber++;
     fstream file;

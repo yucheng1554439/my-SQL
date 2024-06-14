@@ -4,16 +4,16 @@
 #include "../parser/parser.h"
 #include "../table/table.h"
 
-
 using namespace std;
 
 class SQL{
     public:
     SQL();
     Table command(string string);
+    void batch();
     vector<long> select_recnos();
     void run();
-    
+
 
     private:
     string _table_name_list;

@@ -28,6 +28,7 @@ Parser::Parser(string string){
     keyword.insert("SYM", SYM);
     keyword.insert("*", STARR);
     keyword.insert("CREATE", CREATE);
+    keyword.insert("COMMA", COMMA);
 
 
     //tokenize the input into our vector string _token_holder
@@ -140,6 +141,9 @@ keys Parser::get_column(Token token){
     if(keyword.contains(temp)){
         return keyword[toupper(token.token_str())];
     }
+    if(token.token_str()==","){
+        return COMMA;
+    }
     return SYM;
 }
 bool Parser::get_parse_tree(){
@@ -172,7 +176,7 @@ bool Parser::get_parse_tree(){
         state = _table_for_enum.get(state, get_column(token));
 
         valid = _table_for_enum.isSuccess(state);
-
+        // std::cout << "TOken: |" << string << "|" << " Type: |" << get_column(token) << "|\n";
         // std::cout << "Valid:" << valid << endl;
 
         switch(state)
@@ -217,6 +221,18 @@ bool Parser::get_parse_tree(){
                 ptree["values"] += token.token_str().substr(1, token.token_str().length()-2);
             }else{ptree["values"] += token.token_str();}
             break;
+        case 51:
+            throw(missing_comma);
+            break;
+        // case 501:
+        //     throw(missing_comma);
+        //     break;
+        // case 501:
+        //     throw(missing_comma);
+        //     break;
+        // case 501:
+        //     throw(missing_comma);
+        //     break;
         default:
             break;
         }

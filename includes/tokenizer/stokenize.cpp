@@ -225,8 +225,7 @@ void STokenizer::make_table_enum(int _table[][MAX_COLUMNS]){
     mark_fail(_table, 19);
 
     //trash can
-    mark_fail(_table, 20);
-
+    mark_fail(_table, 50);  
 
 
 
@@ -239,7 +238,10 @@ void STokenizer::make_table_enum(int _table[][MAX_COLUMNS]){
     //select case
     mark_cells(0, _table, SELECT, 9);
     mark_cells(9, _table, SYM, 13);
+    
+
     mark_cells(13, _table, SYM, 13);
+
     mark_cells(13, _table, FROM, 14);
     mark_cells(14, _table, SYM, 12);
     mark_cells(9, _table, STARR, 10);
