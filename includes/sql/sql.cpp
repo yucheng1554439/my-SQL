@@ -34,9 +34,10 @@ void SQL::run(){
 void SQL::batch(){
     const int SELECT_COMMANDS = 13;
     const vector<string> command_list = {
-    "select nim, first, major from student where (lname=Yang or major=CS) and age<23 or lname=Jackson",
+    // 1. Correct one:
+    "select last, first, major from student where (lame=Yang or major=CS) and age<23 or lname=Jackson",
     // 2. Expected comma: 
-    "select last first, major from student where ((lname=Yang or major=CS) and age<23 )or lname=Jackson",
+    "select last first, major from student where ((lname=Yang or major=CS)) and age<23 or lname=Jackson",
     // 3. Expected: Missing field name
     "select last, , major from student where ((lname=Yang or major=CS) and age<23 )or lname=Jackson",
     // 4. Expected from:
@@ -66,9 +67,9 @@ void SQL::batch(){
     for (int i = 0; i < SELECT_COMMANDS; i++)
     {
         try{
-                cout << ">" << command_list[i] << endl;
-                command(command_list[i]);
-            
+            cout << ">" << command_list[i] << endl;
+            command(command_list[i]);
+            throw(command_syntax_error);
         }catch(Code errorcode){
             std::cout << ErrorCode::getCodeString(errorcode);
         }

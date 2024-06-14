@@ -31,7 +31,9 @@ enum Code{
     missing_left_parenthesis = 506,
     missing_right_parenthesis = 507,
     invalid_field_name = 508,
-    missing_comma = 509
+    missing_comma = 509,
+    missing_relational_operator_compare = 510,
+    missing_logical_operator_compare = 511
 };
 
 // enum TokenType

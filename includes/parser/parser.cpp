@@ -28,7 +28,7 @@ Parser::Parser(string string){
     keyword.insert("SYM", SYM);
     keyword.insert("*", STARR);
     keyword.insert("CREATE", CREATE);
-    keyword.insert("COMMA", COMMA);
+    // keyword.insert("COMMA", COMMA);
 
 
     //tokenize the input into our vector string _token_holder
@@ -87,7 +87,7 @@ bool Parser::set_string(string string){
     Token t;
     stringTokenizer>>t;
     //if it is space, we don't include them in our token holder
-    if(t.type_string()!= "SPACE")
+    // if(t.type_string()!= "SPACE")
         _token_holder.push_back(t);
 
     
@@ -96,9 +96,11 @@ bool Parser::set_string(string string){
         // ---- debugging ----
         // cout << "\nTOken:|" << t << "|TOKENTYPE:|" << setw(25)<<t.type_string() << "|\t\n";
         stringTokenizer>>t;
-        if(t.type_string()!= "SPACE")
+        // if(t.type_string()!= "SPACE")
             _token_holder.push_back(t);
     }
+
+    
     
     vector<Token> temp;
     temp.clear();
@@ -106,10 +108,10 @@ bool Parser::set_string(string string){
     int vecLength = _token_holder.size();
     for(int i = 0; i < vecLength; i++){
         //we are going to ignore the spaces and the punctuations, only push the tokens we want
-        if(_token_holder[i].type_string() != "SPACE" && _token_holder[i].type_string() != "PUNCTUATION"){
+        if((_token_holder[i].type_string() != "SPACE" || i == vecLength-1)&& _token_holder[i].type_string() != "PUNCTUATION"){ // 
             
             temp.push_back(_token_holder[i]);
-            
+            // std::cout << "_TOKEN:|" << _token_holder[i] << "|" <<endl;
             //old version
             // if(_token_holder[i].token_str() == "*"){
             //     temp.push_back(_token_holder[i]);
@@ -124,6 +126,11 @@ bool Parser::set_string(string string){
     }
     _token_holder.clear();
     _token_holder = temp;
+
+    // int deguggingLengtyh = _token_holder.size();
+    // for(int i = 0; i < deguggingLengtyh; i++){
+    //     std::cout << "_TOKEN:|" << _token_holder[i] << "|" <<endl;
+    // }
 
     //ptree
     ptree.clear();
@@ -141,9 +148,9 @@ keys Parser::get_column(Token token){
     if(keyword.contains(temp)){
         return keyword[toupper(token.token_str())];
     }
-    if(token.token_str()==","){
-        return COMMA;
-    }
+    // if(token.token_str()==","){
+    //     return COMMA;
+    // }
     return SYM;
 }
 bool Parser::get_parse_tree(){
@@ -161,22 +168,31 @@ bool Parser::get_parse_tree(){
     MPair<std::string, std::string > tp(x);
     ptree.insert(tp);
     
-    int vecLength = _token_holder.size()-1;
+    // int deguggingLengtyh = _token_holder.size();
+    // std::cout << "LAST: |" << _token_holder[deguggingLengtyh-1].token_str() << "|\n";
+
+
+    int vecLength = _token_holder.size()-1; //It was -1, why -1????
 
     _table_for_enum.make_adjacency_table();
     int state = 0;
     std::string yes = "yes";
     bool valid = false;
+    int lastState;
 
     //find the correct state from the state machine and insert into corresponded index of the ptree
     for(int i = 0; i < vecLength; i++){
 
         Token token = _token_holder[i];
         string string = token.token_str();
+        if(state != 0 && state != -1){
+            lastState = state;
+        }
         state = _table_for_enum.get(state, get_column(token));
 
         valid = _table_for_enum.isSuccess(state);
         // std::cout << "TOken: |" << string << "|" << " Type: |" << get_column(token) << "|\n";
+        // std::cout << "State: " << state << endl;
         // std::cout << "Valid:" << valid << endl;
 
         switch(state)
@@ -221,9 +237,9 @@ bool Parser::get_parse_tree(){
                 ptree["values"] += token.token_str().substr(1, token.token_str().length()-2);
             }else{ptree["values"] += token.token_str();}
             break;
-        case 51:
-            throw(missing_comma);
-            break;
+        // case 50:
+        //     throw(missing_comma);
+        //     break;
         // case 501:
         //     throw(missing_comma);
         //     break;
@@ -237,6 +253,21 @@ bool Parser::get_parse_tree(){
             break;
         }
     }
+    // if(!valid){
+    // std::cout << "STATEAFTER" << state << endl;
+    // std::cout << "LASTSTATEAFTER" << lastState << endl;
+    if((state == -1 || state == 0)&& lastState == 13){
+        throw(missing_from);
+    }   
+    if((state == -1 || state == 0)&& lastState == 14){
+        throw(missing_table_name);
+    }   
+    if(state == 15 && lastState == 12){
+        throw(missing_codition);
+    }   
+    if((state == -1 || state == 0)&& lastState == 13){
+        throw(missing_table_name);
+    }   
     return valid;
 
 }

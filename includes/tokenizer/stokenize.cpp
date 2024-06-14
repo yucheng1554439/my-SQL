@@ -204,6 +204,79 @@ void STokenizer::make_table(int _table[][MAX_COLUMNS]){
 
 }
 
+
+//old original table
+// void STokenizer::make_table_enum(int _table[][MAX_COLUMNS]){
+//     init_table(_table);
+
+//     //doubles:
+//     mark_fail(_table, 0);    
+//     mark_fail(_table, 1);  
+//     mark_fail(_table, 2);  
+//     mark_fail(_table, 3);  
+//     mark_fail(_table, 4);  
+//     mark_fail(_table, 6);  
+//     mark_fail(_table, 7);  
+//     mark_fail(_table, 8);  
+//     mark_fail(_table, 9);  
+//     mark_fail(_table, 11);  
+//     mark_fail(_table, 15);  
+//     mark_fail(_table, 13);  
+//     mark_fail(_table, 14);  
+//     mark_fail(_table, 17);
+//     mark_fail(_table, 19);
+
+//     //trash can
+//     mark_fail(_table, 50);  
+
+
+
+//     mark_success(_table, 5);
+//     mark_success(_table, 18);
+//     mark_success(_table, 10);
+//     mark_success(_table, 12);
+//     mark_success(_table, 16);
+
+//     //select case
+//     mark_cells(0, _table, SELECT, 9);
+//     mark_cells(9, _table, SYM, 13);
+    
+
+//     mark_cells(13, _table, SYM, 13);
+
+//     mark_cells(13, _table, FROM, 14);
+//     mark_cells(14, _table, SYM, 12);
+//     mark_cells(9, _table, STARR, 10);
+//     mark_cells(10, _table, FROM, 11);
+//     mark_cells(11, _table, SYM, 12);
+//     mark_cells(12, _table, WHERE, 15);
+//     mark_cells(15, _table, SYM, 16);
+//     mark_cells(16, _table, SYM, 16);
+//     //select with wrong input
+//     // mark_cells(0, _table, SYM, 20);
+//     // mark_cells(0, _table, SYM, 20);
+//     // mark_cells(0, _table, SYM, 20);
+
+//     //insert case
+//     mark_cells(0, _table, INSERT, 6);
+//     mark_cells(6, _table, INTO, 7);
+//     mark_cells(7, _table, SYM, 8);
+//     mark_cells(8, _table, VALUES, 17);
+//     mark_cells(17, _table, SYM, 18);
+//     mark_cells(18, _table, SYM, 18);
+//     //insert with wrong input
+
+//     //make case
+//     mark_cells(0, _table, MAKE, 1);
+//     mark_cells(0, _table, CREATE, 1);
+//     mark_cells(1, _table, TABLE, 2);
+//     mark_cells(2, _table, SYM, 3);
+//     mark_cells(3, _table, FIELDS, 4);
+//     mark_cells(4, _table, SYM, 5);
+//     mark_cells(5, _table, SYM, 5);
+//     //make with wrong input
+// }
+
 void STokenizer::make_table_enum(int _table[][MAX_COLUMNS]){
     init_table(_table);
 
@@ -224,8 +297,12 @@ void STokenizer::make_table_enum(int _table[][MAX_COLUMNS]){
     mark_fail(_table, 17);
     mark_fail(_table, 19);
 
+
+    
     //trash can
-    mark_fail(_table, 50);  
+    // mark_fail(_table, 20);
+    // mark_fail(_table, 19);
+    // mark_fail(_table, 19);
 
 
 
@@ -238,10 +315,9 @@ void STokenizer::make_table_enum(int _table[][MAX_COLUMNS]){
     //select case
     mark_cells(0, _table, SELECT, 9);
     mark_cells(9, _table, SYM, 13);
-    
-
     mark_cells(13, _table, SYM, 13);
-
+    // mark_cells(20, _table, SYM, 13);
+    
     mark_cells(13, _table, FROM, 14);
     mark_cells(14, _table, SYM, 12);
     mark_cells(9, _table, STARR, 10);
@@ -255,8 +331,6 @@ void STokenizer::make_table_enum(int _table[][MAX_COLUMNS]){
     // mark_cells(0, _table, SYM, 20);
     // mark_cells(0, _table, SYM, 20);
 
-
-
     //insert case
     mark_cells(0, _table, INSERT, 6);
     mark_cells(6, _table, INTO, 7);
@@ -265,8 +339,6 @@ void STokenizer::make_table_enum(int _table[][MAX_COLUMNS]){
     mark_cells(17, _table, SYM, 18);
     mark_cells(18, _table, SYM, 18);
     //insert with wrong input
-    
-
 
     //make case
     mark_cells(0, _table, MAKE, 1);
@@ -277,7 +349,6 @@ void STokenizer::make_table_enum(int _table[][MAX_COLUMNS]){
     mark_cells(4, _table, SYM, 5);
     mark_cells(5, _table, SYM, 5);
     //make with wrong input
-
 }
 
 // t needs to be changed to token

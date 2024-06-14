@@ -149,10 +149,16 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
     selected_recnos.clear(); //Commented
 
     //if the queue is not empty
-    while(!queue_of_compar.empty()){
+    while(!queue_of_compar.empty()){ 
         //----- < <= >= > = ----- 
         if(queue_of_compar.front()->type_string() == "RELATIONAL"){
+            if(_stack.empty()){
+                throw(missing_relational_operator_compare); 
+            }
             Token* rhs = _stack.pop();
+            if(_stack.empty()){
+                throw(missing_relational_operator_compare);
+            }
             Token* lhs = _stack.pop();
             //if the field name(lhs) is not in the table then we mark that there is false input
             // std::cout << index << endl;
@@ -167,7 +173,13 @@ Table Table::select(vectorstr fieldnames, Queue<Token*> queue_of_compar){
             _stack.push(result);
         //------ and or -----
         }else if(queue_of_compar.front()->type_string() == "LOGICAL"){
+            if(_stack.empty()){
+                throw(missing_logical_operator_compare);
+            }
             Token* rhs = _stack.pop();
+            if(_stack.empty()){
+                throw(missing_logical_operator_compare);
+            }
             Token* lhs = _stack.pop();
             //get the record vector after evaluating with that equation and push back into the stack
             recVectr = queue_of_compar.pop()->evaluate(lhs, rhs);  
@@ -241,6 +253,7 @@ Table Table::select(vectorstr fieldnames){
 
 Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
     int vecSize = string_of_compar.size();
+    // std::cout << "string_of_compar: |" << string_of_compar << "|" << endl; 
     Queue<Token*> postOrderQueue;
     Stack<Token*> tempStack;
     //loop thru the input expression
@@ -308,7 +321,8 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
         if(tempStack.top()->type_string() == "LPAREN"){
             throw(missing_right_parenthesis);
             tempStack.pop();
-        }else{
+        }
+        else{
             postOrderQueue.push(tempStack.pop());
         }
     }
@@ -317,11 +331,11 @@ Table Table::select(vectorstr fieldnames, vector<string> string_of_compar){
     // }
     // ---------- Debugging ----------
     // printing the post order experission
-    Queue<Token*> printingtest = postOrderQueue;
-    while(!printingtest.empty()){
-        std::cout << "|" <<printingtest.pop()->getString() << "| ";
-    }
-    std::cout << endl;
+    // Queue<Token*> printingtest = postOrderQueue;
+    // while(!printingtest.empty()){
+    //     std::cout << "|" <<printingtest.pop()->getString() << "| ";
+    // }
+    // std::cout << endl;
     
     //calling the select with the postorder input
     return select(fieldnames, postOrderQueue);
