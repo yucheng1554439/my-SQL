@@ -62,7 +62,9 @@ Table SQL::command(string string){
                 if(ptree.contains("where")){
                     //select the records from the table with condition
                     Table temp = table.select(table.get_field_names(), ptree["condition"]);
-                    _recnos_selected = table.select_recnos(); 
+                    for(int i = 0; i < table.select_recnos().size(); i++){
+                        _recnos_selected.push_back(table.select_recnos()[i]);
+                    }
                     return temp;
                 }else{
                     //select all the records from the table
@@ -76,12 +78,16 @@ Table SQL::command(string string){
                 if(ptree.contains("where")){
                     //the chosen fields with the conditions
                     Table temp = table.select(ptree["fields"], ptree["condition"]);
-                    _recnos_selected = table.select_recnos(); 
+                    for(int i = 0; i < table.select_recnos().size(); i++){
+                        _recnos_selected.push_back(table.select_recnos()[i]);
+                    }
                     return temp;
                 }else{
                     //only select certain fields
                     Table temp = table.select(ptree["fields"]);
-                    _recnos_selected = table.select_recnos();
+                    for(int i = 0; i < table.select_recnos().size(); i++){
+                        _recnos_selected.push_back(table.select_recnos()[i]);
+                    }
                     return temp;
                 }
             }
