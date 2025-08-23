@@ -1,50 +1,38 @@
-
 # Work Report
 
-## Name: <ins> your name goes here </ins>
+## Name: <ins>Yucheng Zhao</ins>
 
 ## Features:
 
 - Not Implemented:
-  - what features have been implemented
+  - UPDATE, DELETE, DROP TABLE
+  - ORDER BY, LIMIT, JOIN
+  - Persistent storage (save/load tables)
+  - Indexes for faster filtering on large tables
+  - More advanced error handling and type checking
 
 <br><br>
 
 - Implemented:
-  - what has been implemented
+  - CREATE TABLE (using `MAKE TABLE ... FIELDS ...`)
+  - INSERT INTO table with values
+  - SELECT with specific fields or `*`
+  - WHERE clause with conditions (`=`, `!=`, `>`, `<`)
+  - Boolean logic in WHERE (`AND`, `OR`, parentheses)
+  - Support for both strings and numbers
+  - Output of matching record indices and rows
 
 <br><br>
 
-- Partly implemented:
-  - what features have not been implemented
+## Example Usage:
 
-<br><br>
+```sql
+MAKE TABLE employee FIELDS last, first, dep, salary, year;
+INSERT INTO employee VALUES Blow, Joe, CS, 100000, 2018;
+INSERT INTO employee VALUES Blow, JoAnn, Physics, 200000, 2016;
+INSERT INTO employee VALUES Johnson, Jack, HR, 150000, 2014;
+INSERT INTO employee VALUES Johnson, "Jimmy", Chemistry, 140000, 2018;
 
-- Bugs
-  - Known bugs
-
-<br><br>
-
-# Reflections:
-
-- Any thoughts you may have and would like to share.
-
-# **output**
-<pre>
-<br/><br/><br/><br/>
-## Delete this line and paste the output of your basic test and then testB here
-</pre>
-
-
-<br/><br/>
-
-# basic_test.cpp output:
-<pre>
-<br/><br/><br/><br/>
-</pre>
-# testB.cpp output:
-<pre>
-<br/><br/><br/><br/>
-</pre>
-
-
+SELECT * FROM employee;
+SELECT last, first FROM employee;
+SELECT * FROM employee WHERE last = Johnson;
