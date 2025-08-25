@@ -38,4 +38,9 @@ SELECT last, first FROM employee;
 SELECT * FROM employee WHERE last = Johnson;
 
 ```
-![SQL Running Demo](sql_running.png)
+## Demo Screenshot
+
+<p align="center">
+  <img src="sql_running.png" alt="SQL Running Demo" width="600"/>
+</p>
+
