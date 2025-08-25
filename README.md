@@ -36,3 +36,6 @@ INSERT INTO employee VALUES Johnson, "Jimmy", Chemistry, 140000, 2018;
 SELECT * FROM employee;
 SELECT last, first FROM employee;
 SELECT * FROM employee WHERE last = Johnson;
+
+```
+![SQL Running Demo](sql_running.png)
